@@ -885,27 +885,4 @@ details p {
   .footer-domain {
     justify-content: flex-start;
   }
-.footer-bottom {
-
-  position: relative;
-
-  min-height: 90px;
-
-}
-
-.footer-sticker {
-
-  position: absolute;
-
-  right: 24px;
-
-  bottom: 0;
-
-  width: 130px;
-
-  height: auto;
-
-  display: block;
-
-}
 }

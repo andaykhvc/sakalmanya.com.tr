@@ -885,4 +885,42 @@ details p {
   .footer-domain {
     justify-content: flex-start;
   }
+}/* LinkedIn badge - Hakkımda bölümü */
+.linkedin-badge-wrap {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  width: 100%;
+  max-width: 100%;
+  margin: 0 0 24px;
+  overflow: hidden;
+}
+
+/* Hakkımda sol ve sağ taraf üst hizalama */
+.about-section .two-column {
+  align-items: start;
+}
+
+.about-section .section-label {
+  margin-top: 0;
+  margin-bottom: 18px;
+}
+
+.about-section .rich-text {
+  padding-top: 0;
+}
+
+/* LinkedIn badge taşarsa engelle */
+.linkedin-badge-wrap iframe,
+.linkedin-badge-wrap .LI-profile-badge,
+.linkedin-badge-wrap .badge-base {
+  max-width: 100% !important;
+}
+
+/* Mobilde ortalansın */
+@media (max-width: 640px) {
+  .linkedin-badge-wrap {
+    justify-content: center;
+    margin-bottom: 22px;
+  }
 }

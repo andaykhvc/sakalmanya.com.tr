@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 56" role="img" aria-label="buraya bakarlar">
+  <rect width="160" height="56" rx="4" fill="#111111"/>
+  <path d="M0 0h54v6H0z" fill="#111111"/>
+  <path d="M54 0h53v6H54z" fill="#d1121b"/>
+  <path d="M107 0h53v6h-53z" fill="#f0c241"/>
+  <text x="80" y="25" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" font-weight="700" fill="#f0c241">BURAYA</text>
+  <text x="80" y="42" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="800" fill="#ffffff">BAKARLAR</text>
+</svg>

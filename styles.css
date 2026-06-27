@@ -347,6 +347,7 @@ h3 {
 }
 
 .belief-gif {
+  position: relative;
   width: min(100%, 594px);
   margin: 0;
   border: 1px solid var(--line);
@@ -956,21 +957,100 @@ details p {
   .footer-domain {
     justify-content: flex-start;
   }
-}/* LinkedIn badge - Hakkımda bölümü */
-.linkedin-badge-wrap {
-  display: flex;
-  justify-content: flex-start;
-  align-items: flex-start;
-  width: 100%;
-  max-width: 100%;
-  margin: 0 0 24px;
+}/* LinkedIn overlay badge - Hakkımda bölümü */
+.linkedin-overlay-card {
+  position: absolute;
+  top: 24px;
+  left: 50%;
+  z-index: 3;
+  display: grid;
+  width: calc(100% - 48px);
+  max-width: 560px;
   overflow: hidden;
+  border: 1px solid rgba(17, 17, 17, 0.12);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: 0 18px 48px rgba(17, 17, 17, 0.22);
+  color: var(--ink);
+  transform: translateX(-50%);
+  transition:
+    transform 180ms ease,
+    box-shadow 180ms ease;
 }
 
-.linkedin-badge-wrap iframe,
-.linkedin-badge-wrap .LI-profile-badge,
-.linkedin-badge-wrap .badge-base {
-  max-width: 100% !important;
+.linkedin-overlay-card:hover {
+  box-shadow: 0 22px 58px rgba(17, 17, 17, 0.28);
+  transform: translateX(-50%) translateY(-2px);
+}
+
+.linkedin-overlay-card__brand {
+  display: block;
+  padding: 11px 16px;
+  background: #e9e6df;
+  color: #0a66c2;
+  font-family: Arial, sans-serif;
+  font-size: 1.45rem;
+  font-weight: 800;
+  letter-spacing: 0;
+}
+
+.linkedin-overlay-card__brand span {
+  display: inline-grid;
+  width: 24px;
+  height: 24px;
+  margin-left: 2px;
+  place-items: center;
+  border-radius: 3px;
+  background: #0a66c2;
+  color: #fff;
+  font-size: 1rem;
+}
+
+.linkedin-overlay-card__body {
+  display: grid;
+  grid-template-columns: 62px minmax(0, 1fr);
+  gap: 14px;
+  padding: 14px 16px 16px;
+}
+
+.linkedin-overlay-card__body img {
+  width: 62px;
+  height: 62px;
+  border-radius: 999px;
+  object-fit: cover;
+}
+
+.linkedin-overlay-card__copy {
+  display: grid;
+  min-width: 0;
+  gap: 3px;
+}
+
+.linkedin-overlay-card__copy strong {
+  color: #000;
+  font-family: Arial, sans-serif;
+  font-size: 1.05rem;
+  line-height: 1.15;
+}
+
+.linkedin-overlay-card__copy small {
+  color: #111;
+  font-family: Arial, sans-serif;
+  font-size: 0.9rem;
+  line-height: 1.25;
+}
+
+.linkedin-overlay-card__copy em {
+  width: fit-content;
+  margin-top: 8px;
+  padding: 6px 14px;
+  border: 2px solid #0a66c2;
+  border-radius: 999px;
+  color: #0a66c2;
+  font-family: Arial, sans-serif;
+  font-size: 0.95rem;
+  font-style: normal;
+  font-weight: 800;
 }
 
 .about-section .two-column {
@@ -987,8 +1067,45 @@ details p {
 }
 
 @media (max-width: 640px) {
-  .linkedin-badge-wrap {
-    justify-content: center;
-    margin-bottom: 22px;
+  .linkedin-overlay-card {
+    top: 14px;
+    width: calc(100% - 24px);
+    border-radius: 10px;
+  }
+
+  .linkedin-overlay-card__brand {
+    padding: 8px 12px;
+    font-size: 1.05rem;
+  }
+
+  .linkedin-overlay-card__brand span {
+    width: 20px;
+    height: 20px;
+    font-size: 0.82rem;
+  }
+
+  .linkedin-overlay-card__body {
+    grid-template-columns: 46px minmax(0, 1fr);
+    gap: 10px;
+    padding: 10px 12px 12px;
+  }
+
+  .linkedin-overlay-card__body img {
+    width: 46px;
+    height: 46px;
+  }
+
+  .linkedin-overlay-card__copy strong {
+    font-size: 0.9rem;
+  }
+
+  .linkedin-overlay-card__copy small {
+    font-size: 0.76rem;
+  }
+
+  .linkedin-overlay-card__copy em {
+    margin-top: 5px;
+    padding: 4px 10px;
+    font-size: 0.82rem;
   }
 }

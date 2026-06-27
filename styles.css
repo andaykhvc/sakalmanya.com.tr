@@ -31,6 +31,10 @@ body {
   overflow-x: clip;
 }
 
+body.is-modal-open {
+  overflow: hidden;
+}
+
 a {
   color: inherit;
   text-decoration: none;
@@ -576,6 +580,73 @@ h3 {
   object-position: top;
 }
 
+.document-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: none;
+  padding: 22px;
+}
+
+.document-modal.is-open {
+  display: grid;
+  place-items: center;
+}
+
+.document-modal__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(17, 17, 17, 0.62);
+  backdrop-filter: blur(10px);
+}
+
+.document-modal__dialog {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  width: min(100%, 1060px);
+  height: min(92vh, 920px);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  background: var(--paper);
+  box-shadow: 0 30px 90px rgba(0, 0, 0, 0.34);
+}
+
+.document-modal__controls {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 10px;
+  border-bottom: 1px solid var(--line);
+  background: var(--white);
+}
+
+.document-modal__controls button {
+  display: grid;
+  width: 38px;
+  height: 38px;
+  place-items: center;
+  border: 1px solid var(--ink);
+  background: var(--white);
+  color: var(--ink);
+  cursor: pointer;
+  font-size: 1.55rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.document-modal__controls button:disabled {
+  cursor: not-allowed;
+  opacity: 0.35;
+}
+
+.document-modal__frame {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  background: var(--white);
+}
+
 .process-section {
   border-top: 1px solid var(--line);
   border-bottom: 1px solid var(--line);
@@ -896,99 +967,12 @@ details p {
   overflow: hidden;
 }
 
-/* Hakkımda sol ve sağ taraf üst hizalama */
-.about-section .two-column {
-  align-items: start;
-}
-
-.about-section .section-label {
-  margin-top: 0;
-  margin-bottom: 18px;
-}
-
-.about-section .rich-text {
-  padding-top: 0;
-}
-
-/* LinkedIn badge taşarsa engelle */
 .linkedin-badge-wrap iframe,
 .linkedin-badge-wrap .LI-profile-badge,
 .linkedin-badge-wrap .badge-base {
   max-width: 100% !important;
 }
 
-/* Mobilde ortalansın */
-@media (max-width: 640px) {
-  .linkedin-badge-wrap {
-    justify-content: center;
-    margin-bottom: 22px;
-  }
-}/* LinkedIn özel kart */
-.linkedin-badge-wrap {
-  display: flex;
-  justify-content: flex-start;
-  align-items: flex-start;
-  width: 100%;
-  max-width: 100%;
-  margin: 0 0 24px;
-}
-
-.custom-linkedin-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 14px;
-  width: 100%;
-  max-width: 360px;
-  padding: 16px 18px;
-  border: 1px solid var(--line);
-  background: var(--white);
-  color: var(--ink);
-  box-shadow: 0 14px 34px rgba(17, 17, 17, 0.1);
-  transition:
-    transform 180ms ease,
-    box-shadow 180ms ease,
-    border-color 180ms ease;
-}
-
-.custom-linkedin-badge:hover {
-  transform: translateY(-2px);
-  border-color: #0a66c2;
-  box-shadow: 0 18px 42px rgba(17, 17, 17, 0.14);
-}
-
-.linkedin-logo {
-  display: grid;
-  width: 42px;
-  height: 42px;
-  min-width: 42px;
-  place-items: center;
-  border-radius: 6px;
-  background: #0a66c2;
-  color: #ffffff;
-  font-family: Arial, sans-serif;
-  font-size: 1.25rem;
-  font-weight: 900;
-  line-height: 1;
-}
-
-.linkedin-text strong,
-.linkedin-text small {
-  display: block;
-}
-
-.linkedin-text strong {
-  font-size: 1rem;
-  line-height: 1.2;
-}
-
-.linkedin-text small {
-  margin-top: 4px;
-  color: var(--muted);
-  font-size: 0.88rem;
-  line-height: 1.25;
-}
-
-/* Hakkımda sol ve sağ taraf hizalama */
 .about-section .two-column {
   align-items: start;
 }
@@ -1002,14 +986,9 @@ details p {
   padding-top: 0;
 }
 
-/* Mobil */
 @media (max-width: 640px) {
   .linkedin-badge-wrap {
     justify-content: center;
     margin-bottom: 22px;
-  }
-
-  .custom-linkedin-badge {
-    max-width: 100%;
   }
 }

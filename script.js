@@ -28,6 +28,61 @@ document.querySelectorAll("[data-document-carousel]").forEach((carousel) => {
   show(0);
 });
 
+const documentModal = document.querySelector("[data-document-modal]");
+const documentFrame = document.querySelector("[data-document-frame]");
+const modalPrevious = document.querySelector("[data-document-modal-prev]");
+const modalNext = document.querySelector("[data-document-modal-next]");
+let activeDocuments = [];
+let activeDocumentIndex = 0;
+
+const openDocumentModal = (documents, index) => {
+  if (!documentModal || !documentFrame) return;
+  activeDocuments = documents;
+  activeDocumentIndex = index;
+  documentFrame.src = activeDocuments[activeDocumentIndex].href;
+  documentModal.classList.add("is-open");
+  documentModal.setAttribute("aria-hidden", "false");
+  document.body.classList.add("is-modal-open");
+  const hasMultipleDocuments = activeDocuments.length > 1;
+  if (modalPrevious) modalPrevious.disabled = !hasMultipleDocuments;
+  if (modalNext) modalNext.disabled = !hasMultipleDocuments;
+};
+
+const closeDocumentModal = () => {
+  if (!documentModal || !documentFrame) return;
+  documentModal.classList.remove("is-open");
+  documentModal.setAttribute("aria-hidden", "true");
+  document.body.classList.remove("is-modal-open");
+  documentFrame.src = "";
+};
+
+const showModalDocument = (offset) => {
+  if (!activeDocuments.length || !documentFrame) return;
+  activeDocumentIndex = (activeDocumentIndex + offset + activeDocuments.length) % activeDocuments.length;
+  documentFrame.src = activeDocuments[activeDocumentIndex].href;
+};
+
+document.querySelectorAll("[data-document-carousel]").forEach((carousel) => {
+  const documents = Array.from(carousel.querySelectorAll(".document-previews a"));
+  documents.forEach((documentLink, index) => {
+    documentLink.addEventListener("click", (event) => {
+      event.preventDefault();
+      openDocumentModal(documents, index);
+    });
+  });
+});
+
+document.querySelectorAll("[data-document-close]").forEach((button) => {
+  button.addEventListener("click", closeDocumentModal);
+});
+
+modalPrevious?.addEventListener("click", () => showModalDocument(-1));
+modalNext?.addEventListener("click", () => showModalDocument(1));
+
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape") closeDocumentModal();
+});
+
 if (yearElement) {
   yearElement.textContent = new Date().getFullYear();
 }

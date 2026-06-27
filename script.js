@@ -12,12 +12,14 @@ document.querySelectorAll("[data-document-carousel]").forEach((carousel) => {
   const items = Array.from(carousel.querySelectorAll(".document-previews a"));
   const previous = carousel.querySelector("[data-carousel-prev]");
   const next = carousel.querySelector("[data-carousel-next]");
+  const visibleCount = Math.min(3, items.length);
   let current = 0;
 
   const show = (index) => {
     current = (index + items.length) % items.length;
     items.forEach((item, itemIndex) => {
-      item.classList.toggle("is-active", itemIndex === current);
+      const offset = (itemIndex - current + items.length) % items.length;
+      item.classList.toggle("is-active", offset < visibleCount);
     });
   };
 

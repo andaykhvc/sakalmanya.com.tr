@@ -957,30 +957,25 @@ details p {
   .footer-domain {
     justify-content: flex-start;
   }
-}/* LinkedIn overlay badge - Hakkımda bölümü */
+}/* LinkedIn badge - Hakkımda bölümü */
 .linkedin-overlay-card {
-  position: absolute;
-  top: 18px;
-  left: 50%;
-  z-index: 3;
   display: grid;
-  width: calc(100% - 72px);
-  max-width: 430px;
+  width: min(100%, 594px);
+  margin: 0 0 18px;
   overflow: hidden;
   border: 1px solid rgba(17, 17, 17, 0.12);
   border-radius: 12px;
-  background: rgba(255, 255, 255, 0.91);
-  box-shadow: 0 14px 34px rgba(17, 17, 17, 0.2);
+  background: #fff;
+  box-shadow: 0 14px 34px rgba(17, 17, 17, 0.12);
   color: var(--ink);
-  transform: translateX(-50%);
   transition:
     transform 180ms ease,
     box-shadow 180ms ease;
 }
 
 .linkedin-overlay-card:hover {
-  box-shadow: 0 18px 42px rgba(17, 17, 17, 0.26);
-  transform: translateX(-50%) translateY(-2px);
+  box-shadow: 0 18px 42px rgba(17, 17, 17, 0.18);
+  transform: translateY(-2px);
 }
 
 .linkedin-overlay-card__brand {
@@ -1068,8 +1063,8 @@ details p {
 
 @media (max-width: 640px) {
   .linkedin-overlay-card {
-    top: 10px;
-    width: calc(100% - 24px);
+    width: 100%;
+    margin-bottom: 14px;
     border-radius: 10px;
   }
 

@@ -802,6 +802,145 @@ details p {
   border: 1px solid var(--line);
 }
 
+.page-hero {
+  padding: 104px 0 72px;
+  background:
+    linear-gradient(90deg, rgba(17, 17, 17, 0.9), rgba(17, 17, 17, 0.72)),
+    url("/assets/hero-germany-study.png") center / cover;
+  color: var(--white);
+}
+
+.page-hero h1 {
+  max-width: 900px;
+  font-size: clamp(2.8rem, 7vw, 6.4rem);
+}
+
+.page-hero p:not(.section-label) {
+  max-width: 780px;
+  color: rgba(255, 255, 255, 0.78);
+  font-size: 1.12rem;
+}
+
+.blog-hero {
+  background:
+    linear-gradient(90deg, rgba(17, 17, 17, 0.92), rgba(17, 17, 17, 0.72)),
+    url("/assets/hero-germany-study.png") center / cover;
+}
+
+.page-content {
+  background: var(--paper);
+}
+
+.article-layout {
+  max-width: 920px;
+}
+
+.article-layout h2 {
+  margin: 42px 0 14px;
+  font-family: var(--serif);
+  font-size: clamp(1.8rem, 3vw, 2.6rem);
+  line-height: 1.05;
+}
+
+.article-layout h2:first-child {
+  margin-top: 0;
+}
+
+.article-layout p {
+  color: var(--ink-soft);
+  font-size: 1.06rem;
+}
+
+.notice-box,
+.cta-band {
+  margin: 42px 0;
+  padding: 24px;
+  border-left: 4px solid var(--red);
+  background: var(--white);
+  box-shadow: 0 12px 28px rgba(17, 17, 17, 0.06);
+}
+
+.cta-band {
+  border-left-color: var(--gold);
+}
+
+.cta-band h2 {
+  margin-top: 0;
+}
+
+.inline-links,
+.seo-link-grid,
+.blog-list {
+  display: grid;
+  gap: 14px;
+}
+
+.inline-links {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.inline-links a,
+.seo-link-grid a,
+.blog-card {
+  border: 1px solid var(--line);
+  background: var(--white);
+  box-shadow: 0 12px 28px rgba(17, 17, 17, 0.05);
+}
+
+.inline-links a,
+.seo-link-grid a {
+  padding: 16px 18px;
+  font-weight: 700;
+}
+
+.inline-links a:hover,
+.seo-link-grid a:hover,
+.text-link:hover {
+  color: var(--red-dark);
+  text-decoration: underline;
+  text-underline-offset: 5px;
+}
+
+.seo-links-section {
+  background: var(--paper);
+}
+
+.seo-link-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.blog-list {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.blog-card {
+  padding: 24px;
+}
+
+.blog-card span {
+  color: var(--red);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.blog-card h2 {
+  margin: 12px 0;
+  font-family: var(--serif);
+  font-size: 1.8rem;
+  line-height: 1.08;
+}
+
+.blog-card p {
+  color: var(--muted);
+}
+
+.text-link {
+  color: var(--red-dark);
+  font-weight: 700;
+}
+
 @media (max-width: 940px) {
   .site-header {
     display: flex;
@@ -853,7 +992,9 @@ details p {
 
   .proof-grid,
   .services-grid,
-  .achievement-grid {
+  .achievement-grid,
+  .seo-link-grid,
+  .blog-list {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
@@ -916,8 +1057,15 @@ details p {
   .hero-facts,
   .proof-grid,
   .services-grid,
-  .achievement-grid {
+  .achievement-grid,
+  .seo-link-grid,
+  .blog-list,
+  .inline-links {
     grid-template-columns: 1fr;
+  }
+
+  .page-hero {
+    padding: 78px 0 56px;
   }
 
   .hero-facts {

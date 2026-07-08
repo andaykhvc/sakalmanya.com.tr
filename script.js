@@ -8,6 +8,29 @@ document.querySelectorAll("[data-whatsapp-link]").forEach((link) => {
   link.href = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(whatsappMessage)}`;
 });
 
+const floatingWhatsappMessages = {
+  tr: "Merhaba, Almanya süreci hakkında bilgi almak istiyorum.",
+  de: "Hallo, ich möchte Informationen zum Deutschland-Prozess erhalten.",
+  en: "Hello, I would like to get information about the Germany process.",
+};
+
+const pageLanguage = document.documentElement.lang || "tr";
+const floatingWhatsapp = document.createElement("a");
+floatingWhatsapp.className = "floating-whatsapp";
+floatingWhatsapp.href = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(
+  floatingWhatsappMessages[pageLanguage] || floatingWhatsappMessages.tr
+)}`;
+floatingWhatsapp.target = "_blank";
+floatingWhatsapp.rel = "noopener noreferrer";
+floatingWhatsapp.setAttribute("aria-label", "WhatsApp");
+floatingWhatsapp.innerHTML = `
+  <svg viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+    <path d="M16.04 3.2A12.67 12.67 0 0 0 5.32 22.6L3.2 28.8l6.4-2.04A12.66 12.66 0 1 0 16.04 3.2Zm0 23.05c-2.1 0-4.06-.62-5.7-1.7l-.4-.26-3.77 1.2 1.23-3.64-.27-.42a10.26 10.26 0 1 1 8.91 4.82Zm5.82-7.68c-.32-.16-1.88-.93-2.17-1.03-.29-.11-.5-.16-.72.16-.21.32-.82 1.03-1.01 1.24-.19.21-.37.24-.69.08-.32-.16-1.34-.49-2.55-1.57-.94-.84-1.58-1.88-1.76-2.2-.19-.32-.02-.49.14-.65.14-.14.32-.37.48-.56.16-.19.21-.32.32-.53.11-.21.05-.4-.03-.56-.08-.16-.72-1.73-.98-2.36-.26-.62-.52-.53-.72-.54h-.61c-.21 0-.56.08-.85.4-.29.32-1.12 1.09-1.12 2.66s1.15 3.08 1.31 3.29c.16.21 2.27 3.46 5.5 4.85.77.33 1.37.53 1.84.68.77.24 1.47.21 2.02.13.62-.09 1.88-.77 2.15-1.52.27-.75.27-1.39.19-1.52-.08-.13-.29-.21-.61-.37Z"/>
+  </svg>
+  <span>WhatsApp</span>
+`;
+document.body.appendChild(floatingWhatsapp);
+
 document.querySelectorAll("[data-document-carousel]").forEach((carousel) => {
   const items = Array.from(carousel.querySelectorAll(".document-previews a"));
   const previous = carousel.querySelector("[data-carousel-prev]");

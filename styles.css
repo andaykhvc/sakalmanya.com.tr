@@ -107,12 +107,16 @@ button {
 }
 
 .main-nav {
+  position: absolute;
+  left: 50%;
   display: flex;
   justify-content: center;
-  gap: 14px;
+  gap: 12px;
+  transform: translateX(-50%);
   color: var(--ink-soft);
-  font-size: 0.88rem;
+  font-size: 0.86rem;
   font-weight: 500;
+  white-space: nowrap;
 }
 
 .main-nav a {
@@ -175,6 +179,41 @@ button {
 .header-cta:hover,
 .button:hover {
   transform: translateY(-2px);
+}
+
+.floating-whatsapp {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: 90;
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  min-height: 52px;
+  padding: 0 18px 0 14px;
+  border-radius: 999px;
+  background: #25d366;
+  color: var(--white);
+  box-shadow: 0 18px 38px rgba(37, 211, 102, 0.32);
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  transition:
+    transform 180ms ease,
+    box-shadow 180ms ease,
+    background-color 180ms ease;
+}
+
+.floating-whatsapp:hover {
+  background: #1fbd5a;
+  box-shadow: 0 22px 46px rgba(37, 211, 102, 0.42);
+  transform: translateY(-2px) scale(1.02);
+}
+
+.floating-whatsapp svg {
+  width: 23px;
+  height: 23px;
+  flex: 0 0 auto;
+  fill: currentColor;
 }
 
 .hero {
@@ -1165,6 +1204,27 @@ details p {
   color: var(--ink-soft);
 }
 
+@media (max-width: 1120px) {
+  .site-header {
+    gap: 14px;
+    padding: 0 22px;
+  }
+
+  .main-nav {
+    gap: 9px;
+    font-size: 0.78rem;
+  }
+
+  .language-switcher {
+    font-size: 0.74rem;
+  }
+
+  .header-cta {
+    min-height: 42px;
+    padding: 0 14px;
+  }
+}
+
 @media (max-width: 940px) {
   .site-header {
     display: flex;
@@ -1353,6 +1413,24 @@ details p {
 
   .footer-domain {
     justify-content: flex-start;
+  }
+
+  .floating-whatsapp {
+    right: 18px;
+    bottom: 18px;
+    width: 52px;
+    min-height: 52px;
+    justify-content: center;
+    padding: 0;
+  }
+
+  .floating-whatsapp span {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
   }
 }/* LinkedIn badge - Hakkımda bölümü */
 .linkedin-overlay-card {

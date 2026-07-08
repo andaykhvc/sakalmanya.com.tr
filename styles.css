@@ -708,6 +708,10 @@ h3 {
   border-top: 1px solid var(--line);
 }
 
+.faq-page .faq-category + .faq-category {
+  margin-top: 52px;
+}
+
 details {
   border-bottom: 1px solid var(--line);
 }

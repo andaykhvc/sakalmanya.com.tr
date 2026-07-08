@@ -67,11 +67,11 @@ button {
   top: 0;
   z-index: 50;
   display: grid;
-  grid-template-columns: auto 1fr auto;
+  grid-template-columns: auto 1fr auto auto;
   align-items: center;
-  gap: 26px;
+  gap: 18px;
   min-height: 76px;
-  padding: 0 38px;
+  padding: 0 30px;
   border-bottom: 1px solid rgba(17, 17, 17, 0.1);
   background: rgba(251, 250, 247, 0.92);
   backdrop-filter: blur(18px);
@@ -114,9 +114,9 @@ button {
 .main-nav {
   display: flex;
   justify-content: center;
-  gap: 18px;
+  gap: 14px;
   color: var(--ink-soft);
-  font-size: 0.9rem;
+  font-size: 0.88rem;
   font-weight: 500;
 }
 
@@ -130,6 +130,28 @@ button {
 }
 
 .main-nav a[aria-current="page"] {
+  color: var(--red-dark);
+  text-decoration: underline;
+}
+
+.language-switcher {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+
+.language-switcher a {
+  color: var(--muted);
+  text-underline-offset: 5px;
+}
+
+.language-switcher a:hover,
+.language-switcher a[aria-current="true"] {
   color: var(--red-dark);
   text-decoration: underline;
 }
@@ -222,6 +244,12 @@ h1 {
   font-family: var(--serif);
   font-size: clamp(4.4rem, 10vw, 9.6rem);
   line-height: 0.88;
+}
+
+.hero-title-long {
+  max-width: 980px;
+  font-size: clamp(3.2rem, 7vw, 7rem);
+  line-height: 0.94;
 }
 
 h2 {
@@ -824,6 +852,24 @@ details p {
   text-decoration: underline;
 }
 
+.footer-nav {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px 14px;
+  max-width: 520px;
+  margin-bottom: 10px;
+  color: var(--muted);
+  font-size: 0.88rem;
+  font-weight: 700;
+}
+
+.footer-nav a:hover {
+  color: var(--red-dark);
+  text-decoration: underline;
+  text-underline-offset: 5px;
+}
+
 .footer-grid .footer-links-panel {
   display: grid;
   gap: 8px;
@@ -1134,7 +1180,7 @@ details p {
 
   .brand {
     flex: 1 1 auto;
-    max-width: 100%;
+    max-width: calc(100% - 96px);
   }
 
   .brand strong {
@@ -1146,6 +1192,10 @@ details p {
   .main-nav,
   .header-cta {
     display: none;
+  }
+
+  .language-switcher {
+    margin-left: auto;
   }
 
   .hero {
@@ -1189,6 +1239,15 @@ details p {
   .footer-grid div:last-child {
     text-align: left;
   }
+
+  .footer-nav,
+  .footer-grid .footer-links-panel,
+  .social-links {
+    align-items: flex-start;
+    justify-content: flex-start;
+    justify-items: start;
+    text-align: left;
+  }
 }
 
 @media (max-width: 640px) {
@@ -1220,6 +1279,11 @@ details p {
     max-width: 358px;
     font-size: clamp(2rem, 9.2vw, 3.2rem);
     white-space: normal;
+  }
+
+  .hero-title-long {
+    max-width: 358px;
+    font-size: clamp(2rem, 8.8vw, 3rem);
   }
 
   .hero-copy {

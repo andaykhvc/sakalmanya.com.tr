@@ -114,9 +114,9 @@ button {
 .main-nav {
   display: flex;
   justify-content: center;
-  gap: 24px;
+  gap: 18px;
   color: var(--ink-soft);
-  font-size: 0.94rem;
+  font-size: 0.9rem;
   font-weight: 500;
 }
 
@@ -125,6 +125,11 @@ button {
 }
 
 .main-nav a:hover {
+  color: var(--red-dark);
+  text-decoration: underline;
+}
+
+.main-nav a[aria-current="page"] {
   color: var(--red-dark);
   text-decoration: underline;
 }

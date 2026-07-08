@@ -786,11 +786,12 @@ details p {
 .social-links {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: flex-end;
   gap: 8px;
-  margin-top: 14px;
+  margin: 0 0 6px;
   font-size: 1.05rem;
   font-weight: 700;
+  text-align: right;
 }
 
 .social-links a {
@@ -807,14 +808,14 @@ details p {
 }
 
 .social-links .social-linkedin {
-  color: #0a66c2;
+  color: var(--gold);
 }
 
 .social-links a:hover {
   text-decoration: underline;
 }
 
-.footer-grid div:last-child {
+.footer-grid .footer-links-panel {
   display: grid;
   gap: 8px;
   justify-items: end;

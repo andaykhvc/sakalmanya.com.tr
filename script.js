@@ -2,7 +2,7 @@ const yearElement = document.querySelector("[data-year]");
 
 const whatsappNumber = "905452013570";
 const whatsappMessage =
-  "Merhaba Anday, andaykahveci.de sitesinden yazıyorum. Almanya eğitim danışmanlığı için ön görüşme almak istiyorum. Hedefim ve mevcut Almanca seviyem hakkında bilgi paylaşabilirim.";
+  "Merhaba Anday, sakalmanya.com.tr üzerinden yazıyorum. Almanya eğitim danışmanlığı veya Almanca özel ders için ön görüşme almak istiyorum. Hedefim ve mevcut Almanca seviyem hakkında bilgi paylaşabilirim.";
 
 document.querySelectorAll("[data-whatsapp-link]").forEach((link) => {
   link.href = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(whatsappMessage)}`;

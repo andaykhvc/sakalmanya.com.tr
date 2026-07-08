@@ -41,22 +41,109 @@
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
-        "@type": "EducationalOrganization",
-        "name": "Anday Kahveci",
-        "alternateName": "ŞAK Almanya",
-        "url": "https://sakalmanya.com.tr/",
-        "image": "https://sakalmanya.com.tr/assets/hero-germany-study.png",
-        "areaServed": ["Türkiye", "Almanya"],
-        "knowsLanguage": ["tr", "de"],
-        "sameAs": ["https://de.linkedin.com/in/andaykahveci/en"],
-        "makesOffer": [
-          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Almanya eğitim danışmanlığı" } },
-          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Almanca özel ders" } },
-          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Almanya üniversite başvurusu" } },
-          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Hochschule başvurusu" } },
-          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Ausbildung danışmanlığı" } },
-          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Şartlı kabul danışmanlığı" } },
-          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Öğrenci vizesi hazırlık rehberliği" } }
+        "@graph": [
+          {
+            "@type": "Organization",
+            "@id": "https://sakalmanya.com.tr/#organization",
+            "name": "ŞAK Almanya",
+            "alternateName": [
+              "SAK Almanya",
+              "ŞAK Almanya Danışmanlık"
+            ],
+            "url": "https://sakalmanya.com.tr/",
+            "image": "https://sakalmanya.com.tr/assets/hero-germany-study.png",
+            "description": "ŞAK Almanya, Almanya’da eğitim, vize, üniversite başvurusu ve genel Almanya süreci hakkında Türkçe, Almanca ve İngilizce danışmanlık/yönlendirme sağlayan online bir markadır.",
+            "foundingDate": "2026",
+            "founder": {
+              "@id": "https://sakalmanya.com.tr/#founder"
+            },
+            "contactPoint": {
+              "@type": "ContactPoint",
+              "telephone": "+90-545-201-3570",
+              "contactType": "customer support",
+              "availableLanguage": [
+                "Turkish",
+                "German",
+                "English"
+              ],
+              "areaServed": [
+                "TR",
+                "DE"
+              ]
+            },
+            "areaServed": [
+              {
+                "@type": "Country",
+                "name": "Türkiye"
+              },
+              {
+                "@type": "Country",
+                "name": "Germany"
+              }
+            ],
+            "knowsLanguage": [
+              "Turkish",
+              "German",
+              "English"
+            ],
+            "sameAs": [
+              "https://www.instagram.com/andaykahveci",
+              "https://github.com/andaykhvc",
+              "https://www.linkedin.com/in/andaykahveci/"
+            ],
+            "makesOffer": [
+              { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Almanya eğitim danışmanlığı" } },
+              { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Almanca özel ders" } },
+              { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Almanya üniversite başvurusu" } },
+              { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Hochschule başvurusu" } },
+              { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Ausbildung danışmanlığı" } },
+              { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Şartlı kabul danışmanlığı" } },
+              { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Öğrenci vizesi hazırlık rehberliği" } }
+            ]
+          },
+          {
+            "@type": "Person",
+            "@id": "https://sakalmanya.com.tr/#founder",
+            "name": "Ş. Anday Kahveci",
+            "alternateName": "Anday Sahin Kahveci",
+            "description": "Ş. Anday Kahveci, Dresden’de öğrenci olarak Almanya’daki üniversite, başvuru, vize ve yerleşim süreçlerini bizzat deneyimlemiş; bu deneyimlerini ŞAK Almanya üzerinden öğrenci adaylarına anlaşılır ve pratik şekilde aktaran kurucudur.",
+            "jobTitle": "Founder",
+            "affiliation": {
+              "@id": "https://sakalmanya.com.tr/#organization"
+            },
+            "sameAs": [
+              "https://www.linkedin.com/in/andaykahveci/",
+              "https://github.com/andaykhvc",
+              "https://www.instagram.com/andaykahveci"
+            ]
+          },
+          {
+            "@type": "WebSite",
+            "@id": "https://sakalmanya.com.tr/#website",
+            "url": "https://sakalmanya.com.tr/",
+            "name": "ŞAK Almanya",
+            "publisher": {
+              "@id": "https://sakalmanya.com.tr/#organization"
+            },
+            "inLanguage": "tr"
+          },
+          {
+            "@type": "WebPage",
+            "@id": "https://sakalmanya.com.tr/#webpage",
+            "url": "https://sakalmanya.com.tr/",
+            "name": "Almanya Eğitim Danışmanlığı ve Almanca Özel Ders | Anday Kahveci",
+            "isPartOf": {
+              "@id": "https://sakalmanya.com.tr/#website"
+            },
+            "about": {
+              "@id": "https://sakalmanya.com.tr/#organization"
+            },
+            "primaryImageOfPage": {
+              "@type": "ImageObject",
+              "url": "https://sakalmanya.com.tr/assets/hero-germany-study.png"
+            },
+            "inLanguage": "tr"
+          }
         ]
       }
     </script>

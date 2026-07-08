@@ -28,6 +28,30 @@ document.querySelectorAll("[data-document-carousel]").forEach((carousel) => {
   show(0);
 });
 
+const universityFilters = document.querySelector("[data-university-filters]");
+const universityCards = Array.from(document.querySelectorAll("[data-university-grid] .university-card"));
+
+if (universityFilters && universityCards.length) {
+  const filterCards = () => {
+    const values = Object.fromEntries(
+      Array.from(universityFilters.querySelectorAll("[data-filter]")).map((field) => [field.dataset.filter, field.value])
+    );
+
+    universityCards.forEach((card) => {
+      const matchesState = !values.state || card.dataset.state === values.state;
+      const matchesType = !values.type || card.dataset.type === values.type;
+      const matchesGermanCourse = !values.germanCourse || card.dataset.germanCourse === values.germanCourse;
+      const matchesLevel = !values.level || card.dataset.level?.includes(values.level);
+      const matchesUniAssist = !values.uniAssist || card.dataset.uniAssist === values.uniAssist;
+
+      card.hidden = !(matchesState && matchesType && matchesGermanCourse && matchesLevel && matchesUniAssist);
+    });
+  };
+
+  universityFilters.addEventListener("change", filterCards);
+  filterCards();
+}
+
 const documentModal = document.querySelector("[data-document-modal]");
 const documentFrame = document.querySelector("[data-document-frame]");
 const modalPrevious = document.querySelector("[data-document-modal-prev]");

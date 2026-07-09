@@ -1138,8 +1138,12 @@ details p {
 }
 
 .university-card > .button {
-  align-self: end;
-  margin-top: auto;
+  align-self: start;
+  justify-self: start;
+  margin-top: 0;
+  border-color: var(--ink);
+  background: transparent;
+  color: var(--ink);
   opacity: 1;
   visibility: visible;
   transform: none;
@@ -1147,6 +1151,9 @@ details p {
 }
 
 .university-card > .button:hover {
+  border-color: var(--ink);
+  background: var(--ink);
+  color: var(--white);
   transform: none;
 }
 

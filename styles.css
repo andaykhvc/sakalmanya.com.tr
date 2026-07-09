@@ -1163,6 +1163,17 @@ details p {
   transform: none;
 }
 
+.university-empty-state {
+  grid-column: 1 / -1;
+  margin: 0;
+  padding: 34px 24px;
+  border: 1px solid var(--line);
+  background: var(--white);
+  color: var(--muted);
+  font-weight: 700;
+  text-align: center;
+}
+
 .university-type {
   margin: 0;
   color: var(--red-dark);

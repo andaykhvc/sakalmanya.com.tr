@@ -1137,6 +1137,19 @@ details p {
   line-height: 1.05;
 }
 
+.university-card > .button {
+  align-self: end;
+  margin-top: auto;
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+  animation: none;
+}
+
+.university-card > .button:hover {
+  transform: none;
+}
+
 .university-type {
   margin: 0;
   color: var(--red-dark);

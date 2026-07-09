@@ -832,9 +832,13 @@ details p {
 
 .footer-grid {
   display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 24px;
+  grid-template-columns: minmax(0, 1fr) minmax(220px, 0.7fr);
+  gap: 32px;
   align-items: center;
+}
+
+.footer-about {
+  max-width: 560px;
 }
 
 .footer-grid p,
@@ -885,11 +889,13 @@ details p {
   flex-wrap: wrap;
   justify-content: flex-end;
   gap: 8px 14px;
-  max-width: 520px;
-  margin-bottom: 10px;
-  color: var(--muted);
-  font-size: 0.88rem;
+  margin-bottom: 4px;
+  font-size: 1rem;
   font-weight: 700;
+}
+
+.footer-nav a {
+  color: var(--ink);
 }
 
 .footer-nav a:hover {
@@ -902,6 +908,7 @@ details p {
   display: grid;
   gap: 8px;
   justify-items: end;
+  min-width: min(320px, 100%);
   text-align: right;
 }
 

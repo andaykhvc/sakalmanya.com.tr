@@ -1138,9 +1138,9 @@ details p {
 }
 
 .university-card > .button {
-  align-self: start;
-  justify-self: start;
-  margin-top: 0;
+  align-self: end;
+  justify-self: center;
+  margin-top: auto;
   border-color: var(--ink);
   background: transparent;
   color: var(--ink);

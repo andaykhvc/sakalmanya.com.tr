@@ -1,0 +1,6 @@
+*.xlsx
+*.xls
+server-data/
+data/
+tmp/
+assets/logo-export/

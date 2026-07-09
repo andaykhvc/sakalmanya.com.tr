@@ -1180,6 +1180,12 @@ details p {
   font-weight: 700;
 }
 
+.university-card-meta {
+  margin: -6px 0 0;
+  color: var(--muted);
+  font-weight: 700;
+}
+
 .university-facts-mini {
   display: grid;
   gap: 10px;
@@ -1201,6 +1207,16 @@ details p {
 .university-facts-mini dd {
   margin: 0;
   color: var(--ink-soft);
+}
+
+.university-load-more {
+  display: flex;
+  width: fit-content;
+  margin: 28px auto 0;
+}
+
+.university-load-more[hidden] {
+  display: none;
 }
 
 .table-wrap {

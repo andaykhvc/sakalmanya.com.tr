@@ -52,27 +52,208 @@ document.querySelectorAll("[data-document-carousel]").forEach((carousel) => {
 });
 
 const universityFilters = document.querySelector("[data-university-filters]");
-const universityCards = Array.from(document.querySelectorAll("[data-university-grid] .university-card"));
+const universityGrid = document.querySelector("[data-university-grid]");
+const universityLoadMore = document.createElement("button");
 
-if (universityFilters && universityCards.length) {
-  const filterCards = () => {
-    const values = Object.fromEntries(
-      Array.from(universityFilters.querySelectorAll("[data-filter]")).map((field) => [field.dataset.filter, field.value])
-    );
+const universityCopy = {
+  tr: {
+    all: "Tümü",
+    loading: "Üniversite verileri yükleniyor...",
+    empty: "Üniversite verisi yakında eklenecek.",
+    error: "Üniversite verileri şu an yüklenemedi.",
+    loadMore: "Daha fazla göster",
+    source: "Resmi kaynak",
+    qs: "QS 2026",
+    bachelor: "Lisans",
+    master: "Master",
+    germanPrep: "Almanca hazırlık",
+    uniAssist: "Uni-Assist",
+    lastChecked: "Son kontrol",
+  },
+  de: {
+    all: "Alle",
+    loading: "Universitätsdaten werden geladen...",
+    empty: "Universitätsdaten werden bald ergänzt.",
+    error: "Universitätsdaten konnten gerade nicht geladen werden.",
+    loadMore: "Mehr anzeigen",
+    source: "Offizielle Quelle",
+    qs: "QS 2026",
+    bachelor: "Bachelor",
+    master: "Master",
+    germanPrep: "Deutschvorbereitung",
+    uniAssist: "Uni-Assist",
+    lastChecked: "Zuletzt geprüft",
+  },
+  en: {
+    all: "All",
+    loading: "Loading university data...",
+    empty: "University data will be added soon.",
+    error: "University data could not be loaded right now.",
+    loadMore: "Show more",
+    source: "Official source",
+    qs: "QS 2026",
+    bachelor: "Bachelor",
+    master: "Master",
+    germanPrep: "German prep",
+    uniAssist: "Uni-Assist",
+    lastChecked: "Last checked",
+  },
+};
 
-    universityCards.forEach((card) => {
-      const matchesState = !values.state || card.dataset.state === values.state;
-      const matchesType = !values.type || card.dataset.type === values.type;
-      const matchesGermanCourse = !values.germanCourse || card.dataset.germanCourse === values.germanCourse;
-      const matchesLevel = !values.level || card.dataset.level?.includes(values.level);
-      const matchesUniAssist = !values.uniAssist || card.dataset.uniAssist === values.uniAssist;
+const activeUniversityCopy = universityCopy[pageLanguage] || universityCopy.tr;
 
-      card.hidden = !(matchesState && matchesType && matchesGermanCourse && matchesLevel && matchesUniAssist);
-    });
+if (universityFilters && universityGrid) {
+  let universityPage = 1;
+  let hasMoreUniversities = false;
+  let universityFiltersPopulated = false;
+
+  universityLoadMore.type = "button";
+  universityLoadMore.className = "button button-secondary university-load-more";
+  universityLoadMore.textContent = activeUniversityCopy.loadMore;
+  universityLoadMore.hidden = true;
+  universityGrid.after(universityLoadMore);
+
+  const setUniversityMessage = (message) => {
+    universityGrid.innerHTML = "";
+    const emptyState = document.createElement("p");
+    emptyState.className = "university-empty-state";
+    emptyState.textContent = message;
+    universityGrid.append(emptyState);
   };
 
-  universityFilters.addEventListener("change", filterCards);
-  filterCards();
+  const getLabel = (option) => option?.label?.[pageLanguage] || option?.label?.tr || option?.value || "";
+
+  const populateUniversityFilters = (filters) => {
+    if (!filters || universityFiltersPopulated) return;
+    universityFilters.querySelectorAll("[data-filter]").forEach((field) => {
+      const options = filters[field.dataset.filter];
+      if (!Array.isArray(options)) return;
+      const currentValue = field.value;
+      field.innerHTML = "";
+      const allOption = document.createElement("option");
+      allOption.value = "";
+      allOption.textContent = activeUniversityCopy.all;
+      field.append(allOption);
+      options.forEach((option) => {
+        const element = document.createElement("option");
+        element.value = option.value;
+        element.textContent = getLabel(option);
+        field.append(element);
+      });
+      field.value = currentValue;
+    });
+    universityFiltersPopulated = true;
+  };
+
+  const currentUniversityParams = () => {
+    const params = new URLSearchParams({ page: String(universityPage), limit: "12" });
+    universityFilters.querySelectorAll("[data-filter]").forEach((field) => {
+      if (field.value) params.set(field.dataset.filter, field.value);
+    });
+    return params;
+  };
+
+  const createFact = (label, value) => {
+    const wrapper = document.createElement("div");
+    const term = document.createElement("dt");
+    const description = document.createElement("dd");
+    term.textContent = label;
+    description.textContent = value || "-";
+    wrapper.append(term, description);
+    return wrapper;
+  };
+
+  const renderUniversityCard = (item) => {
+    const card = document.createElement("article");
+    card.className = "university-card";
+
+    const location = document.createElement("p");
+    location.className = "section-label";
+    location.textContent = [item.city, item.state].filter(Boolean).join(" / ");
+
+    const title = document.createElement("h2");
+    title.textContent = item.name;
+
+    const type = document.createElement("p");
+    type.className = "university-type";
+    type.textContent = item.type;
+
+    const meta = document.createElement("p");
+    meta.className = "university-card-meta";
+    meta.textContent = `${activeUniversityCopy.qs}: ${item.qsWorldRanking2026 || "-"}`;
+
+    const facts = document.createElement("dl");
+    facts.className = "university-facts-mini";
+    facts.append(
+      createFact(activeUniversityCopy.bachelor, item.bachelorDeadline),
+      createFact(activeUniversityCopy.master, item.masterDeadline),
+      createFact(activeUniversityCopy.germanPrep, item.germanPrepStatus),
+      createFact(activeUniversityCopy.uniAssist, item.uniAssistStatus),
+      createFact(activeUniversityCopy.lastChecked, item.lastChecked)
+    );
+
+    const schoolIntro = document.createElement("p");
+    schoolIntro.textContent = item.schoolIntro;
+
+    const cityIntro = document.createElement("p");
+    cityIntro.textContent = item.cityIntro;
+
+    const source = document.createElement("a");
+    source.className = "button button-secondary";
+    source.href = item.sourceUrl || "#";
+    source.target = "_blank";
+    source.rel = "noopener noreferrer";
+    source.textContent = activeUniversityCopy.source;
+
+    card.append(location, title, type, meta, facts, schoolIntro, cityIntro, source);
+    return card;
+  };
+
+  const loadUniversities = async ({ reset = false } = {}) => {
+    if (reset) {
+      universityPage = 1;
+      setUniversityMessage(activeUniversityCopy.loading);
+    }
+
+    universityLoadMore.disabled = true;
+    const response = await fetch(`/api/universities?${currentUniversityParams().toString()}`);
+    if (!response.ok) throw new Error("University API request failed");
+    const payload = await response.json();
+    populateUniversityFilters(payload.filters);
+
+    if (reset) universityGrid.innerHTML = "";
+
+    if (!payload.items?.length && universityPage === 1) {
+      setUniversityMessage(activeUniversityCopy.empty);
+    } else {
+      payload.items.forEach((item) => universityGrid.append(renderUniversityCard(item)));
+    }
+
+    hasMoreUniversities = Boolean(payload.pagination?.hasMore);
+    universityLoadMore.hidden = !hasMoreUniversities;
+    universityLoadMore.disabled = false;
+  };
+
+  universityFilters.addEventListener("change", () => {
+    loadUniversities({ reset: true }).catch(() => {
+      universityLoadMore.hidden = true;
+      setUniversityMessage(activeUniversityCopy.error);
+    });
+  });
+
+  universityLoadMore.addEventListener("click", () => {
+    if (!hasMoreUniversities) return;
+    universityPage += 1;
+    loadUniversities().catch(() => {
+      universityLoadMore.hidden = true;
+      setUniversityMessage(activeUniversityCopy.error);
+    });
+  });
+
+  loadUniversities({ reset: true }).catch(() => {
+    universityLoadMore.hidden = true;
+    setUniversityMessage(activeUniversityCopy.error);
+  });
 }
 
 const documentModal = document.querySelector("[data-document-modal]");

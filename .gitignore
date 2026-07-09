@@ -4,3 +4,8 @@ node_modules/
 tmp/
 .DS_Store
 *.log
+*.xlsx
+*.xls
+server-data/
+data/
+assets/logo-export/

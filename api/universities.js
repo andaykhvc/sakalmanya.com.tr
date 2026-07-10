@@ -1,1147 +1,10 @@
-const UNIVERSITIES = [
-  {
-    "name": "Universität Leipzig",
-    "slug": "universitaet-leipzig",
-    "city": "Leipzig",
-    "state": "Sachsen",
-    "type": "Universität",
-    "qsWorldRanking2026": "QS Top 500 dışında",
-    "schoolIntro": "Almanya’nın köklü araştırma üniversitelerinden biri; hukuk, sosyal bilimler, beşeri bilimler, doğa bilimleri ve tıp gibi geniş alanlarda güçlü bir seçenek sunar.",
-    "cityIntro": "Leipzig genç, kültürel ve öğrenci dostu bir şehir; Berlin’e göre daha hesaplı, ulaşımı kolay ve yaratıcı sektörleri güçlü bir yaşam sunar.",
-    "bachelorDeadline": "15 Temmuz 2026",
-    "masterDeadline": "31 Mayıs 2026",
-    "germanPrepStatus": "Hazırlık/DSH kursu var",
-    "uniAssistStatus": "Program bazlı / değişken",
-    "lastChecked": "2026-07-09",
-    "sourceUrl": "https://www.uni-leipzig.de/en/international/studying-at-leipzig-university/application-and-preparing-to-study/masters-programmes",
-    "detailUrl": "/universiteler/universitaet-leipzig/",
-    "filters": {
-      "state": "Sachsen",
-      "type": "Universität",
-      "germanCourse": "Hazırlık/DSH kursu var",
-      "level": [
-        "Lisans",
-        "Master"
-      ],
-      "uniAssist": "Program bazlı / değişken"
-    }
-  },
-  {
-    "name": "Technische Universität Dresden",
-    "slug": "tu-dresden",
-    "city": "Dresden",
-    "state": "Sachsen",
-    "type": "Technische Universität",
-    "qsWorldRanking2026": "#218",
-    "schoolIntro": "Saksonya’nın en güçlü teknik araştırma merkezlerinden biri; mühendislik, informatik, malzeme, ulaşım ve doğa bilimleri alanlarında öne çıkar.",
-    "cityIntro": "Dresden tarihi mimarisi, Elbe kıyısı, teknik ekosistemi ve görece sakin yaşam temposuyla öğrenciler için dengeli ve yaşanabilir bir şehirdir.",
-    "bachelorDeadline": "Program bazlı kontrol edilmeli",
-    "masterDeadline": "Program bazlı kontrol edilmeli",
-    "germanPrepStatus": "Hazırlık/DSH kursu var",
-    "uniAssistStatus": "Program bazlı / değişken",
-    "lastChecked": "2026-07-09",
-    "sourceUrl": "https://tu-dresden.de/studium/vor-dem-studium/bewerbung/bewerbungsfristen?set_language=en",
-    "detailUrl": "/universiteler/tu-dresden/",
-    "filters": {
-      "state": "Sachsen",
-      "type": "Technische Universität",
-      "germanCourse": "Hazırlık/DSH kursu var",
-      "level": [
-        "Lisans",
-        "Master"
-      ],
-      "uniAssist": "Program bazlı / değişken"
-    }
-  },
-  {
-    "name": "Technische Universität Chemnitz",
-    "slug": "tu-chemnitz",
-    "city": "Chemnitz",
-    "state": "Sachsen",
-    "type": "Technische Universität",
-    "qsWorldRanking2026": "QS Top 500 dışında",
-    "schoolIntro": "Daha kompakt ve teknik odaklı bir üniversite; otomotiv, üretim, sensörik, informatik ve uygulamalı mühendislik alanları için mantıklı bir alternatif olabilir.",
-    "cityIntro": "Chemnitz daha uygun maliyetli ve sakin bir Saksonya şehridir; teknik/sanayi geçmişi ve düşük kira potansiyeliyle bütçe odaklı öğrenciler için mantıklıdır.",
-    "bachelorDeadline": "15 Temmuz 2026",
-    "masterDeadline": "15 Temmuz 2026",
-    "germanPrepStatus": "Hazırlık/DSH kursu var",
-    "uniAssistStatus": "Program bazlı / değişken",
-    "lastChecked": "2026-07-09",
-    "sourceUrl": "https://hochschuldaten.che.de/sachsen/hochschulen/",
-    "detailUrl": "/universiteler/tu-chemnitz/",
-    "filters": {
-      "state": "Sachsen",
-      "type": "Technische Universität",
-      "germanCourse": "Hazırlık/DSH kursu var",
-      "level": [
-        "Lisans",
-        "Master"
-      ],
-      "uniAssist": "Program bazlı / değişken"
-    }
-  },
-  {
-    "name": "HTW Dresden",
-    "slug": "htw-dresden",
-    "city": "Dresden",
-    "state": "Sachsen",
-    "type": "Hochschule",
-    "qsWorldRanking2026": "QS Top 500 dışında",
-    "schoolIntro": "Uygulama odaklı Hochschule yapısıyla pratik mühendislik, informatik, tasarım ve ekonomi alanlarında daha mesleğe yakın bir eğitim profili sunar.",
-    "cityIntro": "Dresden tarihi mimarisi, Elbe kıyısı, teknik ekosistemi ve görece sakin yaşam temposuyla öğrenciler için dengeli ve yaşanabilir bir şehirdir.",
-    "bachelorDeadline": "15 Haziran 2026",
-    "masterDeadline": "15 Haziran 2026",
-    "germanPrepStatus": "Hazırlık/DSH kursu var",
-    "uniAssistStatus": "Program bazlı / değişken",
-    "lastChecked": "2026-07-09",
-    "sourceUrl": "https://www.htw-dresden.de/en/international/coming-to-htw-dresden/degree-studies-at-htw-dresden",
-    "detailUrl": "/universiteler/htw-dresden/",
-    "filters": {
-      "state": "Sachsen",
-      "type": "Hochschule",
-      "germanCourse": "Hazırlık/DSH kursu var",
-      "level": [
-        "Lisans",
-        "Master"
-      ],
-      "uniAssist": "Program bazlı / değişken"
-    }
-  },
-  {
-    "name": "HTWK Leipzig",
-    "slug": "htwk-leipzig",
-    "city": "Leipzig",
-    "state": "Sachsen",
-    "type": "Hochschule",
-    "qsWorldRanking2026": "QS Top 500 dışında",
-    "schoolIntro": "Teknik ve uygulamalı alanlara odaklanan Leipzig merkezli Hochschule; mühendislik, medya, ekonomi ve mimarlık gibi alanlarda pratik yönü güçlüdür.",
-    "cityIntro": "Leipzig genç, kültürel ve öğrenci dostu bir şehir; Berlin’e göre daha hesaplı, ulaşımı kolay ve yaratıcı sektörleri güçlü bir yaşam sunar.",
-    "bachelorDeadline": "15 Temmuz 2026",
-    "masterDeadline": "15 Temmuz 2026",
-    "germanPrepStatus": "Hazırlık/DSH kursu var",
-    "uniAssistStatus": "Program bazlı / değişken",
-    "lastChecked": "2026-07-09",
-    "sourceUrl": "https://www.htwk-leipzig.de/studieren/bewerbung-auswahlverfahren/internationale-studieninteressierte",
-    "detailUrl": "/universiteler/htwk-leipzig/",
-    "filters": {
-      "state": "Sachsen",
-      "type": "Hochschule",
-      "germanCourse": "Hazırlık/DSH kursu var",
-      "level": [
-        "Lisans",
-        "Master"
-      ],
-      "uniAssist": "Program bazlı / değişken"
-    }
-  },
-  {
-    "name": "RWTH Aachen University",
-    "slug": "rwth-aachen",
-    "city": "Aachen",
-    "state": "Nordrhein-Westfalen",
-    "type": "Technische Universität",
-    "qsWorldRanking2026": "#105",
-    "schoolIntro": "Almanya’nın en prestijli teknik üniversitelerinden biri; özellikle makine, elektrik, endüstri, malzeme ve bilgisayar mühendisliği için çok rekabetçidir.",
-    "cityIntro": "Aachen küçük ama çok uluslararası bir öğrenci şehridir; Hollanda ve Belçika sınırına yakınlığı, teknik sanayi bağlantıları ve RWTH etkisiyle öne çıkar.",
-    "bachelorDeadline": "15 Temmuz 2026",
-    "masterDeadline": "15 Temmuz 2026",
-    "germanPrepStatus": "Hazırlık/DSH kursu yok",
-    "uniAssistStatus": "Henüz doğrulanmadı",
-    "lastChecked": "2026-07-09",
-    "sourceUrl": "https://www.tu9.de/en/",
-    "detailUrl": "/universiteler/rwth-aachen/",
-    "filters": {
-      "state": "Nordrhein-Westfalen",
-      "type": "Technische Universität",
-      "germanCourse": "Hazırlık/DSH kursu yok",
-      "level": [
-        "Lisans",
-        "Master"
-      ],
-      "uniAssist": "Henüz doğrulanmadı"
-    }
-  },
-  {
-    "name": "Technische Universität Berlin",
-    "slug": "tu-berlin",
-    "city": "Berlin",
-    "state": "Berlin",
-    "type": "Technische Universität",
-    "qsWorldRanking2026": "#145",
-    "schoolIntro": "Başkentte güçlü teknik ve araştırma ağı sunan büyük bir üniversite; mühendislik, şehircilik, informatik ve sürdürülebilirlik alanlarında çok sayıda seçenek sağlar.",
-    "cityIntro": "Berlin Almanya’nın en uluslararası ve hareketli şehri; kültür, startup, teknoloji ve sosyal hayat çok güçlüdür fakat konaklama bulmak zor olabilir.",
-    "bachelorDeadline": "15 Temmuz 2026",
-    "masterDeadline": "15 Haziran 2026",
-    "germanPrepStatus": "Hazırlık/DSH kursu var",
-    "uniAssistStatus": "Program bazlı / değişken",
-    "lastChecked": "2026-07-09",
-    "sourceUrl": "https://www.tu9.de/en/",
-    "detailUrl": "/universiteler/tu-berlin/",
-    "filters": {
-      "state": "Berlin",
-      "type": "Technische Universität",
-      "germanCourse": "Hazırlık/DSH kursu var",
-      "level": [
-        "Lisans",
-        "Master"
-      ],
-      "uniAssist": "Program bazlı / değişken"
-    }
-  },
-  {
-    "name": "Technische Universität Braunschweig",
-    "slug": "tu-braunschweig",
-    "city": "Braunschweig",
-    "state": "Niedersachsen",
-    "type": "Technische Universität",
-    "qsWorldRanking2026": "QS Top 500 dışında",
-    "schoolIntro": "Otomotiv, havacılık, makine ve mühendislik kültürü güçlü bir teknik üniversite; daha sakin şehir isteyen teknik öğrenciler için iyi bir profildir.",
-    "cityIntro": "Braunschweig daha sakin, teknik sanayi bağlantıları güçlü ve öğrenci yaşamı yönetilebilir bir şehirdir; özellikle otomotiv ve mühendislik çevresi dikkat çeker.",
-    "bachelorDeadline": "15 Temmuz 2026",
-    "masterDeadline": "15 Temmuz 2026",
-    "germanPrepStatus": "Hazırlık/DSH kursu var",
-    "uniAssistStatus": "Henüz doğrulanmadı",
-    "lastChecked": "2026-07-09",
-    "sourceUrl": "https://www.tu9.de/en/",
-    "detailUrl": "/universiteler/tu-braunschweig/",
-    "filters": {
-      "state": "Niedersachsen",
-      "type": "Technische Universität",
-      "germanCourse": "Hazırlık/DSH kursu var",
-      "level": [
-        "Lisans",
-        "Master"
-      ],
-      "uniAssist": "Henüz doğrulanmadı"
-    }
-  },
-  {
-    "name": "Technische Universität Darmstadt",
-    "slug": "tu-darmstadt",
-    "city": "Darmstadt",
-    "state": "Hessen",
-    "type": "Technische Universität",
-    "qsWorldRanking2026": "#253",
-    "schoolIntro": "Mühendislik, informatik, yapay zeka, siber güvenlik ve dijitalleşme alanlarında güçlü bir teknik üniversite; Rhein-Main iş ağıyla avantajlıdır.",
-    "cityIntro": "Darmstadt teknoloji, araştırma kurumları ve IT çevresiyle bilinir; Frankfurt’a yakınlığı sayesinde iş/staj ağı açısından avantajlıdır.",
-    "bachelorDeadline": "Program bazlı kontrol edilmeli",
-    "masterDeadline": "Program bazlı kontrol edilmeli",
-    "germanPrepStatus": "Hazırlık/DSH kursu var",
-    "uniAssistStatus": "Henüz doğrulanmadı",
-    "lastChecked": "2026-07-09",
-    "sourceUrl": "https://www.tu9.de/en/",
-    "detailUrl": "/universiteler/tu-darmstadt/",
-    "filters": {
-      "state": "Hessen",
-      "type": "Technische Universität",
-      "germanCourse": "Hazırlık/DSH kursu var",
-      "level": [
-        "Lisans",
-        "Master"
-      ],
-      "uniAssist": "Henüz doğrulanmadı"
-    }
-  },
-  {
-    "name": "Leibniz Universität Hannover",
-    "slug": "leibniz-hannover",
-    "city": "Hannover",
-    "state": "Niedersachsen",
-    "type": "Technische Universität",
-    "qsWorldRanking2026": "#433",
-    "schoolIntro": "Geniş program yelpazesine sahip büyük bir üniversite; mühendislik, mimarlık, hukuk, ekonomi ve doğa bilimlerini teknik profil ile birleştirir.",
-    "cityIntro": "Hannover büyük şehir imkanlarını daha dengeli yaşam maliyetiyle sunar; fuar, ulaşım ve teknik iş ağı açısından merkezi bir konumdadır.",
-    "bachelorDeadline": "15 Temmuz 2026",
-    "masterDeadline": "15 Temmuz 2026",
-    "germanPrepStatus": "Hazırlık/DSH kursu var",
-    "uniAssistStatus": "Program bazlı / değişken",
-    "lastChecked": "2026-07-09",
-    "sourceUrl": "https://www.tu9.de/en/",
-    "detailUrl": "/universiteler/leibniz-hannover/",
-    "filters": {
-      "state": "Niedersachsen",
-      "type": "Technische Universität",
-      "germanCourse": "Hazırlık/DSH kursu var",
-      "level": [
-        "Lisans",
-        "Master"
-      ],
-      "uniAssist": "Program bazlı / değişken"
-    }
-  },
-  {
-    "name": "Karlsruher Institut für Technologie",
-    "slug": "kit",
-    "city": "Karlsruhe",
-    "state": "Baden-Württemberg",
-    "type": "Technische Universität",
-    "qsWorldRanking2026": "#98",
-    "schoolIntro": "Üniversite ve büyük araştırma merkezi karakterini birleştiren çok güçlü teknik kurum; enerji, informatik, mühendislik ve doğa bilimlerinde yüksek itibara sahiptir.",
-    "cityIntro": "Karlsruhe teknik ve hukuk kurumlarıyla bilinen düzenli bir öğrenci şehridir; bisiklet kullanımı, teknoloji şirketleri ve Fransa’ya yakınlığı avantajdır.",
-    "bachelorDeadline": "15 Temmuz 2026",
-    "masterDeadline": "15 Temmuz 2026",
-    "germanPrepStatus": "Hazırlık/DSH kursu var",
-    "uniAssistStatus": "Henüz doğrulanmadı",
-    "lastChecked": "2026-07-09",
-    "sourceUrl": "https://www.tu9.de/en/",
-    "detailUrl": "/universiteler/kit/",
-    "filters": {
-      "state": "Baden-Württemberg",
-      "type": "Technische Universität",
-      "germanCourse": "Hazırlık/DSH kursu var",
-      "level": [
-        "Lisans",
-        "Master"
-      ],
-      "uniAssist": "Henüz doğrulanmadı"
-    }
-  },
-  {
-    "name": "Technical University of Munich",
-    "slug": "tum",
-    "city": "München",
-    "state": "Bayern",
-    "type": "Technische Universität",
-    "qsWorldRanking2026": "#22",
-    "schoolIntro": "Almanya’nın en rekabetçi teknik üniversitelerinden biri; mühendislik, informatik, işletme, sağlık teknolojileri ve girişimcilik ekosistemiyle çok güçlüdür.",
-    "cityIntro": "Münih çok güçlü iş, teknoloji ve yaşam kalitesi sunar; ancak Almanya’nın en pahalı şehirlerinden biri olduğu için bütçe planı kritik önem taşır.",
-    "bachelorDeadline": "15 Temmuz 2026",
-    "masterDeadline": "Program bazlı kontrol edilmeli",
-    "germanPrepStatus": "Hazırlık/DSH kursu var",
-    "uniAssistStatus": "Uni-Assist var",
-    "lastChecked": "2026-07-09",
-    "sourceUrl": "https://www.tu9.de/en/",
-    "detailUrl": "/universiteler/tum/",
-    "filters": {
-      "state": "Bayern",
-      "type": "Technische Universität",
-      "germanCourse": "Hazırlık/DSH kursu var",
-      "level": [
-        "Lisans",
-        "Master"
-      ],
-      "uniAssist": "Uni-Assist var"
-    }
-  },
-  {
-    "name": "Universität Stuttgart",
-    "slug": "universitaet-stuttgart",
-    "city": "Stuttgart",
-    "state": "Baden-Württemberg",
-    "type": "Technische Universität",
-    "qsWorldRanking2026": "#310",
-    "schoolIntro": "Otomotiv, havacılık, makine, inşaat ve sistem mühendisliği alanlarında güçlü teknik profil sunar; Baden-Württemberg sanayi ağıyla yakındır.",
-    "cityIntro": "Stuttgart otomotiv ve mühendislik sanayisinin kalbinde yer alır; Mercedes-Benz, Porsche ve tedarikçi ekosistemi nedeniyle teknik öğrenciler için güçlüdür.",
-    "bachelorDeadline": "15 Temmuz 2026",
-    "masterDeadline": "Program bazlı kontrol edilmeli",
-    "germanPrepStatus": "Hazırlık/DSH kursu var",
-    "uniAssistStatus": "Henüz doğrulanmadı",
-    "lastChecked": "2026-07-09",
-    "sourceUrl": "https://www.tu9.de/en/",
-    "detailUrl": "/universiteler/universitaet-stuttgart/",
-    "filters": {
-      "state": "Baden-Württemberg",
-      "type": "Technische Universität",
-      "germanCourse": "Hazırlık/DSH kursu var",
-      "level": [
-        "Lisans",
-        "Master"
-      ],
-      "uniAssist": "Henüz doğrulanmadı"
-    }
-  },
-  {
-    "name": "Ludwig-Maximilians-Universität München",
-    "slug": "lmu-muenchen",
-    "city": "München",
-    "state": "Bayern",
-    "type": "Universität",
-    "qsWorldRanking2026": "#58",
-    "schoolIntro": "Almanya’nın en güçlü klasik araştırma üniversitelerinden biri; tıp, hukuk, sosyal bilimler, beşeri bilimler ve doğa bilimlerinde çok geniş seçenek sunar.",
-    "cityIntro": "Münih çok güçlü iş, teknoloji ve yaşam kalitesi sunar; ancak Almanya’nın en pahalı şehirlerinden biri olduğu için bütçe planı kritik önem taşır.",
-    "bachelorDeadline": "15 Temmuz 2026",
-    "masterDeadline": "15 Temmuz 2026",
-    "germanPrepStatus": "Hazırlık/DSH kursu yok",
-    "uniAssistStatus": "Program bazlı / değişken",
-    "lastChecked": "2026-07-09",
-    "sourceUrl": "https://www.lmu.de/en/study/all-degrees-and-programs/international-degree-students/",
-    "detailUrl": "/universiteler/lmu-muenchen/",
-    "filters": {
-      "state": "Bayern",
-      "type": "Universität",
-      "germanCourse": "Hazırlık/DSH kursu yok",
-      "level": [
-        "Lisans",
-        "Master"
-      ],
-      "uniAssist": "Program bazlı / değişken"
-    }
-  },
-  {
-    "name": "Ruprecht-Karls-Universität Heidelberg",
-    "slug": "universitaet-heidelberg",
-    "city": "Heidelberg",
-    "state": "Baden-Württemberg",
-    "type": "Universität",
-    "qsWorldRanking2026": "#80",
-    "schoolIntro": "Almanya’nın en eski ve en itibarlı üniversitelerinden biri; tıp, yaşam bilimleri, beşeri bilimler ve araştırma odaklı akademik profil açısından güçlüdür.",
-    "cityIntro": "Heidelberg tarihi ve çok öğrenci odaklı bir şehirdir; küçük/orta ölçekli yapısı, uluslararası atmosferi ve akademik kimliğiyle öne çıkar.",
-    "bachelorDeadline": "15 Temmuz 2026",
-    "masterDeadline": "Program bazlı kontrol edilmeli",
-    "germanPrepStatus": "Hazırlık/DSH kursu var",
-    "uniAssistStatus": "Program bazlı / değişken",
-    "lastChecked": "2026-07-09",
-    "sourceUrl": "https://www.uni-heidelberg.de/en/study/management-of-studies/key-dates-deadlines/application-deadlines-for-the-1st-semester-of-undergraduate-degree-programmes",
-    "detailUrl": "/universiteler/universitaet-heidelberg/",
-    "filters": {
-      "state": "Baden-Württemberg",
-      "type": "Universität",
-      "germanCourse": "Hazırlık/DSH kursu var",
-      "level": [
-        "Lisans",
-        "Master"
-      ],
-      "uniAssist": "Program bazlı / değişken"
-    }
-  },
-  {
-    "name": "Freie Universität Berlin",
-    "slug": "freie-universitaet-berlin",
-    "city": "Berlin",
-    "state": "Berlin",
-    "type": "Universität",
-    "qsWorldRanking2026": "#88",
-    "schoolIntro": "Berlin’in önde gelen araştırma üniversitelerinden biri; sosyal bilimler, siyaset, beşeri bilimler, yaşam bilimleri ve uluslararası akademik çevre açısından güçlüdür.",
-    "cityIntro": "Berlin Almanya’nın en uluslararası ve hareketli şehri; kültür, startup, teknoloji ve sosyal hayat çok güçlüdür fakat konaklama bulmak zor olabilir.",
-    "bachelorDeadline": "restricted: 2026-07-15; unrestricted: 2026-09-01",
-    "masterDeadline": "restricted: 2026-05-31; unrestricted: 2026-08-15",
-    "germanPrepStatus": "Hazırlık/DSH kursu yok",
-    "uniAssistStatus": "Program bazlı / değişken",
-    "lastChecked": "2026-07-09",
-    "sourceUrl": "https://www.fu-berlin.de/en/studium/bewerbung/bewerbungsfristen/index.html",
-    "detailUrl": "/universiteler/freie-universitaet-berlin/",
-    "filters": {
-      "state": "Berlin",
-      "type": "Universität",
-      "germanCourse": "Hazırlık/DSH kursu yok",
-      "level": [
-        "Lisans",
-        "Master"
-      ],
-      "uniAssist": "Program bazlı / değişken"
-    }
-  },
-  {
-    "name": "Humboldt-Universität zu Berlin",
-    "slug": "humboldt-universitaet-berlin",
-    "city": "Berlin",
-    "state": "Berlin",
-    "type": "Universität",
-    "qsWorldRanking2026": "#130",
-    "schoolIntro": "Berlin merkezli köklü araştırma üniversitesi; beşeri bilimler, sosyal bilimler, hukuk, ekonomi ve doğa bilimleri alanlarında prestijlidir.",
-    "cityIntro": "Berlin Almanya’nın en uluslararası ve hareketli şehri; kültür, startup, teknoloji ve sosyal hayat çok güçlüdür fakat konaklama bulmak zor olabilir.",
-    "bachelorDeadline": "15 Temmuz 2026",
-    "masterDeadline": "Program bazlı kontrol edilmeli",
-    "germanPrepStatus": "Henüz doğrulanmadı",
-    "uniAssistStatus": "Program bazlı / değişken",
-    "lastChecked": "2026-07-09",
-    "sourceUrl": "https://www.hu-berlin.de/en/studies/counselling/leaflets/standard-periods-for-application-registration-and-enrolment",
-    "detailUrl": "/universiteler/humboldt-universitaet-berlin/",
-    "filters": {
-      "state": "Berlin",
-      "type": "Universität",
-      "germanCourse": "Henüz doğrulanmadı",
-      "level": [
-        "Lisans",
-        "Master"
-      ],
-      "uniAssist": "Program bazlı / değişken"
-    }
-  },
-  {
-    "name": "Universität Hamburg",
-    "slug": "universitaet-hamburg",
-    "city": "Hamburg",
-    "state": "Hamburg",
-    "type": "Universität",
-    "qsWorldRanking2026": "#193",
-    "schoolIntro": "Kuzey Almanya’nın büyük araştırma üniversitelerinden biri; şehir, liman, medya ve ekonomi ekosistemiyle geniş akademik seçenekleri birleştirir.",
-    "cityIntro": "Hamburg büyük liman, medya, lojistik ve kültür şehridir; su kenarı yaşamı ve uluslararası atmosferi güçlü olsa da kira piyasası rekabetçidir.",
-    "bachelorDeadline": "15 Temmuz 2026",
-    "masterDeadline": "15 Haziran 2026",
-    "germanPrepStatus": "Hazırlık/DSH kursu yok",
-    "uniAssistStatus": "Program bazlı / değişken",
-    "lastChecked": "2026-07-09",
-    "sourceUrl": "https://www.uni-hamburg.de/en/campuscenter/bewerbung/fristen-termine.html",
-    "detailUrl": "/universiteler/universitaet-hamburg/",
-    "filters": {
-      "state": "Hamburg",
-      "type": "Universität",
-      "germanCourse": "Hazırlık/DSH kursu yok",
-      "level": [
-        "Lisans",
-        "Master"
-      ],
-      "uniAssist": "Program bazlı / değişken"
-    }
-  },
-  {
-    "name": "Universität Freiburg",
-    "slug": "universitaet-freiburg",
-    "city": "Freiburg im Breisgau",
-    "state": "Baden-Württemberg",
-    "type": "Universität",
-    "qsWorldRanking2026": "#201",
-    "schoolIntro": "Araştırma kalitesi ve öğrenci şehri atmosferiyle bilinen köklü üniversite; tıp, doğa bilimleri, sürdürülebilirlik ve beşeri bilimlerde güçlüdür.",
-    "cityIntro": "Freiburg güneşli iklimi, sürdürülebilirlik kültürü ve öğrenci şehri havasıyla bilinir; İsviçre ve Fransa’ya yakınlığı ek avantaj sağlar.",
-    "bachelorDeadline": "15 Temmuz 2026",
-    "masterDeadline": "Program bazlı kontrol edilmeli",
-    "germanPrepStatus": "Henüz doğrulanmadı",
-    "uniAssistStatus": "Program bazlı / değişken",
-    "lastChecked": "2026-07-09",
-    "sourceUrl": "https://uni-freiburg.de/en/studies/applying/dates-and-deadlines/",
-    "detailUrl": "/universiteler/universitaet-freiburg/",
-    "filters": {
-      "state": "Baden-Württemberg",
-      "type": "Universität",
-      "germanCourse": "Henüz doğrulanmadı",
-      "level": [
-        "Lisans",
-        "Master"
-      ],
-      "uniAssist": "Program bazlı / değişken"
-    }
-  },
-  {
-    "name": "Rheinische Friedrich-Wilhelms-Universität Bonn",
-    "slug": "universitaet-bonn",
-    "city": "Bonn",
-    "state": "Nordrhein-Westfalen",
-    "type": "Universität",
-    "qsWorldRanking2026": "#207",
-    "schoolIntro": "Araştırma profili çok güçlü bir üniversite; matematik, ekonomi, yaşam bilimleri, tarım bilimleri ve siyaset çevresiyle öne çıkar.",
-    "cityIntro": "Bonn eski başkent kimliği, uluslararası kurumları ve daha sakin şehir yapısıyla bilinir; Köln’e yakınlığı sayesinde sosyal ve iş ağı genişler.",
-    "bachelorDeadline": "15 Temmuz 2026",
-    "masterDeadline": "Program bazlı kontrol edilmeli",
-    "germanPrepStatus": "Hazırlık/DSH kursu var",
-    "uniAssistStatus": "Program bazlı / değişken",
-    "lastChecked": "2026-07-09",
-    "sourceUrl": "https://www.uni-bonn.de/en/studying/application-admission-and-enrollment/application-deadlines",
-    "detailUrl": "/universiteler/universitaet-bonn/",
-    "filters": {
-      "state": "Nordrhein-Westfalen",
-      "type": "Universität",
-      "germanCourse": "Hazırlık/DSH kursu var",
-      "level": [
-        "Lisans",
-        "Master"
-      ],
-      "uniAssist": "Program bazlı / değişken"
-    }
-  },
-  {
-    "name": "Eberhard Karls Universität Tübingen",
-    "slug": "universitaet-tuebingen",
-    "city": "Tübingen",
-    "state": "Baden-Württemberg",
-    "type": "Universität",
-    "qsWorldRanking2026": "#215",
-    "schoolIntro": "Klasik Alman üniversite şehri atmosferinde güçlü bir araştırma üniversitesi; tıp, yapay zeka, yaşam bilimleri ve beşeri bilimlerde dikkat çeker.",
-    "cityIntro": "Tübingen klasik bir öğrenci şehridir; küçük, akademik, tarihi ve yürünebilir yapısıyla yoğun üniversite atmosferi sunar.",
-    "bachelorDeadline": "15 Temmuz 2026",
-    "masterDeadline": "restricted: 2026-07-15; unrestricted: 2026-09-15",
-    "germanPrepStatus": "Hazırlık/DSH kursu var",
-    "uniAssistStatus": "Program bazlı / değişken",
-    "lastChecked": "2026-07-09",
-    "sourceUrl": "https://uni-tuebingen.de/en/study/application-and-enrollment/masters-degree/",
-    "detailUrl": "/universiteler/universitaet-tuebingen/",
-    "filters": {
-      "state": "Baden-Württemberg",
-      "type": "Universität",
-      "germanCourse": "Hazırlık/DSH kursu var",
-      "level": [
-        "Lisans",
-        "Master"
-      ],
-      "uniAssist": "Program bazlı / değişken"
-    }
-  },
-  {
-    "name": "Friedrich-Alexander-Universität Erlangen-Nürnberg",
-    "slug": "fau-erlangen-nuernberg",
-    "city": "Erlangen / Nürnberg",
-    "state": "Bayern",
-    "type": "Universität",
-    "qsWorldRanking2026": "#232",
-    "schoolIntro": "Bavyera’da geniş program yelpazesi ve güçlü mühendislik/medikal teknoloji bağlantıları olan büyük bir üniversitedir.",
-    "cityIntro": "Erlangen öğrenci ve teknoloji odaklı sakin bir şehirken Nürnberg daha büyük şehir imkanları sunar; birlikte güçlü bir bölgesel yaşam alanı oluştururlar.",
-    "bachelorDeadline": "Program bazlı kontrol edilmeli",
-    "masterDeadline": "Program bazlı kontrol edilmeli",
-    "germanPrepStatus": "Hazırlık/DSH kursu var",
-    "uniAssistStatus": "Program bazlı / değişken",
-    "lastChecked": "2026-07-09",
-    "sourceUrl": "https://www.fau.eu/studying/applications-and-admissions/application-deadlines/",
-    "detailUrl": "/universiteler/fau-erlangen-nuernberg/",
-    "filters": {
-      "state": "Bayern",
-      "type": "Universität",
-      "germanCourse": "Hazırlık/DSH kursu var",
-      "level": [
-        "Lisans",
-        "Master"
-      ],
-      "uniAssist": "Program bazlı / değişken"
-    }
-  },
-  {
-    "name": "Georg-August-Universität Göttingen",
-    "slug": "universitaet-goettingen",
-    "city": "Göttingen",
-    "state": "Niedersachsen",
-    "type": "Universität",
-    "qsWorldRanking2026": "#243",
-    "schoolIntro": "Köklü araştırma geleneğine sahip üniversite; doğa bilimleri, tarım, sosyal bilimler ve beşeri bilimlerde öğrenci şehri avantajıyla öne çıkar.",
-    "cityIntro": "Göttingen tam anlamıyla öğrenci şehridir; kompakt, bisiklet dostu ve akademik yoğunluğu yüksek bir yaşam sunar.",
-    "bachelorDeadline": "restricted: 2026-04-30; open: 2026-09-30",
-    "masterDeadline": "Program bazlı kontrol edilmeli",
-    "germanPrepStatus": "Hazırlık/DSH kursu var",
-    "uniAssistStatus": "Program bazlı / değişken",
-    "lastChecked": "2026-07-09",
-    "sourceUrl": "https://www.uni-goettingen.de/en/51427.html",
-    "detailUrl": "/universiteler/universitaet-goettingen/",
-    "filters": {
-      "state": "Niedersachsen",
-      "type": "Universität",
-      "germanCourse": "Hazırlık/DSH kursu var",
-      "level": [
-        "Lisans",
-        "Master"
-      ],
-      "uniAssist": "Program bazlı / değişken"
-    }
-  },
-  {
-    "name": "Universität zu Köln",
-    "slug": "universitaet-zu-koeln",
-    "city": "Köln",
-    "state": "Nordrhein-Westfalen",
-    "type": "Universität",
-    "qsWorldRanking2026": "#272",
-    "schoolIntro": "Almanya’nın en büyük üniversitelerinden biri; ekonomi, hukuk, sosyal bilimler, beşeri bilimler ve şehir hayatı açısından güçlü bir merkezdir.",
-    "cityIntro": "Köln büyük, canlı ve sosyal bir şehir; medya, kültür, etkinlik ve iş ağı çok güçlüdür fakat konaklama piyasası rekabetçi olabilir.",
-    "bachelorDeadline": "Program bazlı kontrol edilmeli",
-    "masterDeadline": "Program bazlı kontrol edilmeli",
-    "germanPrepStatus": "Hazırlık/DSH kursu var",
-    "uniAssistStatus": "Program bazlı / değişken",
-    "lastChecked": "2026-07-09",
-    "sourceUrl": "https://uni-koeln.de/en/international/study-in-cologne/international-applications",
-    "detailUrl": "/universiteler/universitaet-zu-koeln/",
-    "filters": {
-      "state": "Nordrhein-Westfalen",
-      "type": "Universität",
-      "germanCourse": "Hazırlık/DSH kursu var",
-      "level": [
-        "Lisans",
-        "Master"
-      ],
-      "uniAssist": "Program bazlı / değişken"
-    }
-  },
-  {
-    "name": "Goethe Universität Frankfurt am Main",
-    "slug": "goethe-universitaet-frankfurt",
-    "city": "Frankfurt am Main",
-    "state": "Hessen",
-    "type": "Universität",
-    "qsWorldRanking2026": "#316",
-    "schoolIntro": "Finans ve iş dünyasının merkezinde yer alan güçlü bir araştırma üniversitesi; ekonomi, hukuk, sosyal bilimler ve finans çevresiyle avantaj sağlar.",
-    "cityIntro": "Frankfurt finans, havalimanı ve uluslararası şirketler merkezi olarak güçlüdür; iş/staj fırsatı fazla ama yaşam maliyeti yüksek olabilir.",
-    "bachelorDeadline": "Program bazlı kontrol edilmeli",
-    "masterDeadline": "Program bazlı kontrol edilmeli",
-    "germanPrepStatus": "Hazırlık/DSH kursu var",
-    "uniAssistStatus": "Program bazlı / değişken",
-    "lastChecked": "2026-07-09",
-    "sourceUrl": "https://www.uni-frankfurt.de/en/studium/bewerbung-einschreibung/internationale-studierende/zugang",
-    "detailUrl": "/universiteler/goethe-universitaet-frankfurt/",
-    "filters": {
-      "state": "Hessen",
-      "type": "Universität",
-      "germanCourse": "Hazırlık/DSH kursu var",
-      "level": [
-        "Lisans",
-        "Master"
-      ],
-      "uniAssist": "Program bazlı / değişken"
-    }
-  },
-  {
-    "name": "Universität Münster",
-    "slug": "universitaet-muenster",
-    "city": "Münster",
-    "state": "Nordrhein-Westfalen",
-    "type": "Universität",
-    "qsWorldRanking2026": "#350",
-    "schoolIntro": "Büyük ve öğrenci odaklı bir üniversite; hukuk, ekonomi, tıp, doğa bilimleri ve öğretmenlik alanlarında güçlü ve dengeli bir profil sunar.",
-    "cityIntro": "Münster güvenli, bisiklet dostu ve öğrenci oranı yüksek bir şehir; düzenli ve kaliteli yaşam isteyen öğrenciler için çok iyi bir ortam sunar.",
-    "bachelorDeadline": "restricted: 2026-05-31; unrestricted: 2026-07-15",
-    "masterDeadline": "Program bazlı kontrol edilmeli",
-    "germanPrepStatus": "Hazırlık/DSH kursu var",
-    "uniAssistStatus": "Henüz doğrulanmadı",
-    "lastChecked": "2026-07-09",
-    "sourceUrl": "https://www.uni-muenster.de/studieninteressierte/en/bewerbung/index.html",
-    "detailUrl": "/universiteler/universitaet-muenster/",
-    "filters": {
-      "state": "Nordrhein-Westfalen",
-      "type": "Universität",
-      "germanCourse": "Hazırlık/DSH kursu var",
-      "level": [
-        "Lisans",
-        "Master"
-      ],
-      "uniAssist": "Henüz doğrulanmadı"
-    }
-  },
-  {
-    "name": "Ruhr-Universität Bochum",
-    "slug": "ruhr-universitaet-bochum",
-    "city": "Bochum",
-    "state": "Nordrhein-Westfalen",
-    "type": "Universität",
-    "qsWorldRanking2026": "#395",
-    "schoolIntro": "Ruhr bölgesinde geniş program seçenekleri sunan büyük kampüs üniversitesi; mühendislik, sosyal bilimler, doğa bilimleri ve tıp alanlarını kapsar.",
-    "cityIntro": "Bochum Ruhr bölgesinin merkezinde, daha ulaşılabilir maliyetli ve çok şehirli iş/ulaşım ağına bağlı bir öğrenci şehridir.",
-    "bachelorDeadline": "15 Temmuz 2026",
-    "masterDeadline": "15 Temmuz 2026",
-    "germanPrepStatus": "Henüz doğrulanmadı",
-    "uniAssistStatus": "Henüz doğrulanmadı",
-    "lastChecked": "2026-07-09",
-    "sourceUrl": "https://studium.ruhr-uni-bochum.de/en/international-applicants",
-    "detailUrl": "/universiteler/ruhr-universitaet-bochum/",
-    "filters": {
-      "state": "Nordrhein-Westfalen",
-      "type": "Universität",
-      "germanCourse": "Henüz doğrulanmadı",
-      "level": [
-        "Lisans",
-        "Master"
-      ],
-      "uniAssist": "Henüz doğrulanmadı"
-    }
-  },
-  {
-    "name": "Julius-Maximilians-Universität Würzburg",
-    "slug": "universitaet-wuerzburg",
-    "city": "Würzburg",
-    "state": "Bayern",
-    "type": "Universität",
-    "qsWorldRanking2026": "#416",
-    "schoolIntro": "Köklü araştırma üniversitesi; tıp, biyoloji, psikoloji, doğa bilimleri ve beşeri bilimlerde güçlü akademik altyapıya sahiptir.",
-    "cityIntro": "Würzburg tarihi, kompakt ve öğrenci dostu bir Frankonya şehridir; yaşam temposu büyük şehirlere göre daha sakin ve yönetilebilirdir.",
-    "bachelorDeadline": "15 Temmuz 2026",
-    "masterDeadline": "Program bazlı kontrol edilmeli",
-    "germanPrepStatus": "Henüz doğrulanmadı",
-    "uniAssistStatus": "Program bazlı / değişken",
-    "lastChecked": "2026-07-09",
-    "sourceUrl": "https://www.uni-wuerzburg.de/en/studying-at-jmu/studienangelegenheiten/dates-and-deadlines/application-deadlines/",
-    "detailUrl": "/universiteler/universitaet-wuerzburg/",
-    "filters": {
-      "state": "Bayern",
-      "type": "Universität",
-      "germanCourse": "Henüz doğrulanmadı",
-      "level": [
-        "Lisans",
-        "Master"
-      ],
-      "uniAssist": "Program bazlı / değişken"
-    }
-  },
-  {
-    "name": "Universität Mannheim",
-    "slug": "universitaet-mannheim",
-    "city": "Mannheim",
-    "state": "Baden-Württemberg",
-    "type": "Universität",
-    "qsWorldRanking2026": "#416",
-    "schoolIntro": "İşletme, ekonomi ve sosyal bilimler alanlarında Almanya’nın en bilinen üniversitelerinden biri; özellikle business odaklı öğrenciler için güçlüdür.",
-    "cityIntro": "Mannheim grid planlı, iş ve sanayi bağlantıları güçlü bir şehir; Heidelberg’e yakınlığı ve Rhein-Neckar bölgesi avantaj sağlar.",
-    "bachelorDeadline": "15 Temmuz 2026",
-    "masterDeadline": "Program bazlı kontrol edilmeli",
-    "germanPrepStatus": "Henüz doğrulanmadı",
-    "uniAssistStatus": "Direkt başvuru",
-    "lastChecked": "2026-07-09",
-    "sourceUrl": "https://www.uni-mannheim.de/en/academics/before-your-studies/application/application-periods/",
-    "detailUrl": "/universiteler/universitaet-mannheim/",
-    "filters": {
-      "state": "Baden-Württemberg",
-      "type": "Universität",
-      "germanCourse": "Henüz doğrulanmadı",
-      "level": [
-        "Lisans",
-        "Master"
-      ],
-      "uniAssist": "Direkt başvuru"
-    }
-  },
-  {
-    "name": "Universität Konstanz",
-    "slug": "universitaet-konstanz",
-    "city": "Konstanz",
-    "state": "Baden-Württemberg",
-    "type": "Universität",
-    "qsWorldRanking2026": "#440",
-    "schoolIntro": "Daha kompakt ve araştırma odaklı bir üniversite; sosyal bilimler, politika, ekonomi, psikoloji ve yaşam bilimlerinde kaliteli bir ortam sunar.",
-    "cityIntro": "Konstanz Bodensee kıyısında çok yaşanabilir, güvenli ve uluslararası hissi güçlü bir öğrenci şehridir; İsviçre’ye yakınlığı dikkat çeker.",
-    "bachelorDeadline": "restricted: 2026-07-15; unrestricted: 2026-09-15",
-    "masterDeadline": "Program bazlı kontrol edilmeli",
-    "germanPrepStatus": "Henüz doğrulanmadı",
-    "uniAssistStatus": "Direkt başvuru",
-    "lastChecked": "2026-07-09",
-    "sourceUrl": "https://www.uni-konstanz.de/en/study/before-you-study/application-and-enrolment/bachelors-degree-and-first-state-examination-in-law/higher-education-entrance-qualification-earned-outside-the-eu/",
-    "detailUrl": "/universiteler/universitaet-konstanz/",
-    "filters": {
-      "state": "Baden-Württemberg",
-      "type": "Universität",
-      "germanCourse": "Henüz doğrulanmadı",
-      "level": [
-        "Lisans",
-        "Master"
-      ],
-      "uniAssist": "Direkt başvuru"
-    }
-  },
-  {
-    "name": "Universität Bayreuth",
-    "slug": "universitaet-bayreuth",
-    "city": "Bayreuth",
-    "state": "Bayern",
-    "type": "Universität",
-    "qsWorldRanking2026": "#448",
-    "schoolIntro": "Disiplinlerarası programları, hukuk/ekonomi profili ve küçük şehir avantajıyla bilinen bir üniversite; kampüs yaşamı güçlüdür.",
-    "cityIntro": "Bayreuth daha küçük ve kampüs odaklı bir şehir; yaşam maliyeti ve ulaşılabilirlik açısından büyük şehirlere göre daha rahat olabilir.",
-    "bachelorDeadline": "Program bazlı kontrol edilmeli",
-    "masterDeadline": "Program bazlı kontrol edilmeli",
-    "germanPrepStatus": "Henüz doğrulanmadı",
-    "uniAssistStatus": "Direkt başvuru",
-    "lastChecked": "2026-07-09",
-    "sourceUrl": "https://www.international-office.uni-bayreuth.de/en/degree-programmes/4-periods-and-deadlines-for-masters/index.php",
-    "detailUrl": "/universiteler/universitaet-bayreuth/",
-    "filters": {
-      "state": "Bayern",
-      "type": "Universität",
-      "germanCourse": "Henüz doğrulanmadı",
-      "level": [
-        "Lisans",
-        "Master"
-      ],
-      "uniAssist": "Direkt başvuru"
-    }
-  },
-  {
-    "name": "Johannes Gutenberg-Universität Mainz",
-    "slug": "johannes-gutenberg-universitaet-mainz",
-    "city": "Mainz",
-    "state": "Rheinland-Pfalz",
-    "type": "Universität",
-    "qsWorldRanking2026": "#452",
-    "schoolIntro": "Geniş program seçenekleri ve Rhein-Main bölgesine yakınlığıyla öne çıkar; medya, sosyal bilimler, doğa bilimleri ve tıp alanlarında seçenek sunar.",
-    "cityIntro": "Mainz Rhein kıyısında, öğrenci ve medya atmosferi güçlü bir şehir; Frankfurt’a yakınlığı sayesinde iş ve ulaşım avantajı sağlar.",
-    "bachelorDeadline": "15 Temmuz 2026",
-    "masterDeadline": "15 Mayıs 2026",
-    "germanPrepStatus": "Hazırlık/DSH kursu var",
-    "uniAssistStatus": "Program bazlı / değişken",
-    "lastChecked": "2026-07-09",
-    "sourceUrl": "https://www.studium.uni-mainz.de/en/your-application/applying-with-international-certificates/applying-as-an-international-student/",
-    "detailUrl": "/universiteler/johannes-gutenberg-universitaet-mainz/",
-    "filters": {
-      "state": "Rheinland-Pfalz",
-      "type": "Universität",
-      "germanCourse": "Hazırlık/DSH kursu var",
-      "level": [
-        "Lisans",
-        "Master"
-      ],
-      "uniAssist": "Program bazlı / değişken"
-    }
-  },
-  {
-    "name": "Universität Potsdam",
-    "slug": "universitaet-potsdam",
-    "city": "Potsdam",
-    "state": "Brandenburg",
-    "type": "Universität",
-    "qsWorldRanking2026": "#477",
-    "schoolIntro": "Berlin’e yakın konumu ve daha sakin kampüs yapısıyla öne çıkar; eğitim, sosyal bilimler, doğa bilimleri ve veri odaklı alanlarda güçlüdür.",
-    "cityIntro": "Potsdam Berlin’e çok yakın, daha sakin, yeşil ve tarihi bir şehir; Berlin imkanlarına erişirken daha huzurlu yaşam isteyenler için uygundur.",
-    "bachelorDeadline": "Program bazlı kontrol edilmeli",
-    "masterDeadline": "Program bazlı kontrol edilmeli",
-    "germanPrepStatus": "Hazırlık/DSH kursu var",
-    "uniAssistStatus": "Program bazlı / değişken",
-    "lastChecked": "2026-07-09",
-    "sourceUrl": "https://www.uni-potsdam.de/en/studium/dates-and-deadlines/application-and-enrollment-deadlines",
-    "detailUrl": "/universiteler/universitaet-potsdam/",
-    "filters": {
-      "state": "Brandenburg",
-      "type": "Universität",
-      "germanCourse": "Hazırlık/DSH kursu var",
-      "level": [
-        "Lisans",
-        "Master"
-      ],
-      "uniAssist": "Program bazlı / değişken"
-    }
-  },
-  {
-    "name": "TU Bergakademie Freiberg",
-    "slug": "tu-bergakademie-freiberg",
-    "city": "Freiberg",
-    "state": "Sachsen",
-    "type": "Universität",
-    "qsWorldRanking2026": "#487",
-    "schoolIntro": "Maden, malzeme, enerji, jeoloji ve sürdürülebilir kaynak teknolojileri alanlarında uzmanlaşmış teknik ve köklü bir üniversitedir.",
-    "cityIntro": "Freiberg küçük, sakin ve öğrenci bütçesine daha uygun bir Saksonya şehridir; maden/enerji geleneği şehir kimliğinin önemli parçasıdır.",
-    "bachelorDeadline": "15 Eylül 2026",
-    "masterDeadline": "Program bazlı kontrol edilmeli",
-    "germanPrepStatus": "Hazırlık/DSH kursu var",
-    "uniAssistStatus": "Program bazlı / değişken",
-    "lastChecked": "2026-07-09",
-    "sourceUrl": "https://tu-freiberg.de/en/studies/application-and-enrolment",
-    "detailUrl": "/universiteler/tu-bergakademie-freiberg/",
-    "filters": {
-      "state": "Sachsen",
-      "type": "Universität",
-      "germanCourse": "Hazırlık/DSH kursu var",
-      "level": [
-        "Lisans",
-        "Master"
-      ],
-      "uniAssist": "Program bazlı / değişken"
-    }
-  },
-  {
-    "name": "Justus-Liebig-Universität Gießen",
-    "slug": "justus-liebig-universitaet-giessen",
-    "city": "Gießen",
-    "state": "Hessen",
-    "type": "Universität",
-    "qsWorldRanking2026": "#496",
-    "schoolIntro": "Hessen’de geniş program yelpazesine sahip üniversite; veterinerlik, tarım, yaşam bilimleri, öğretmenlik ve sosyal bilimlerde bilinir.",
-    "cityIntro": "Gießen güçlü öğrenci nüfusu olan orta ölçekli bir Hessen şehridir; Frankfurt ve Marburg’a yakınlığıyla ulaşım ve sosyal seçenekleri artırır.",
-    "bachelorDeadline": "15 Ağustos 2026",
-    "masterDeadline": "15 Ağustos 2026",
-    "germanPrepStatus": "Program bazlı / değişken",
-    "uniAssistStatus": "Program bazlı / değişken",
-    "lastChecked": "2026-07-09",
-    "sourceUrl": "https://www.uni-giessen.de/en/study/application/deadlines",
-    "detailUrl": "/universiteler/justus-liebig-universitaet-giessen/",
-    "filters": {
-      "state": "Hessen",
-      "type": "Universität",
-      "germanCourse": "Program bazlı / değişken",
-      "level": [
-        "Lisans",
-        "Master"
-      ],
-      "uniAssist": "Program bazlı / değişken"
-    }
-  }
-];
+/* This file is compiled from sakalmanya_uni_dataset.xlsx by build-university-api.py. */
 
-const FILTER_OPTIONS = {
-  "state": [
-    {
-      "value": "Baden-Württemberg",
-      "label": {
-        "tr": "Baden-Württemberg",
-        "de": "Baden-Württemberg",
-        "en": "Baden-Württemberg"
-      }
-    },
-    {
-      "value": "Bayern",
-      "label": {
-        "tr": "Bavyera",
-        "de": "Bayern",
-        "en": "Bavaria"
-      }
-    },
-    {
-      "value": "Berlin",
-      "label": {
-        "tr": "Berlin",
-        "de": "Berlin",
-        "en": "Berlin"
-      }
-    },
-    {
-      "value": "Brandenburg",
-      "label": {
-        "tr": "Brandenburg",
-        "de": "Brandenburg",
-        "en": "Brandenburg"
-      }
-    },
-    {
-      "value": "Hamburg",
-      "label": {
-        "tr": "Hamburg",
-        "de": "Hamburg",
-        "en": "Hamburg"
-      }
-    },
-    {
-      "value": "Hessen",
-      "label": {
-        "tr": "Hessen",
-        "de": "Hessen",
-        "en": "Hessen"
-      }
-    },
-    {
-      "value": "Niedersachsen",
-      "label": {
-        "tr": "Aşağı Saksonya",
-        "de": "Niedersachsen",
-        "en": "Lower Saxony"
-      }
-    },
-    {
-      "value": "Nordrhein-Westfalen",
-      "label": {
-        "tr": "Kuzey Ren-Vestfalya",
-        "de": "Nordrhein-Westfalen",
-        "en": "North Rhine-Westphalia"
-      }
-    },
-    {
-      "value": "Rheinland-Pfalz",
-      "label": {
-        "tr": "Rheinland-Pfalz",
-        "de": "Rheinland-Pfalz",
-        "en": "Rheinland-Pfalz"
-      }
-    },
-    {
-      "value": "Sachsen",
-      "label": {
-        "tr": "Saksonya",
-        "de": "Sachsen",
-        "en": "Saxony"
-      }
-    }
-  ],
-  "type": [
-    {
-      "value": "Hochschule",
-      "label": {
-        "tr": "Hochschule",
-        "de": "Hochschule",
-        "en": "University of Applied Sciences"
-      }
-    },
-    {
-      "value": "Technische Universität",
-      "label": {
-        "tr": "Technische Universität",
-        "de": "Technische Universität",
-        "en": "Technical University"
-      }
-    },
-    {
-      "value": "Universität",
-      "label": {
-        "tr": "Universität",
-        "de": "Universität",
-        "en": "University"
-      }
-    }
-  ],
-  "germanCourse": [
-    {
-      "value": "Hazırlık/DSH kursu var",
-      "label": {
-        "tr": "Hazırlık/DSH kursu var",
-        "de": "Vorbereitung/DSH-Kurs vorhanden",
-        "en": "Prep/DSH course available"
-      }
-    },
-    {
-      "value": "Program bazlı / değişken",
-      "label": {
-        "tr": "Program bazlı / değişken",
-        "de": "Programmabhängig / variabel",
-        "en": "Program-based / variable"
-      }
-    },
-    {
-      "value": "Hazırlık/DSH kursu yok",
-      "label": {
-        "tr": "Hazırlık/DSH kursu yok",
-        "de": "Kein bestätigter Prep/DSH-Kurs",
-        "en": "No confirmed prep/DSH course"
-      }
-    },
-    {
-      "value": "Henüz doğrulanmadı",
-      "label": {
-        "tr": "Henüz doğrulanmadı",
-        "de": "Noch nicht verifiziert",
-        "en": "Not verified yet"
-      }
-    }
-  ],
-  "level": [
-    {
-      "value": "Lisans",
-      "label": {
-        "tr": "Lisans",
-        "de": "Bachelor",
-        "en": "Bachelor"
-      }
-    },
-    {
-      "value": "Master",
-      "label": {
-        "tr": "Master",
-        "de": "Master",
-        "en": "Master"
-      }
-    }
-  ],
-  "uniAssist": [
-    {
-      "value": "Uni-Assist var",
-      "label": {
-        "tr": "Uni-Assist var",
-        "de": "Uni-Assist vorhanden",
-        "en": "Uni-Assist available"
-      }
-    },
-    {
-      "value": "Direkt başvuru",
-      "label": {
-        "tr": "Direkt başvuru",
-        "de": "Direktbewerbung",
-        "en": "Direct application"
-      }
-    },
-    {
-      "value": "Program bazlı / değişken",
-      "label": {
-        "tr": "Program bazlı / değişken",
-        "de": "Programmabhängig / variabel",
-        "en": "Program-based / variable"
-      }
-    },
-    {
-      "value": "Henüz doğrulanmadı",
-      "label": {
-        "tr": "Henüz doğrulanmadı",
-        "de": "Noch nicht verifiziert",
-        "en": "Not verified yet"
-      }
-    }
-  ]
-};
+const DATASET = {"universities":[{"id":"uni-leipzig","name":"Universität Leipzig","slug":"universitaet-leipzig","city":"Leipzig","state":"Sachsen","type":"Universität","officialWebsite":"https://www.uni-leipzig.de","applicationPortal":"uni-assist / AlmaWeb; Türkiye’den yabancı diploma ile genelde uni-assist","lastChecked":"2026-07-09","sourceUrl":"https://www.uni-leipzig.de/en/international/studying-at-leipzig-university/application-and-preparing-to-study/masters-programmes","qsWorldRanking2026":"QS Top 500 dışında","qsSourceUrl":null,"schoolIntro":"Almanya’nın köklü araştırma üniversitelerinden biri; hukuk, sosyal bilimler, beşeri bilimler, doğa bilimleri ve tıp gibi geniş alanlarda güçlü bir seçenek sunar.","cityIntro":"Leipzig genç, kültürel ve öğrenci dostu bir şehir; Berlin’e göre daha hesaplı, ulaşımı kolay ve yaratıcı sektörleri güçlü bir yaşam sunar.","popularityReason":"Saksonya’nın en büyüklerinden; CHE verisinde WS 2024/25 için 30.528 öğrenci.","logoPath":null,"campusImagePath":null,"cityImagePath":null,"universityLongIntro":null,"whyChoose":null,"cityStudentLife":null,"cityTransport":null,"cityCostOfLiving":null,"cityHistory":null,"cityHistoricalNote":null,"cityEconomy":null,"cityIndustries":null,"studentJobsNote":null,"turkishStudentsNote":null,"filters":{"state":"Sachsen","type":"Universität","germanCourse":"Hazırlık/DSH kursu var","level":"Lisans ve Master","uniAssist":"Program bazlı / değişken"},"deadlines":{"bachelor":{"display":"15 Temmuz 2026","date":"2026-07-15","portal":"uni-assist","portalCategory":"uni_assist","sourceUrl":"https://www.uni-leipzig.de/en/international/studying-at-leipzig-university/application-and-preparing-to-study/bachelors-diplom-state-examination","lastChecked":"2026-07-09"},"master":{"display":"31 Mayıs 2026","date":"2026-05-31","portal":"uni-assist","portalCategory":"uni_assist","sourceUrl":"https://www.uni-leipzig.de/en/international/studying-at-leipzig-university/application-and-preparing-to-study/masters-programmes","lastChecked":"2026-07-09"}},"germanCourse":{"status":"yes_internal","label":"Hazırlık/DSH kursu var","name":"FIT für das Studium - Deutsch","type":"DSH course / studienvorbereitender Deutschintensivkurs","duration":"usually 30 weeks; 5 weekdays, 4 x 45 min; homework 1–2h/day","weeklyHours":null,"targetExam":null,"targetDegreeLevel":"Future Leipzig University students","requiredLevel":"B1 + direct HZB + intention to study at Leipzig","residenceRelevance":"possible","criteriaMatch":"Uygun: DSH/Intensivkurs/Propädeutikum/Studienkolleg hazırlığı kriterine giriyor.","sourceUrl":"https://www.stksachs.uni-leipzig.de/en/studium/studienvorbereitende-deutschintensivkurse/fit-fuer-das-studium-deutsch-dsh-course","lastChecked":"2026-07-09"}},{"id":"tu-dresden","name":"Technische Universität Dresden","slug":"tu-dresden","city":"Dresden","state":"Sachsen","type":"Technische Universität / Exzellenzuniversität","officialWebsite":"https://tu-dresden.de","applicationPortal":"çoğunlukla uni-assist; bazı istisnalar/program özel prosedürler var","lastChecked":"2026-07-09","sourceUrl":"https://tu-dresden.de/studium/vor-dem-studium/bewerbung/bewerbungsfristen?set_language=en","qsWorldRanking2026":"#218","qsSourceUrl":"https://www.topuniversities.com/world-university-rankings?countries=de&region=Europe","schoolIntro":"Saksonya’nın en güçlü teknik araştırma merkezlerinden biri; mühendislik, informatik, malzeme, ulaşım ve doğa bilimleri alanlarında öne çıkar.","cityIntro":"Dresden tarihi mimarisi, Elbe kıyısı, teknik ekosistemi ve görece sakin yaşam temposuyla öğrenciler için dengeli ve yaşanabilir bir şehirdir.","popularityReason":"CHE verisinde WS 2024/25 için 27.812 öğrenci; mühendislik ve teknik alanlarda güçlü.","logoPath":null,"campusImagePath":null,"cityImagePath":null,"universityLongIntro":null,"whyChoose":null,"cityStudentLife":null,"cityTransport":null,"cityCostOfLiving":null,"cityHistory":null,"cityHistoricalNote":null,"cityEconomy":null,"cityIndustries":null,"studentJobsNote":null,"turkishStudentsNote":null,"filters":{"state":"Sachsen","type":"Technische Universität","germanCourse":"Hazırlık/DSH kursu var","level":"Lisans ve Master","uniAssist":"Program bazlı / değişken"},"deadlines":{"bachelor":{"display":"Program bazlı kontrol edilmeli","date":null,"portal":"mostly uni-assist / SINS program page","portalCategory":"mixed","sourceUrl":"https://tu-dresden.de/studium/vor-dem-studium/bewerbung/bewerbungsfristen?set_language=en","lastChecked":"2026-07-09"},"master":{"display":"Program bazlı kontrol edilmeli","date":null,"portal":"uni-assist or direct, programme-specific","portalCategory":"mixed","sourceUrl":"https://tu-dresden.de/studium/vor-dem-studium/bewerbung/bewerbungsfristen?set_language=en","lastChecked":"2026-07-09"}},"germanCourse":{"status":"yes_official_external_pathway","label":"Hazırlık/DSH kursu var","name":"Preparatory Course for the DSH / Propädeutikum","type":"DSH-Vorbereitung / studienvorbereitender Deutschkurs","duration":"preparatory semester; entry test on-site before semester","weeklyHours":null,"targetExam":null,"targetDegreeLevel":"Bachelor/Master German-taught","requiredLevel":"B2 entry test","residenceRelevance":"possible","criteriaMatch":"Uygun: DSH/Intensivkurs/Propädeutikum/Studienkolleg hazırlığı kriterine giriyor.","sourceUrl":"https://tu-dresden.de/gsw/slk/lsk/a-z/ProPaed?set_language=en","lastChecked":"2026-07-09"}},{"id":"tu-chemnitz","name":"Technische Universität Chemnitz","slug":"tu-chemnitz","city":"Chemnitz","state":"Sachsen","type":"Technische Universität","officialWebsite":"https://www.tu-chemnitz.de","applicationPortal":"uni-assist / TU Chemnitz portalı; yabancı başvurular için uni-assist yaygın","lastChecked":"2026-07-09","sourceUrl":"https://hochschuldaten.che.de/sachsen/hochschulen/","qsWorldRanking2026":"QS Top 500 dışında","qsSourceUrl":null,"schoolIntro":"Daha kompakt ve teknik odaklı bir üniversite; otomotiv, üretim, sensörik, informatik ve uygulamalı mühendislik alanları için mantıklı bir alternatif olabilir.","cityIntro":"Chemnitz daha uygun maliyetli ve sakin bir Saksonya şehridir; teknik/sanayi geçmişi ve düşük kira potansiyeliyle bütçe odaklı öğrenciler için mantıklıdır.","popularityReason":"CHE verisinde WS 2024/25 için 8.095 öğrenci; Saksonya’da en büyük üçüncü üniversite.","logoPath":null,"campusImagePath":null,"cityImagePath":null,"universityLongIntro":null,"whyChoose":null,"cityStudentLife":null,"cityTransport":null,"cityCostOfLiving":null,"cityHistory":null,"cityHistoricalNote":null,"cityEconomy":null,"cityIndustries":null,"studentJobsNote":null,"turkishStudentsNote":null,"filters":{"state":"Sachsen","type":"Technische Universität","germanCourse":"Hazırlık/DSH kursu var","level":"Lisans ve Master","uniAssist":"Program bazlı / değişken"},"deadlines":{"bachelor":{"display":"15 Temmuz 2026","date":"2026-07-15","portal":"uni-assist / TU Chemnitz procedure","portalCategory":"mixed","sourceUrl":"https://www.tu-chemnitz.de/studierendenservice/studserv/bewerbung/fristentermine.php","lastChecked":"2026-07-09"},"master":{"display":"15 Temmuz 2026","date":"2026-07-15","portal":"uni-assist / TU Chemnitz procedure","portalCategory":"mixed","sourceUrl":"https://www.tu-chemnitz.de/studierendenservice/studserv/bewerbung/fristentermine.php","lastChecked":"2026-07-09"}},"germanCourse":{"status":"yes_internal","label":"Hazırlık/DSH kursu var","name":"Preparatory DSH-Intensive Course","type":"studienvorbereitender DSH-Intensivkurs","duration":"around 15 weeks; 20–24 lessons per week","weeklyHours":null,"targetExam":null,"targetDegreeLevel":"German-taught degree applicants","requiredLevel":"B2 / DSH1 / TestDaF 3x4 equivalent","residenceRelevance":"possible","criteriaMatch":"Uygun: DSH/Intensivkurs/Propädeutikum/Studienkolleg hazırlığı kriterine giriyor.","sourceUrl":"https://www.tu-chemnitz.de/international/incoming/deutschkurse/dsh.php.en","lastChecked":"2026-07-09"}},{"id":"htw-dresden","name":"HTW Dresden","slug":"htw-dresden","city":"Dresden","state":"Sachsen","type":"Hochschule für angewandte Wissenschaften","officialWebsite":"https://www.htw-dresden.de","applicationPortal":"uni-assist; bazı Bachelor programlarında önce Hochschulstart + uni-assist","lastChecked":"2026-07-09","sourceUrl":"https://www.htw-dresden.de/en/international/coming-to-htw-dresden/degree-studies-at-htw-dresden","qsWorldRanking2026":"QS Top 500 dışında","qsSourceUrl":null,"schoolIntro":"Uygulama odaklı Hochschule yapısıyla pratik mühendislik, informatik, tasarım ve ekonomi alanlarında daha mesleğe yakın bir eğitim profili sunar.","cityIntro":"Dresden tarihi mimarisi, Elbe kıyısı, teknik ekosistemi ve görece sakin yaşam temposuyla öğrenciler için dengeli ve yaşanabilir bir şehirdir.","popularityReason":"Dresden’de pratik odaklı Hochschule; 2024 Jahresbericht’te WS 2024/25 için 4.674 öğrenci.","logoPath":null,"campusImagePath":null,"cityImagePath":null,"universityLongIntro":null,"whyChoose":null,"cityStudentLife":null,"cityTransport":null,"cityCostOfLiving":null,"cityHistory":null,"cityHistoricalNote":null,"cityEconomy":null,"cityIndustries":null,"studentJobsNote":null,"turkishStudentsNote":null,"filters":{"state":"Sachsen","type":"Hochschule","germanCourse":"Hazırlık/DSH kursu var","level":"Lisans ve Master","uniAssist":"Program bazlı / değişken"},"deadlines":{"bachelor":{"display":"15 Haziran 2026","date":"2026-06-15","portal":"uni-assist; some programmes Hochschulstart + uni-assist","portalCategory":"mixed","sourceUrl":"https://www.htw-dresden.de/en/international/coming-to-htw-dresden/degree-studies-at-htw-dresden","lastChecked":"2026-07-09"},"master":{"display":"15 Haziran 2026","date":"2026-06-15","portal":"uni-assist / some German-degree exceptions through university portal","portalCategory":"mixed","sourceUrl":"https://www.htw-dresden.de/en/international/coming-to-htw-dresden/degree-studies-at-htw-dresden","lastChecked":"2026-07-09"}},"germanCourse":{"status":"yes_official_external_pathway","label":"Hazırlık/DSH kursu var","name":"Language course German at Studienkolleg Zittau/Görlitz pathway","type":"DSH-2 preparation / German language course","duration":"Language course duration 1 semester; Studienkolleg FSP 2 semesters","weeklyHours":null,"targetExam":null,"targetDegreeLevel":"Bachelor/Diploma/Master German-taught applicants","requiredLevel":"B2 for language course; B1 for FSP Studienkolleg","residenceRelevance":"possible","criteriaMatch":"Uygun: DSH/Intensivkurs/Propädeutikum/Studienkolleg hazırlığı kriterine giriyor.","sourceUrl":"https://www.htw-dresden.de/en/international/coming-to-htw-dresden/degree-studies-at-htw-dresden","lastChecked":"2026-07-09"}},{"id":"htwk-leipzig","name":"HTWK Leipzig","slug":"htwk-leipzig","city":"Leipzig","state":"Sachsen","type":"Hochschule für angewandte Wissenschaften","officialWebsite":"https://www.htwk-leipzig.de","applicationPortal":"uni-assist; daha önce HTWK Prüfbericht varsa direkt HTWK portalı olabilir","lastChecked":"2026-07-09","sourceUrl":"https://www.htwk-leipzig.de/studieren/bewerbung-auswahlverfahren/internationale-studieninteressierte","qsWorldRanking2026":"QS Top 500 dışında","qsSourceUrl":null,"schoolIntro":"Teknik ve uygulamalı alanlara odaklanan Leipzig merkezli Hochschule; mühendislik, medya, ekonomi ve mimarlık gibi alanlarda pratik yönü güçlüdür.","cityIntro":"Leipzig genç, kültürel ve öğrenci dostu bir şehir; Berlin’e göre daha hesaplı, ulaşımı kolay ve yaratıcı sektörleri güçlü bir yaşam sunar.","popularityReason":"Leipzig’de teknik/ekonomi/kültür odaklı HAW; Türk öğrenciler için pratik alanlarda güçlü seçenek.","logoPath":null,"campusImagePath":null,"cityImagePath":null,"universityLongIntro":null,"whyChoose":null,"cityStudentLife":null,"cityTransport":null,"cityCostOfLiving":null,"cityHistory":null,"cityHistoricalNote":null,"cityEconomy":null,"cityIndustries":null,"studentJobsNote":null,"turkishStudentsNote":null,"filters":{"state":"Sachsen","type":"Hochschule","germanCourse":"Hazırlık/DSH kursu var","level":"Lisans ve Master","uniAssist":"Program bazlı / değişken"},"deadlines":{"bachelor":{"display":"15 Temmuz 2026","date":"2026-07-15","portal":"uni-assist; prior HTWK Prüfbericht may allow direct portal","portalCategory":"mixed","sourceUrl":"https://www.htwk-leipzig.de/studieren/bewerbung-auswahlverfahren/internationale-studieninteressierte","lastChecked":"2026-07-09"},"master":{"display":"15 Temmuz 2026","date":"2026-07-15","portal":"uni-assist; prior HTWK Prüfbericht may allow direct portal","portalCategory":"mixed","sourceUrl":"https://www.htwk-leipzig.de/studieren/bewerbung-auswahlverfahren/internationale-studieninteressierte","lastChecked":"2026-07-09"}},"germanCourse":{"status":"yes_official_external_pathway","label":"Hazırlık/DSH kursu var","name":"Deutschkurs / Studienkolleg at Hochschule Zittau/Görlitz","type":"Deutschkurs or Studienkolleg pathway","duration":"intensive preparatory pathway; exact intensity on HSZG page","weeklyHours":null,"targetExam":null,"targetDegreeLevel":"Bachelor/Master applicants lacking C1/C2","requiredLevel":"B1 or B2 certificate for Deutschkurs/Studienkolleg route","residenceRelevance":"possible","criteriaMatch":"Uygun: DSH/Intensivkurs/Propädeutikum/Studienkolleg hazırlığı kriterine giriyor.","sourceUrl":"https://www.htwk-leipzig.de/studieren/bewerbung-auswahlverfahren/internationale-studieninteressierte","lastChecked":"2026-07-09"}},{"id":"rwth-aachen","name":"RWTH Aachen University","slug":"rwth-aachen","city":"Aachen","state":"Nordrhein-Westfalen","type":"Technische Universität / Exzellenzuniversität","officialWebsite":"https://www.rwth-aachen.de","applicationPortal":"RWTHonline; Türkiye’den yabancı diploma ile international application prosedürü","lastChecked":"2026-07-09","sourceUrl":"https://www.tu9.de/en/","qsWorldRanking2026":"#105","qsSourceUrl":"https://www.topuniversities.com/world-university-rankings?countries=de&region=Europe","schoolIntro":"Almanya’nın en prestijli teknik üniversitelerinden biri; özellikle makine, elektrik, endüstri, malzeme ve bilgisayar mühendisliği için çok rekabetçidir.","cityIntro":"Aachen küçük ama çok uluslararası bir öğrenci şehridir; Hollanda ve Belçika sınırına yakınlığı, teknik sanayi bağlantıları ve RWTH etkisiyle öne çıkar.","popularityReason":"TU9 üyesi; Almanya’nın en büyük ve en güçlü teknik üniversitelerinden, mühendislikte çok yüksek bilinirlik.","logoPath":null,"campusImagePath":null,"cityImagePath":null,"universityLongIntro":null,"whyChoose":null,"cityStudentLife":null,"cityTransport":null,"cityCostOfLiving":null,"cityHistory":null,"cityHistoricalNote":null,"cityEconomy":null,"cityIndustries":null,"studentJobsNote":null,"turkishStudentsNote":null,"filters":{"state":"Nordrhein-Westfalen","type":"Technische Universität","germanCourse":"Hazırlık/DSH kursu yok","level":"Lisans ve Master","uniAssist":"Henüz doğrulanmadı"},"deadlines":{"bachelor":{"display":"15 Temmuz 2026","date":"2026-07-15","portal":"RWTHonline","portalCategory":"unknown","sourceUrl":"https://www.rwth-aachen.de/cms/root/studium/vor-dem-studium/bewerbung-um-einen-studienplatz/bewerbung-bachelor/~bqrn/internationale-studierende/?lidx=1","lastChecked":"2026-07-09"},"master":{"display":"15 Temmuz 2026","date":"2026-07-15","portal":"RWTHonline","portalCategory":"unknown","sourceUrl":"https://www.rwth-aachen.de/cms/root/studium/vor-dem-studium/bewerbung-um-einen-studienplatz/~dedx/master-bewerbung/?lidx=1","lastChecked":"2026-07-09"}},"germanCourse":{"status":"no_confirmed","label":"Hazırlık/DSH kursu yok","name":"No confirmed standalone RWTH DSH/§16 intensive pathway","type":"not confirmed as eligible intensive preparatory course","duration":"RWTH language center courses may exist, but no official standalone DSH/§16 intensive pathway confirmed for dataset criteria","weeklyHours":null,"targetExam":null,"targetDegreeLevel":"enrolled/exchange/international community","requiredLevel":"various levels","residenceRelevance":"no_confirmed_pathway","criteriaMatch":"Uygun değil: resmi kaynakta hazırlık/DSH yoğun kurs yolu doğrulanamadı.","sourceUrl":"https://www.rwth-aachen.de/go/id/bnqyy/lidx/1","lastChecked":"2026-07-09"}},{"id":"tu-berlin","name":"Technische Universität Berlin","slug":"tu-berlin","city":"Berlin","state":"Berlin","type":"Technische Universität","officialWebsite":"https://www.tu.berlin","applicationPortal":"tuPORT/TU Berlin application + uni-assist VPD","lastChecked":"2026-07-09","sourceUrl":"https://www.tu9.de/en/","qsWorldRanking2026":"#145","qsSourceUrl":"https://www.topuniversities.com/world-university-rankings?countries=de&region=Europe","schoolIntro":"Başkentte güçlü teknik ve araştırma ağı sunan büyük bir üniversite; mühendislik, şehircilik, informatik ve sürdürülebilirlik alanlarında çok sayıda seçenek sağlar.","cityIntro":"Berlin Almanya’nın en uluslararası ve hareketli şehri; kültür, startup, teknoloji ve sosyal hayat çok güçlüdür fakat konaklama bulmak zor olabilir.","popularityReason":"TU9 üyesi; Berlin’de büyük teknik üniversite, mühendislik/informatik için yüksek talep.","logoPath":null,"campusImagePath":null,"cityImagePath":null,"universityLongIntro":null,"whyChoose":null,"cityStudentLife":null,"cityTransport":null,"cityCostOfLiving":null,"cityHistory":null,"cityHistoricalNote":null,"cityEconomy":null,"cityIndustries":null,"studentJobsNote":null,"turkishStudentsNote":null,"filters":{"state":"Berlin","type":"Technische Universität","germanCourse":"Hazırlık/DSH kursu var","level":"Lisans ve Master","uniAssist":"Program bazlı / değişken"},"deadlines":{"bachelor":{"display":"15 Temmuz 2026","date":"2026-07-15","portal":"tuPORT + uni-assist VPD","portalCategory":"uni_assist","sourceUrl":"https://www.tu.berlin/en/studierendensekretariat/dates-deadlines-for-application-and-enrollment-at-tu-berlin","lastChecked":"2026-07-09"},"master":{"display":"15 Haziran 2026","date":"2026-06-15","portal":"tuPORT + uni-assist VPD","portalCategory":"uni_assist","sourceUrl":"https://www.tu.berlin/en/studierendensekretariat/dates-deadlines-for-application-and-enrollment-at-tu-berlin","lastChecked":"2026-07-09"}},"germanCourse":{"status":"yes_official_external_pathway","label":"Hazırlık/DSH kursu var","name":"TU Berlin Preparatory School / Studienkolleg-related route","type":"preparatory school / language-preparatory route","duration":"preparatory route; exact language intensity and residence suitability need official admission letter check","weeklyHours":null,"targetExam":null,"targetDegreeLevel":"Bachelor prep / exchange-oriented intensive courses","requiredLevel":"depends on route","residenceRelevance":"possible_need_check","criteriaMatch":"Uygun: DSH/Intensivkurs/Propädeutikum/Studienkolleg hazırlığı kriterine giriyor.","sourceUrl":"https://www.tu.berlin/en/studying/applying-and-enrolling","lastChecked":"2026-07-09"}},{"id":"tu-braunschweig","name":"Technische Universität Braunschweig","slug":"tu-braunschweig","city":"Braunschweig","state":"Niedersachsen","type":"Technische Universität","officialWebsite":"https://www.tu-braunschweig.de","applicationPortal":"TU Braunschweig online application / Incoming Office","lastChecked":"2026-07-09","sourceUrl":"https://www.tu9.de/en/","qsWorldRanking2026":"QS Top 500 dışında","qsSourceUrl":null,"schoolIntro":"Otomotiv, havacılık, makine ve mühendislik kültürü güçlü bir teknik üniversite; daha sakin şehir isteyen teknik öğrenciler için iyi bir profildir.","cityIntro":"Braunschweig daha sakin, teknik sanayi bağlantıları güçlü ve öğrenci yaşamı yönetilebilir bir şehirdir; özellikle otomotiv ve mühendislik çevresi dikkat çeker.","popularityReason":"TU9 üyesi; otomotiv, mühendislik ve teknik alanlarda güçlü; Türk öğrenciler için daha az rekabetli TU9 alternatifi olabilir.","logoPath":null,"campusImagePath":null,"cityImagePath":null,"universityLongIntro":null,"whyChoose":null,"cityStudentLife":null,"cityTransport":null,"cityCostOfLiving":null,"cityHistory":null,"cityHistoricalNote":null,"cityEconomy":null,"cityIndustries":null,"studentJobsNote":null,"turkishStudentsNote":null,"filters":{"state":"Niedersachsen","type":"Technische Universität","germanCourse":"Hazırlık/DSH kursu var","level":"Lisans ve Master","uniAssist":"Henüz doğrulanmadı"},"deadlines":{"bachelor":{"display":"15 Temmuz 2026","date":"2026-07-15","portal":"TU Braunschweig online application","portalCategory":"unknown","sourceUrl":"https://www.tu-braunschweig.de/en/international-students/application","lastChecked":"2026-07-09"},"master":{"display":"15 Temmuz 2026","date":"2026-07-15","portal":"TU Braunschweig online application / Incoming Office","portalCategory":"unknown","sourceUrl":"https://www.tu-braunschweig.de/en/international-students/application","lastChecked":"2026-07-09"}},"germanCourse":{"status":"yes_internal","label":"Hazırlık/DSH kursu var","name":"Preparatory German Courses","type":"TestDaF/DSH-oriented preparatory German course","duration":"intensive preparatory course; duration/visa depends on booking/course","weeklyHours":null,"targetExam":null,"targetDegreeLevel":"future TU Braunschweig applicants/students","requiredLevel":"varies; likely placement/level-based","residenceRelevance":"likely_yes_need_visa_check","criteriaMatch":"Uygun: DSH/Intensivkurs/Propädeutikum/Studienkolleg hazırlığı kriterine giriyor.","sourceUrl":"https://www.tu-braunschweig.de/en/learning-german/preparatory-courses","lastChecked":"2026-07-09"}},{"id":"tu-darmstadt","name":"Technische Universität Darmstadt","slug":"tu-darmstadt","city":"Darmstadt","state":"Hessen","type":"Technische Universität","officialWebsite":"https://www.tu-darmstadt.de","applicationPortal":"TUCaN; international admission","lastChecked":"2026-07-09","sourceUrl":"https://www.tu9.de/en/","qsWorldRanking2026":"#253","qsSourceUrl":"https://www.topuniversities.com/world-university-rankings?countries=de&region=Europe","schoolIntro":"Mühendislik, informatik, yapay zeka, siber güvenlik ve dijitalleşme alanlarında güçlü bir teknik üniversite; Rhein-Main iş ağıyla avantajlıdır.","cityIntro":"Darmstadt teknoloji, araştırma kurumları ve IT çevresiyle bilinir; Frankfurt’a yakınlığı sayesinde iş/staj ağı açısından avantajlıdır.","popularityReason":"TU9 üyesi; mühendislik, informatik ve cyber/security alanlarında güçlü; Rhein-Main lokasyonu avantajlı.","logoPath":null,"campusImagePath":null,"cityImagePath":null,"universityLongIntro":null,"whyChoose":null,"cityStudentLife":null,"cityTransport":null,"cityCostOfLiving":null,"cityHistory":null,"cityHistoricalNote":null,"cityEconomy":null,"cityIndustries":null,"studentJobsNote":null,"turkishStudentsNote":null,"filters":{"state":"Hessen","type":"Technische Universität","germanCourse":"Hazırlık/DSH kursu var","level":"Lisans ve Master","uniAssist":"Henüz doğrulanmadı"},"deadlines":{"bachelor":{"display":"Program bazlı kontrol edilmeli","date":null,"portal":"TUCaN","portalCategory":"unknown","sourceUrl":"https://www.tu-darmstadt.de/studieren/studieninteressierte/bewerbung_zulassung_tu/bewerbungsfristen/index.en.jsp","lastChecked":"2026-07-09"},"master":{"display":"Program bazlı kontrol edilmeli","date":null,"portal":"TUCaN","portalCategory":"unknown","sourceUrl":"https://www.tu-darmstadt.de/studieren/studieninteressierte/bewerbung_zulassung_tu/bewerbungsfristen/index.en.jsp","lastChecked":"2026-07-09"}},"germanCourse":{"status":"yes_internal","label":"Hazırlık/DSH kursu var","name":"DSH preparation courses at Studienkolleg Darmstadt","type":"DSH-Vorbereitung / studienvorbereitender Deutschkurs","duration":"one-semester or two-semester DSH course; approx. 240 lessons per semester; Monday-Friday blocks","weeklyHours":null,"targetExam":null,"targetDegreeLevel":"future TU Darmstadt applicants / German-taught degree applicants","requiredLevel":"B1 or B2 depending one/two-semester course","residenceRelevance":"possible","criteriaMatch":"Uygun: DSH/Intensivkurs/Propädeutikum/Studienkolleg hazırlığı kriterine giriyor.","sourceUrl":"https://www.stk.tu-darmstadt.de/dsh_stk/index.en.jsp","lastChecked":"2026-07-09"}},{"id":"leibniz-hannover","name":"Leibniz Universität Hannover","slug":"leibniz-hannover","city":"Hannover","state":"Niedersachsen","type":"Universität / Technische Universität profili","officialWebsite":"https://www.uni-hannover.de","applicationPortal":"Leibniz University application portal / international office; program bazlı kontrol","lastChecked":"2026-07-09","sourceUrl":"https://www.tu9.de/en/","qsWorldRanking2026":"#433","qsSourceUrl":"https://www.topuniversities.com/world-university-rankings?countries=de&region=Europe","schoolIntro":"Geniş program yelpazesine sahip büyük bir üniversite; mühendislik, mimarlık, hukuk, ekonomi ve doğa bilimlerini teknik profil ile birleştirir.","cityIntro":"Hannover büyük şehir imkanlarını daha dengeli yaşam maliyetiyle sunar; fuar, ulaşım ve teknik iş ağı açısından merkezi bir konumdadır.","popularityReason":"TU9 üyesi; mühendislik, mimarlık, informatik ve teknik bölümlerde geniş seçenek.","logoPath":null,"campusImagePath":null,"cityImagePath":null,"universityLongIntro":null,"whyChoose":null,"cityStudentLife":null,"cityTransport":null,"cityCostOfLiving":null,"cityHistory":null,"cityHistoricalNote":null,"cityEconomy":null,"cityIndustries":null,"studentJobsNote":null,"turkishStudentsNote":null,"filters":{"state":"Niedersachsen","type":"Technische Universität","germanCourse":"Hazırlık/DSH kursu var","level":"Lisans ve Master","uniAssist":"Program bazlı / değişken"},"deadlines":{"bachelor":{"display":"15 Temmuz 2026","date":"2026-07-15","portal":"LUH application portal / international office","portalCategory":"unknown","sourceUrl":"https://www.uni-hannover.de/en/studium/vor-dem-studium/bewerbung-zulassung/voraussetzungen-zum-studium/bewerbungszeiten","lastChecked":"2026-07-09"},"master":{"display":"15 Temmuz 2026","date":"2026-07-15","portal":"LUH application portal / international office","portalCategory":"unknown","sourceUrl":"https://www.uni-hannover.de/en/studium/vor-dem-studium/bewerbung-zulassung/voraussetzungen-zum-studium/bewerbungszeiten","lastChecked":"2026-07-09"}},"germanCourse":{"status":"yes_internal","label":"Hazırlık/DSH kursu var","name":"D-intensive","type":"DSH preparation / intensive German course","duration":"7-month D-intensive route; DSH preparation starts listed for 2026/2027 dates","weeklyHours":null,"targetExam":null,"targetDegreeLevel":"future Leibniz University Hannover students","requiredLevel":"module-based; DSH pathway","residenceRelevance":"possible","criteriaMatch":"Uygun: DSH/Intensivkurs/Propädeutikum/Studienkolleg hazırlığı kriterine giriyor.","sourceUrl":"https://www.llc.uni-hannover.de/en/language-courses/german/d-intensive","lastChecked":"2026-07-09"}},{"id":"kit","name":"Karlsruher Institut für Technologie","slug":"kit","city":"Karlsruhe","state":"Baden-Württemberg","type":"Technische Universität / Forschungsuniversität","officialWebsite":"https://www.kit.edu","applicationPortal":"KIT online portal / International Students Office","lastChecked":"2026-07-09","sourceUrl":"https://www.tu9.de/en/","qsWorldRanking2026":"#98","qsSourceUrl":"https://www.topuniversities.com/world-university-rankings?countries=de&region=Europe","schoolIntro":"Üniversite ve büyük araştırma merkezi karakterini birleştiren çok güçlü teknik kurum; enerji, informatik, mühendislik ve doğa bilimlerinde yüksek itibara sahiptir.","cityIntro":"Karlsruhe teknik ve hukuk kurumlarıyla bilinen düzenli bir öğrenci şehridir; bisiklet kullanımı, teknoloji şirketleri ve Fransa’ya yakınlığı avantajdır.","popularityReason":"TU9 üyesi; Almanya’nın en güçlü teknik/fen üniversitelerinden; mühendislik ve informatikte yüksek prestij.","logoPath":null,"campusImagePath":null,"cityImagePath":null,"universityLongIntro":null,"whyChoose":null,"cityStudentLife":null,"cityTransport":null,"cityCostOfLiving":null,"cityHistory":null,"cityHistoricalNote":null,"cityEconomy":null,"cityIndustries":null,"studentJobsNote":null,"turkishStudentsNote":null,"filters":{"state":"Baden-Württemberg","type":"Technische Universität","germanCourse":"Hazırlık/DSH kursu var","level":"Lisans ve Master","uniAssist":"Henüz doğrulanmadı"},"deadlines":{"bachelor":{"display":"15 Temmuz 2026","date":"2026-07-15","portal":"KIT online portal / International Students Office","portalCategory":"unknown","sourceUrl":"https://www.intl.kit.edu/istudies/3167.php","lastChecked":"2026-07-09"},"master":{"display":"15 Temmuz 2026","date":"2026-07-15","portal":"KIT online portal / International Students Office","portalCategory":"unknown","sourceUrl":"https://www.intl.kit.edu/istudies/7392.php","lastChecked":"2026-07-09"}},"germanCourse":{"status":"yes_internal","label":"Hazırlık/DSH kursu var","name":"German course to prepare for studies","type":"German course / DSH preparation","duration":"around one semester; concludes with DSH test","weeklyHours":null,"targetExam":null,"targetDegreeLevel":"Bachelor/Master applicants lacking DSH2","requiredLevel":"B1 minimum; entrance exam B1/B2 level","residenceRelevance":"possible","criteriaMatch":"Uygun: DSH/Intensivkurs/Propädeutikum/Studienkolleg hazırlığı kriterine giriyor.","sourceUrl":"https://www.intl.kit.edu/istudies/7392.php","lastChecked":"2026-07-09"}},{"id":"tum","name":"Technical University of Munich","slug":"tum","city":"München","state":"Bayern","type":"Technische Universität / Exzellenzuniversität","officialWebsite":"https://www.tum.de","applicationPortal":"TUMonline + uni-assist VPD for international HZB","lastChecked":"2026-07-09","sourceUrl":"https://www.tu9.de/en/","qsWorldRanking2026":"#22","qsSourceUrl":"https://www.topuniversities.com/world-university-rankings?countries=de&region=Europe","schoolIntro":"Almanya’nın en rekabetçi teknik üniversitelerinden biri; mühendislik, informatik, işletme, sağlık teknolojileri ve girişimcilik ekosistemiyle çok güçlüdür.","cityIntro":"Münih çok güçlü iş, teknoloji ve yaşam kalitesi sunar; ancak Almanya’nın en pahalı şehirlerinden biri olduğu için bütçe planı kritik önem taşır.","popularityReason":"TU9 üyesi; Almanya’nın en popüler ve en rekabetçi teknik üniversitelerinden.","logoPath":null,"campusImagePath":null,"cityImagePath":null,"universityLongIntro":null,"whyChoose":null,"cityStudentLife":null,"cityTransport":null,"cityCostOfLiving":null,"cityHistory":null,"cityHistoricalNote":null,"cityEconomy":null,"cityIndustries":null,"studentJobsNote":null,"turkishStudentsNote":null,"filters":{"state":"Bayern","type":"Technische Universität","germanCourse":"Hazırlık/DSH kursu var","level":"Lisans ve Master","uniAssist":"Uni-Assist var"},"deadlines":{"bachelor":{"display":"15 Temmuz 2026","date":"2026-07-15","portal":"TUMonline + uni-assist VPD","portalCategory":"uni_assist","sourceUrl":"https://www.tum.de/en/studies/application/bachelor/application-bachelor","lastChecked":"2026-07-09"},"master":{"display":"Program bazlı kontrol edilmeli","date":null,"portal":"TUMonline + uni-assist VPD if required","portalCategory":"uni_assist","sourceUrl":"https://www.tum.de/en/studies/application/application-info-portal/dates-periods-and-deadlines","lastChecked":"2026-07-09"}},"germanCourse":{"status":"yes_internal","label":"Hazırlık/DSH kursu var","name":"TUM Language Center German courses","type":"general German courses; no DSH/Studienkolleg prep","duration":"semester break intensive courses 1–5 weeks; FAQ says no preparatory courses for Studienkolleg or German university language tests","weeklyHours":null,"targetExam":null,"targetDegreeLevel":"enrolled TUM students/staff","requiredLevel":"various","residenceRelevance":"unlikely","criteriaMatch":"Uygun: DSH/Intensivkurs/Propädeutikum/Studienkolleg hazırlığı kriterine giriyor.","sourceUrl":"https://www.sprachenzentrum.tum.de/en/sz/faq/","lastChecked":"2026-07-09"}},{"id":"uni-stuttgart","name":"Universität Stuttgart","slug":"universitaet-stuttgart","city":"Stuttgart","state":"Baden-Württemberg","type":"Universität / Technische Universität profili","officialWebsite":"https://www.uni-stuttgart.de","applicationPortal":"C@MPUS online portal; international degree application","lastChecked":"2026-07-09","sourceUrl":"https://www.tu9.de/en/","qsWorldRanking2026":"#310","qsSourceUrl":"https://www.topuniversities.com/world-university-rankings?countries=de&region=Europe","schoolIntro":"Otomotiv, havacılık, makine, inşaat ve sistem mühendisliği alanlarında güçlü teknik profil sunar; Baden-Württemberg sanayi ağıyla yakındır.","cityIntro":"Stuttgart otomotiv ve mühendislik sanayisinin kalbinde yer alır; Mercedes-Benz, Porsche ve tedarikçi ekosistemi nedeniyle teknik öğrenciler için güçlüdür.","popularityReason":"TU9 üyesi; otomotiv, makine, inşaat, havacılık ve mühendislikte güçlü lokasyon.","logoPath":null,"campusImagePath":null,"cityImagePath":null,"universityLongIntro":null,"whyChoose":null,"cityStudentLife":null,"cityTransport":null,"cityCostOfLiving":null,"cityHistory":null,"cityHistoricalNote":null,"cityEconomy":null,"cityIndustries":null,"studentJobsNote":null,"turkishStudentsNote":null,"filters":{"state":"Baden-Württemberg","type":"Technische Universität","germanCourse":"Hazırlık/DSH kursu var","level":"Lisans ve Master","uniAssist":"Henüz doğrulanmadı"},"deadlines":{"bachelor":{"display":"15 Temmuz 2026","date":"2026-07-15","portal":"C@MPUS","portalCategory":"unknown","sourceUrl":"https://www.uni-stuttgart.de/en/study/application/dates/","lastChecked":"2026-07-09"},"master":{"display":"Program bazlı kontrol edilmeli","date":null,"portal":"C@MPUS","portalCategory":"unknown","sourceUrl":"https://www.uni-stuttgart.de/en/study/application/dates/","lastChecked":"2026-07-09"}},"germanCourse":{"status":"yes_internal","label":"Hazırlık/DSH kursu var","name":"Preparatory German language course","type":"studienvorbereitender Deutschkurs / DSH pathway","duration":"preparatory German course before degree studies","weeklyHours":null,"targetExam":null,"targetDegreeLevel":"international applicants lacking sufficient German","requiredLevel":"depending on course; preparatory route","residenceRelevance":"possible","criteriaMatch":"Uygun: DSH/Intensivkurs/Propädeutikum/Studienkolleg hazırlığı kriterine giriyor.","sourceUrl":"https://www.uni-stuttgart.de/en/study/international/german-courses/study-preparation/","lastChecked":"2026-07-09"}},{"id":"lmu-muenchen","name":"Ludwig-Maximilians-Universität München","slug":"lmu-muenchen","city":"München","state":"Bayern","type":"Universität","officialWebsite":"https://www.lmu.de","applicationPortal":"International Office / programme-specific; sometimes hochschulstart","lastChecked":"2026-07-09","sourceUrl":"https://www.lmu.de/en/study/all-degrees-and-programs/international-degree-students/","qsWorldRanking2026":"#58","qsSourceUrl":"https://www.topuniversities.com/world-university-rankings?countries=de&region=Europe","schoolIntro":"Almanya’nın en güçlü klasik araştırma üniversitelerinden biri; tıp, hukuk, sosyal bilimler, beşeri bilimler ve doğa bilimlerinde çok geniş seçenek sunar.","cityIntro":"Münih çok güçlü iş, teknoloji ve yaşam kalitesi sunar; ancak Almanya’nın en pahalı şehirlerinden biri olduğu için bütçe planı kritik önem taşır.","popularityReason":"QS World University Rankings 2026 global top 500 Germany listesinde #58; TU9 ve önceki Saksonya ilk 5 dışında eklendi.","logoPath":null,"campusImagePath":null,"cityImagePath":null,"universityLongIntro":null,"whyChoose":null,"cityStudentLife":null,"cityTransport":null,"cityCostOfLiving":null,"cityHistory":null,"cityHistoricalNote":null,"cityEconomy":null,"cityIndustries":null,"studentJobsNote":null,"turkishStudentsNote":null,"filters":{"state":"Bayern","type":"Universität","germanCourse":"Hazırlık/DSH kursu yok","level":"Lisans ve Master","uniAssist":"Program bazlı / değişken"},"deadlines":{"bachelor":{"display":"15 Temmuz 2026","date":"2026-07-15","portal":"International Office / programme-specific; sometimes hochschulstart","portalCategory":"program_specific","sourceUrl":"https://www.lmu.de/en/study/degree-students/dates-and-deadlines/","lastChecked":"2026-07-09"},"master":{"display":"15 Temmuz 2026","date":"2026-07-15","portal":"International Office / programme-specific; sometimes hochschulstart","portalCategory":"program_specific","sourceUrl":"https://www.lmu.de/en/study/degree-students/dates-and-deadlines/","lastChecked":"2026-07-09"}},"germanCourse":{"status":"no_confirmed","label":"Hazırlık/DSH kursu yok","name":"No standalone LMU DSH/§16 intensive pathway confirmed","type":"not confirmed as eligible intensive preparatory course","duration":"Not confirmed as standalone DSH/intensive preparatory course for residence purpose","weeklyHours":null,"targetExam":null,"targetDegreeLevel":"Admitted/starting LMU degree or visiting students","requiredLevel":"varies; A1-C1 courses","residenceRelevance":"no_confirmed_pathway","criteriaMatch":"Uygun değil: resmi kaynakta hazırlık/DSH yoğun kurs yolu doğrulanamadı.","sourceUrl":"https://www.lmu.de/en/study/all-degrees-and-programs/international-degree-students/","lastChecked":"2026-07-09"}},{"id":"uni-heidelberg","name":"Ruprecht-Karls-Universität Heidelberg","slug":"universitaet-heidelberg","city":"Heidelberg","state":"Baden-Württemberg","type":"Universität","officialWebsite":"https://www.uni-heidelberg.de","applicationPortal":"heiCO / programme-specific","lastChecked":"2026-07-09","sourceUrl":"https://www.uni-heidelberg.de/en/study/management-of-studies/key-dates-deadlines/application-deadlines-for-the-1st-semester-of-undergraduate-degree-programmes","qsWorldRanking2026":"#80","qsSourceUrl":"https://www.topuniversities.com/world-university-rankings?countries=de&region=Europe","schoolIntro":"Almanya’nın en eski ve en itibarlı üniversitelerinden biri; tıp, yaşam bilimleri, beşeri bilimler ve araştırma odaklı akademik profil açısından güçlüdür.","cityIntro":"Heidelberg tarihi ve çok öğrenci odaklı bir şehirdir; küçük/orta ölçekli yapısı, uluslararası atmosferi ve akademik kimliğiyle öne çıkar.","popularityReason":"QS World University Rankings 2026 global top 500 Germany listesinde #80; TU9 ve önceki Saksonya ilk 5 dışında eklendi.","logoPath":null,"campusImagePath":null,"cityImagePath":null,"universityLongIntro":null,"whyChoose":null,"cityStudentLife":null,"cityTransport":null,"cityCostOfLiving":null,"cityHistory":null,"cityHistoricalNote":null,"cityEconomy":null,"cityIndustries":null,"studentJobsNote":null,"turkishStudentsNote":null,"filters":{"state":"Baden-Württemberg","type":"Universität","germanCourse":"Hazırlık/DSH kursu var","level":"Lisans ve Master","uniAssist":"Program bazlı / değişken"},"deadlines":{"bachelor":{"display":"15 Temmuz 2026","date":"2026-07-15","portal":"heiCO / programme-specific","portalCategory":"program_specific","sourceUrl":"https://www.uni-heidelberg.de/en/study/management-of-studies/key-dates-deadlines/application-deadlines-for-the-1st-semester-of-undergraduate-degree-programmes","lastChecked":"2026-07-09"},"master":{"display":"Program bazlı kontrol edilmeli","date":null,"portal":"heiCO / programme-specific","portalCategory":"program_specific","sourceUrl":"https://www.uni-heidelberg.de/en/study/application-enrolment/starting-your-degree-course-in-the-first-academic-semester/masters-degree-programmes-with-access-and-admission-restrictions","lastChecked":"2026-07-09"}},"germanCourse":{"status":"yes_internal","label":"Hazırlık/DSH kursu var","name":"Kolleg für deutsche Sprache und Kultur / DSH preparation","type":"DSH preparation / intensive German course","duration":"20 classes/week; advanced C1 = DSH preparation + oral exam training","weeklyHours":null,"targetExam":null,"targetDegreeLevel":"Applicants needing Studienkolleg or DSH proof","requiredLevel":"DSH-1 for Studienkolleg admission in some cases","residenceRelevance":"likely_yes_need_admission_check","criteriaMatch":"Uygun: DSH/Intensivkurs/Propädeutikum/Studienkolleg hazırlığı kriterine giriyor.","sourceUrl":"https://www.isz.uni-heidelberg.de/en/ksk","lastChecked":"2026-07-09"}},{"id":"fu-berlin","name":"Freie Universität Berlin","slug":"freie-universitaet-berlin","city":"Berlin","state":"Berlin","type":"Universität","officialWebsite":"https://www.fu-berlin.de","applicationPortal":"uni-assist / FU application portal","lastChecked":"2026-07-09","sourceUrl":"https://www.fu-berlin.de/en/studium/bewerbung/bewerbungsfristen/index.html","qsWorldRanking2026":"#88","qsSourceUrl":"https://www.topuniversities.com/world-university-rankings?countries=de&region=Europe","schoolIntro":"Berlin’in önde gelen araştırma üniversitelerinden biri; sosyal bilimler, siyaset, beşeri bilimler, yaşam bilimleri ve uluslararası akademik çevre açısından güçlüdür.","cityIntro":"Berlin Almanya’nın en uluslararası ve hareketli şehri; kültür, startup, teknoloji ve sosyal hayat çok güçlüdür fakat konaklama bulmak zor olabilir.","popularityReason":"QS World University Rankings 2026 global top 500 Germany listesinde #88; TU9 ve önceki Saksonya ilk 5 dışında eklendi.","logoPath":null,"campusImagePath":null,"cityImagePath":null,"universityLongIntro":null,"whyChoose":null,"cityStudentLife":null,"cityTransport":null,"cityCostOfLiving":null,"cityHistory":null,"cityHistoricalNote":null,"cityEconomy":null,"cityIndustries":null,"studentJobsNote":null,"turkishStudentsNote":null,"filters":{"state":"Berlin","type":"Universität","germanCourse":"Hazırlık/DSH kursu yok","level":"Lisans ve Master","uniAssist":"Program bazlı / değişken"},"deadlines":{"bachelor":{"display":"restricted: 2026-07-15; unrestricted: 2026-09-01","date":null,"portal":"uni-assist / FU application portal","portalCategory":"mixed","sourceUrl":"https://www.fu-berlin.de/en/studium/bewerbung/bewerbungsfristen/index.html","lastChecked":"2026-07-09"},"master":{"display":"restricted: 2026-05-31; unrestricted: 2026-08-15","date":null,"portal":"uni-assist / FU application portal","portalCategory":"mixed","sourceUrl":"https://www.fu-berlin.de/en/studium/bewerbung/bewerbungsfristen/index.html","lastChecked":"2026-07-09"}},"germanCourse":{"status":"no_confirmed","label":"Hazırlık/DSH kursu yok","name":"No official standalone intensive DSH pathway confirmed","type":"not confirmed as eligible intensive preparatory course","duration":"No suitable standalone DSH/preparatory intensive course confirmed on official admission pages","weeklyHours":null,"targetExam":null,"targetDegreeLevel":null,"requiredLevel":"C1/DSH proof required for enrolment","residenceRelevance":"no_confirmed_pathway","criteriaMatch":"Uygun değil: resmi kaynakta hazırlık/DSH yoğun kurs yolu doğrulanamadı.","sourceUrl":"https://www.fu-berlin.de/en/studium/bewerbung/bewerbungsfristen/index.html","lastChecked":"2026-07-09"}},{"id":"hu-berlin","name":"Humboldt-Universität zu Berlin","slug":"humboldt-universitaet-berlin","city":"Berlin","state":"Berlin","type":"Universität","officialWebsite":"https://www.hu-berlin.de","applicationPortal":"uni-assist / HU portal","lastChecked":"2026-07-09","sourceUrl":"https://www.hu-berlin.de/en/studies/counselling/leaflets/standard-periods-for-application-registration-and-enrolment","qsWorldRanking2026":"#130","qsSourceUrl":"https://www.topuniversities.com/world-university-rankings?countries=de&region=Europe","schoolIntro":"Berlin merkezli köklü araştırma üniversitesi; beşeri bilimler, sosyal bilimler, hukuk, ekonomi ve doğa bilimleri alanlarında prestijlidir.","cityIntro":"Berlin Almanya’nın en uluslararası ve hareketli şehri; kültür, startup, teknoloji ve sosyal hayat çok güçlüdür fakat konaklama bulmak zor olabilir.","popularityReason":"QS World University Rankings 2026 global top 500 Germany listesinde #130; TU9 ve önceki Saksonya ilk 5 dışında eklendi.","logoPath":null,"campusImagePath":null,"cityImagePath":null,"universityLongIntro":null,"whyChoose":null,"cityStudentLife":null,"cityTransport":null,"cityCostOfLiving":null,"cityHistory":null,"cityHistoricalNote":null,"cityEconomy":null,"cityIndustries":null,"studentJobsNote":null,"turkishStudentsNote":null,"filters":{"state":"Berlin","type":"Universität","germanCourse":"Henüz doğrulanmadı","level":"Lisans ve Master","uniAssist":"Program bazlı / değişken"},"deadlines":{"bachelor":{"display":"15 Temmuz 2026","date":"2026-07-15","portal":"uni-assist / HU portal","portalCategory":"mixed","sourceUrl":"https://www.hu-berlin.de/en/study/before-your-studies/apply/international-students/undergraduate-degree-programmes","lastChecked":"2026-07-09"},"master":{"display":"Program bazlı kontrol edilmeli","date":null,"portal":"uni-assist / HU portal","portalCategory":"mixed","sourceUrl":"https://www.hu-berlin.de/en/study/before-your-studies/apply/international-students/undergraduate-degree-programmes","lastChecked":"2026-07-09"}},"germanCourse":{"status":"not_confirmed","label":"Henüz doğrulanmadı","name":"No generally eligible DSH preparatory course confirmed","type":"not confirmed","duration":null,"weeklyHours":null,"targetExam":null,"targetDegreeLevel":null,"requiredLevel":"German proof required by programme","residenceRelevance":"no","criteriaMatch":"Henüz doğrulanmadı: normal Sprachenzentrum dersiyle karıştırılmamalı.","sourceUrl":"https://www.hu-berlin.de/en/study/before-your-studies/apply/international-students","lastChecked":"2026-07-09"}},{"id":"uni-hamburg","name":"Universität Hamburg","slug":"universitaet-hamburg","city":"Hamburg","state":"Hamburg","type":"Universität","officialWebsite":"https://www.uni-hamburg.de","applicationPortal":"STiNE / programme-specific","lastChecked":"2026-07-09","sourceUrl":"https://www.uni-hamburg.de/en/campuscenter/bewerbung/fristen-termine.html","qsWorldRanking2026":"#193","qsSourceUrl":"https://www.topuniversities.com/world-university-rankings?countries=de&region=Europe","schoolIntro":"Kuzey Almanya’nın büyük araştırma üniversitelerinden biri; şehir, liman, medya ve ekonomi ekosistemiyle geniş akademik seçenekleri birleştirir.","cityIntro":"Hamburg büyük liman, medya, lojistik ve kültür şehridir; su kenarı yaşamı ve uluslararası atmosferi güçlü olsa da kira piyasası rekabetçidir.","popularityReason":"QS World University Rankings 2026 global top 500 Germany listesinde #193; TU9 ve önceki Saksonya ilk 5 dışında eklendi.","logoPath":null,"campusImagePath":null,"cityImagePath":null,"universityLongIntro":null,"whyChoose":null,"cityStudentLife":null,"cityTransport":null,"cityCostOfLiving":null,"cityHistory":null,"cityHistoricalNote":null,"cityEconomy":null,"cityIndustries":null,"studentJobsNote":null,"turkishStudentsNote":null,"filters":{"state":"Hamburg","type":"Universität","germanCourse":"Hazırlık/DSH kursu yok","level":"Lisans ve Master","uniAssist":"Program bazlı / değişken"},"deadlines":{"bachelor":{"display":"15 Temmuz 2026","date":"2026-07-15","portal":"STiNE / programme-specific","portalCategory":"program_specific","sourceUrl":"https://www.uni-hamburg.de/en/campuscenter/bewerbung/fristen-termine.html","lastChecked":"2026-07-09"},"master":{"display":"15 Haziran 2026","date":"2026-06-15","portal":"STiNE / programme-specific","portalCategory":"program_specific","sourceUrl":"https://www.uni-hamburg.de/en/campuscenter/bewerbung/fristen-termine.html","lastChecked":"2026-07-09"}},"germanCourse":{"status":"no_confirmed","label":"Hazırlık/DSH kursu yok","name":"No current UHH Propädeutikum from 2025","type":"former pre-semester preparatory course discontinued","duration":"Propädeutikum was last offered in 2024; no application possible from 2025","weeklyHours":null,"targetExam":null,"targetDegreeLevel":"Applicants needing Studienkolleg/FSP","requiredLevel":"depends on course","residenceRelevance":"no_confirmed_current_pathway","criteriaMatch":"Uygun değil: resmi kaynakta hazırlık/DSH yoğun kurs yolu doğrulanamadı.","sourceUrl":"https://www.uni-hamburg.de/en/campuscenter/bewerbung/international/propaedeutikum.html","lastChecked":"2026-07-09"}},{"id":"uni-freiburg","name":"Universität Freiburg","slug":"universitaet-freiburg","city":"Freiburg im Breisgau","state":"Baden-Württemberg","type":"Universität","officialWebsite":"https://uni-freiburg.de","applicationPortal":"University application portal / programme-specific","lastChecked":"2026-07-09","sourceUrl":"https://uni-freiburg.de/en/studies/applying/dates-and-deadlines/","qsWorldRanking2026":"#201","qsSourceUrl":"https://www.topuniversities.com/world-university-rankings?countries=de&region=Europe","schoolIntro":"Araştırma kalitesi ve öğrenci şehri atmosferiyle bilinen köklü üniversite; tıp, doğa bilimleri, sürdürülebilirlik ve beşeri bilimlerde güçlüdür.","cityIntro":"Freiburg güneşli iklimi, sürdürülebilirlik kültürü ve öğrenci şehri havasıyla bilinir; İsviçre ve Fransa’ya yakınlığı ek avantaj sağlar.","popularityReason":"QS World University Rankings 2026 global top 500 Germany listesinde #201; TU9 ve önceki Saksonya ilk 5 dışında eklendi.","logoPath":null,"campusImagePath":null,"cityImagePath":null,"universityLongIntro":null,"whyChoose":null,"cityStudentLife":null,"cityTransport":null,"cityCostOfLiving":null,"cityHistory":null,"cityHistoricalNote":null,"cityEconomy":null,"cityIndustries":null,"studentJobsNote":null,"turkishStudentsNote":null,"filters":{"state":"Baden-Württemberg","type":"Universität","germanCourse":"Henüz doğrulanmadı","level":"Lisans ve Master","uniAssist":"Program bazlı / değişken"},"deadlines":{"bachelor":{"display":"15 Temmuz 2026","date":"2026-07-15","portal":"University application portal / programme-specific","portalCategory":"program_specific","sourceUrl":"https://uni-freiburg.de/en/studies/applying/dates-and-deadlines/","lastChecked":"2026-07-09"},"master":{"display":"Program bazlı kontrol edilmeli","date":null,"portal":"University application portal / programme-specific","portalCategory":"program_specific","sourceUrl":"https://uni-freiburg.de/en/studies/applying/dates-and-deadlines/","lastChecked":"2026-07-09"}},"germanCourse":{"status":"not_confirmed","label":"Henüz doğrulanmadı","name":"No eligible internal DSH intensive course confirmed","type":"not confirmed","duration":null,"weeklyHours":null,"targetExam":null,"targetDegreeLevel":null,"requiredLevel":"German proof required for German-taught programmes","residenceRelevance":"no","criteriaMatch":"Henüz doğrulanmadı: normal Sprachenzentrum dersiyle karıştırılmamalı.","sourceUrl":"https://uni-freiburg.de/en/studies/applying/international-applicants/full-time-studies/","lastChecked":"2026-07-09"}},{"id":"uni-bonn","name":"Rheinische Friedrich-Wilhelms-Universität Bonn","slug":"universitaet-bonn","city":"Bonn","state":"Nordrhein-Westfalen","type":"Universität","officialWebsite":"https://www.uni-bonn.de","applicationPortal":"University portal / programme-specific","lastChecked":"2026-07-09","sourceUrl":"https://www.uni-bonn.de/en/studying/application-admission-and-enrollment/application-deadlines","qsWorldRanking2026":"#207","qsSourceUrl":"https://www.topuniversities.com/world-university-rankings?countries=de&region=Europe","schoolIntro":"Araştırma profili çok güçlü bir üniversite; matematik, ekonomi, yaşam bilimleri, tarım bilimleri ve siyaset çevresiyle öne çıkar.","cityIntro":"Bonn eski başkent kimliği, uluslararası kurumları ve daha sakin şehir yapısıyla bilinir; Köln’e yakınlığı sayesinde sosyal ve iş ağı genişler.","popularityReason":"QS World University Rankings 2026 global top 500 Germany listesinde #207; TU9 ve önceki Saksonya ilk 5 dışında eklendi.","logoPath":null,"campusImagePath":null,"cityImagePath":null,"universityLongIntro":null,"whyChoose":null,"cityStudentLife":null,"cityTransport":null,"cityCostOfLiving":null,"cityHistory":null,"cityHistoricalNote":null,"cityEconomy":null,"cityIndustries":null,"studentJobsNote":null,"turkishStudentsNote":null,"filters":{"state":"Nordrhein-Westfalen","type":"Universität","germanCourse":"Hazırlık/DSH kursu var","level":"Lisans ve Master","uniAssist":"Program bazlı / değişken"},"deadlines":{"bachelor":{"display":"15 Temmuz 2026","date":"2026-07-15","portal":"University portal / programme-specific","portalCategory":"program_specific","sourceUrl":"https://www.uni-bonn.de/en/studying/application-admission-and-enrollment/application-deadlines","lastChecked":"2026-07-09"},"master":{"display":"Program bazlı kontrol edilmeli","date":null,"portal":"University portal / programme-specific","portalCategory":"program_specific","sourceUrl":"https://www.uni-bonn.de/en/studying/application-admission-and-enrollment/applications-from-international-students","lastChecked":"2026-07-09"}},"germanCourse":{"status":"yes_internal","label":"Hazırlık/DSH kursu var","name":"DSH Preparatory Courses","type":"DSH-Vorbereitung","duration":"DSH preparatory course; intensity to verify","weeklyHours":null,"targetExam":null,"targetDegreeLevel":"Prospective degree students missing DSH","requiredLevel":"German certificate; applicant group conditions","residenceRelevance":"possible","criteriaMatch":"Uygun: DSH/Intensivkurs/Propädeutikum/Studienkolleg hazırlığı kriterine giriyor.","sourceUrl":"https://www.uni-bonn.de/en/studying/international-students/learning-german/dsh-preparatory-courses/dsh-preparatory-courses","lastChecked":"2026-07-09"}},{"id":"uni-tuebingen","name":"Eberhard Karls Universität Tübingen","slug":"universitaet-tuebingen","city":"Tübingen","state":"Baden-Württemberg","type":"Universität","officialWebsite":"https://uni-tuebingen.de","applicationPortal":"University portal / programme-specific","lastChecked":"2026-07-09","sourceUrl":"https://uni-tuebingen.de/en/study/application-and-enrollment/masters-degree/","qsWorldRanking2026":"#215","qsSourceUrl":"https://www.topuniversities.com/world-university-rankings?countries=de&region=Europe","schoolIntro":"Klasik Alman üniversite şehri atmosferinde güçlü bir araştırma üniversitesi; tıp, yapay zeka, yaşam bilimleri ve beşeri bilimlerde dikkat çeker.","cityIntro":"Tübingen klasik bir öğrenci şehridir; küçük, akademik, tarihi ve yürünebilir yapısıyla yoğun üniversite atmosferi sunar.","popularityReason":"QS World University Rankings 2026 global top 500 Germany listesinde #215; TU9 ve önceki Saksonya ilk 5 dışında eklendi.","logoPath":null,"campusImagePath":null,"cityImagePath":null,"universityLongIntro":null,"whyChoose":null,"cityStudentLife":null,"cityTransport":null,"cityCostOfLiving":null,"cityHistory":null,"cityHistoricalNote":null,"cityEconomy":null,"cityIndustries":null,"studentJobsNote":null,"turkishStudentsNote":null,"filters":{"state":"Baden-Württemberg","type":"Universität","germanCourse":"Hazırlık/DSH kursu var","level":"Lisans ve Master","uniAssist":"Program bazlı / değişken"},"deadlines":{"bachelor":{"display":"15 Temmuz 2026","date":"2026-07-15","portal":"University portal / programme-specific","portalCategory":"program_specific","sourceUrl":"https://uni-tuebingen.de/en/study/application-and-enrollment/enrollment-in-programs-with-free-admission/","lastChecked":"2026-07-09"},"master":{"display":"restricted: 2026-07-15; unrestricted: 2026-09-15","date":null,"portal":"University portal / programme-specific","portalCategory":"program_specific","sourceUrl":"https://uni-tuebingen.de/en/study/application-and-enrollment/masters-degree/","lastChecked":"2026-07-09"}},"germanCourse":{"status":"yes_internal","label":"Hazırlık/DSH kursu var","name":"Come to prepare – Pre-Study Intensive German Course","type":"Pre-study intensive German / TestDaF preparation","duration":"B2 to C1+; pre-study intensive; prepares for Digital TestDaF","weeklyHours":null,"targetExam":null,"targetDegreeLevel":"Future Tübingen students","requiredLevel":"placement/German level requirements","residenceRelevance":"likely_yes","criteriaMatch":"Uygun: DSH/Intensivkurs/Propädeutikum/Studienkolleg hazırlığı kriterine giriyor.","sourceUrl":"https://uni-tuebingen.de/en/international/learning-languages/learn-german/come-to-stay/come-to-prepare/","lastChecked":"2026-07-09"}},{"id":"fau-erlangen-nuernberg","name":"Friedrich-Alexander-Universität Erlangen-Nürnberg","slug":"fau-erlangen-nuernberg","city":"Erlangen / Nürnberg","state":"Bayern","type":"Universität","officialWebsite":"https://www.fau.eu","applicationPortal":"campo / programme-specific","lastChecked":"2026-07-09","sourceUrl":"https://www.fau.eu/studying/applications-and-admissions/application-deadlines/","qsWorldRanking2026":"#232","qsSourceUrl":"https://www.topuniversities.com/world-university-rankings?countries=de&region=Europe","schoolIntro":"Bavyera’da geniş program yelpazesi ve güçlü mühendislik/medikal teknoloji bağlantıları olan büyük bir üniversitedir.","cityIntro":"Erlangen öğrenci ve teknoloji odaklı sakin bir şehirken Nürnberg daha büyük şehir imkanları sunar; birlikte güçlü bir bölgesel yaşam alanı oluştururlar.","popularityReason":"QS World University Rankings 2026 global top 500 Germany listesinde #232; TU9 ve önceki Saksonya ilk 5 dışında eklendi.","logoPath":null,"campusImagePath":null,"cityImagePath":null,"universityLongIntro":null,"whyChoose":null,"cityStudentLife":null,"cityTransport":null,"cityCostOfLiving":null,"cityHistory":null,"cityHistoricalNote":null,"cityEconomy":null,"cityIndustries":null,"studentJobsNote":null,"turkishStudentsNote":null,"filters":{"state":"Bayern","type":"Universität","germanCourse":"Hazırlık/DSH kursu var","level":"Lisans ve Master","uniAssist":"Program bazlı / değişken"},"deadlines":{"bachelor":{"display":"Program bazlı kontrol edilmeli","date":null,"portal":"campo / programme-specific","portalCategory":"program_specific","sourceUrl":"https://www.fau.eu/studying/applications-and-admissions/application-deadlines/","lastChecked":"2026-07-09"},"master":{"display":"Program bazlı kontrol edilmeli","date":null,"portal":"campo / programme-specific","portalCategory":"program_specific","sourceUrl":"https://www.fau.eu/studying/international-students/application-and-enrollment-for-international-applicants/applying-for-a-masters-degree-program-as-an-international-student/","lastChecked":"2026-07-09"}},"germanCourse":{"status":"yes_internal","label":"Hazırlık/DSH kursu var","name":"FAU DSH preparation / pre-exam German support","type":"short DSH preparation / exam-related support","duration":"short/near-exam preparation; not confirmed as standalone semester intensive pathway","weeklyHours":null,"targetExam":null,"targetDegreeLevel":"Applicants taking DSH at FAU","requiredLevel":"near C1","residenceRelevance":"unlikely_for_standalone_visa","criteriaMatch":"Uygun: DSH/Intensivkurs/Propädeutikum/Studienkolleg hazırlığı kriterine giriyor.","sourceUrl":"https://www.fau.eu/studying/international-students/application-and-enrollment-for-international-applicants/applying-for-a-masters-degree-program-as-an-international-student/","lastChecked":"2026-07-09"}},{"id":"uni-goettingen","name":"Georg-August-Universität Göttingen","slug":"universitaet-goettingen","city":"Göttingen","state":"Niedersachsen","type":"Universität","officialWebsite":"https://www.uni-goettingen.de","applicationPortal":"University Application Guide / programme-specific","lastChecked":"2026-07-09","sourceUrl":"https://www.uni-goettingen.de/en/51427.html","qsWorldRanking2026":"#243","qsSourceUrl":"https://www.topuniversities.com/world-university-rankings?countries=de&region=Europe","schoolIntro":"Köklü araştırma geleneğine sahip üniversite; doğa bilimleri, tarım, sosyal bilimler ve beşeri bilimlerde öğrenci şehri avantajıyla öne çıkar.","cityIntro":"Göttingen tam anlamıyla öğrenci şehridir; kompakt, bisiklet dostu ve akademik yoğunluğu yüksek bir yaşam sunar.","popularityReason":"QS World University Rankings 2026 global top 500 Germany listesinde #243; TU9 ve önceki Saksonya ilk 5 dışında eklendi.","logoPath":null,"campusImagePath":null,"cityImagePath":null,"universityLongIntro":null,"whyChoose":null,"cityStudentLife":null,"cityTransport":null,"cityCostOfLiving":null,"cityHistory":null,"cityHistoricalNote":null,"cityEconomy":null,"cityIndustries":null,"studentJobsNote":null,"turkishStudentsNote":null,"filters":{"state":"Niedersachsen","type":"Universität","germanCourse":"Hazırlık/DSH kursu var","level":"Lisans ve Master","uniAssist":"Program bazlı / değişken"},"deadlines":{"bachelor":{"display":"restricted: 2026-04-30; open: 2026-09-30","date":null,"portal":"University Application Guide / programme-specific","portalCategory":"program_specific","sourceUrl":"https://www.uni-goettingen.de/en/51427.html","lastChecked":"2026-07-09"},"master":{"display":"Program bazlı kontrol edilmeli","date":null,"portal":"University Application Guide / programme-specific","portalCategory":"program_specific","sourceUrl":"https://www.uni-goettingen.de/en/application+deadlines+and+admissions+requirements+for+all+degree+programs/630234.html","lastChecked":"2026-07-09"}},"germanCourse":{"status":"yes_official_external_pathway","label":"Hazırlık/DSH kursu var","name":"IIK Göttingen DSH Exam Preparation","type":"external partner / DSH preparation","duration":"DSH preparation; exact intensity and visa suitability must be checked with IIK and university","weeklyHours":null,"targetExam":null,"targetDegreeLevel":"DSH candidates","requiredLevel":"completed C1 recommended","residenceRelevance":"possible_need_check","criteriaMatch":"Uygun: DSH/Intensivkurs/Propädeutikum/Studienkolleg hazırlığı kriterine giriyor.","sourceUrl":"https://www.uni-goettingen.de/en/51427.html","lastChecked":"2026-07-09"}},{"id":"uni-koeln","name":"Universität zu Köln","slug":"universitaet-zu-koeln","city":"Köln","state":"Nordrhein-Westfalen","type":"Universität","officialWebsite":"https://www.uni-koeln.de","applicationPortal":"uni-assist / KLIPS / programme-specific","lastChecked":"2026-07-09","sourceUrl":"https://uni-koeln.de/en/international/study-in-cologne/international-applications","qsWorldRanking2026":"#272","qsSourceUrl":"https://www.topuniversities.com/world-university-rankings?countries=de&region=Europe","schoolIntro":"Almanya’nın en büyük üniversitelerinden biri; ekonomi, hukuk, sosyal bilimler, beşeri bilimler ve şehir hayatı açısından güçlü bir merkezdir.","cityIntro":"Köln büyük, canlı ve sosyal bir şehir; medya, kültür, etkinlik ve iş ağı çok güçlüdür fakat konaklama piyasası rekabetçi olabilir.","popularityReason":"QS World University Rankings 2026 global top 500 Germany listesinde #272; TU9 ve önceki Saksonya ilk 5 dışında eklendi.","logoPath":null,"campusImagePath":null,"cityImagePath":null,"universityLongIntro":null,"whyChoose":null,"cityStudentLife":null,"cityTransport":null,"cityCostOfLiving":null,"cityHistory":null,"cityHistoricalNote":null,"cityEconomy":null,"cityIndustries":null,"studentJobsNote":null,"turkishStudentsNote":null,"filters":{"state":"Nordrhein-Westfalen","type":"Universität","germanCourse":"Hazırlık/DSH kursu var","level":"Lisans ve Master","uniAssist":"Program bazlı / değişken"},"deadlines":{"bachelor":{"display":"Program bazlı kontrol edilmeli","date":null,"portal":"uni-assist / KLIPS / programme-specific","portalCategory":"mixed","sourceUrl":"https://uni-koeln.de/en/international/study-in-cologne/international-applications","lastChecked":"2026-07-09"},"master":{"display":"Program bazlı kontrol edilmeli","date":null,"portal":"uni-assist / KLIPS / programme-specific","portalCategory":"mixed","sourceUrl":"https://uni-koeln.de/en/international/study-in-cologne/international-applications/master-students-prospective","lastChecked":"2026-07-09"}},"germanCourse":{"status":"yes_internal","label":"Hazırlık/DSH kursu var","name":"Preparatory German Courses","type":"semester intensive preparatory German course","duration":"13 weeks; 20 teaching hours of 45 minutes per week","weeklyHours":null,"targetExam":null,"targetDegreeLevel":"Refugees","requiredLevel":"varies","residenceRelevance":"likely_yes_need_admission_check","criteriaMatch":"Uygun: DSH/Intensivkurs/Propädeutikum/Studienkolleg hazırlığı kriterine giriyor.","sourceUrl":"https://uni-koeln.de/en/international/study-in-cologne/department-german-as-a-foreign-language/preparatory-german-courses","lastChecked":"2026-07-09"}},{"id":"goethe-frankfurt","name":"Goethe Universität Frankfurt am Main","slug":"goethe-universitaet-frankfurt","city":"Frankfurt am Main","state":"Hessen","type":"Universität","officialWebsite":"https://www.uni-frankfurt.de","applicationPortal":"uni-assist / Goethe portal","lastChecked":"2026-07-09","sourceUrl":"https://www.uni-frankfurt.de/en/studium/bewerbung-einschreibung/internationale-studierende/zugang","qsWorldRanking2026":"#316","qsSourceUrl":"https://www.topuniversities.com/world-university-rankings?countries=de&region=Europe","schoolIntro":"Finans ve iş dünyasının merkezinde yer alan güçlü bir araştırma üniversitesi; ekonomi, hukuk, sosyal bilimler ve finans çevresiyle avantaj sağlar.","cityIntro":"Frankfurt finans, havalimanı ve uluslararası şirketler merkezi olarak güçlüdür; iş/staj fırsatı fazla ama yaşam maliyeti yüksek olabilir.","popularityReason":"QS World University Rankings 2026 global top 500 Germany listesinde #316; TU9 ve önceki Saksonya ilk 5 dışında eklendi.","logoPath":null,"campusImagePath":null,"cityImagePath":null,"universityLongIntro":null,"whyChoose":null,"cityStudentLife":null,"cityTransport":null,"cityCostOfLiving":null,"cityHistory":null,"cityHistoricalNote":null,"cityEconomy":null,"cityIndustries":null,"studentJobsNote":null,"turkishStudentsNote":null,"filters":{"state":"Hessen","type":"Universität","germanCourse":"Hazırlık/DSH kursu var","level":"Lisans ve Master","uniAssist":"Program bazlı / değişken"},"deadlines":{"bachelor":{"display":"Program bazlı kontrol edilmeli","date":null,"portal":"uni-assist / Goethe portal","portalCategory":"mixed","sourceUrl":"https://www.uni-frankfurt.de/en/studium/bewerbung-einschreibung/grundstaendige-studiengaenge/termine-fristen","lastChecked":"2026-07-09"},"master":{"display":"Program bazlı kontrol edilmeli","date":null,"portal":"uni-assist / Goethe portal","portalCategory":"mixed","sourceUrl":"https://www.uni-frankfurt.de/en/studium/bewerbung-einschreibung/master-studiengaenge/termine-fristen","lastChecked":"2026-07-09"}},"germanCourse":{"status":"yes_internal","label":"Hazırlık/DSH kursu var","name":"Preparatory School / DSH Preparation Courses","type":"DSH-Vorbereitung / Studienvorbereitung","duration":"preparatory school / DSH course; intensity to verify","weeklyHours":null,"targetExam":null,"targetDegreeLevel":"Applicants needing DSH/prep","requiredLevel":"B1 minimum","residenceRelevance":"possible","criteriaMatch":"Uygun: DSH/Intensivkurs/Propädeutikum/Studienkolleg hazırlığı kriterine giriyor.","sourceUrl":"https://www.uni-frankfurt.de/en/studium/bewerbung-einschreibung/internationale-studierende/sprachkenntnisse","lastChecked":"2026-07-09"}},{"id":"uni-muenster","name":"Universität Münster","slug":"universitaet-muenster","city":"Münster","state":"Nordrhein-Westfalen","type":"Universität","officialWebsite":"https://www.uni-muenster.de","applicationPortal":"University online application","lastChecked":"2026-07-09","sourceUrl":"https://www.uni-muenster.de/studieninteressierte/en/bewerbung/index.html","qsWorldRanking2026":"#350","qsSourceUrl":"https://www.topuniversities.com/world-university-rankings?countries=de&region=Europe","schoolIntro":"Büyük ve öğrenci odaklı bir üniversite; hukuk, ekonomi, tıp, doğa bilimleri ve öğretmenlik alanlarında güçlü ve dengeli bir profil sunar.","cityIntro":"Münster güvenli, bisiklet dostu ve öğrenci oranı yüksek bir şehir; düzenli ve kaliteli yaşam isteyen öğrenciler için çok iyi bir ortam sunar.","popularityReason":"QS World University Rankings 2026 global top 500 Germany listesinde #350; TU9 ve önceki Saksonya ilk 5 dışında eklendi.","logoPath":null,"campusImagePath":null,"cityImagePath":null,"universityLongIntro":null,"whyChoose":null,"cityStudentLife":null,"cityTransport":null,"cityCostOfLiving":null,"cityHistory":null,"cityHistoricalNote":null,"cityEconomy":null,"cityIndustries":null,"studentJobsNote":null,"turkishStudentsNote":null,"filters":{"state":"Nordrhein-Westfalen","type":"Universität","germanCourse":"Hazırlık/DSH kursu var","level":"Lisans ve Master","uniAssist":"Henüz doğrulanmadı"},"deadlines":{"bachelor":{"display":"restricted: 2026-05-31; unrestricted: 2026-07-15","date":null,"portal":"University online application","portalCategory":"unknown","sourceUrl":"https://www.uni-muenster.de/studieninteressierte/en/bewerbung/index.html","lastChecked":"2026-07-09"},"master":{"display":"Program bazlı kontrol edilmeli","date":null,"portal":"University online application","portalCategory":"unknown","sourceUrl":"https://www.uni-muenster.de/studieninteressierte/en/bewerbung/master.html","lastChecked":"2026-07-09"}},"germanCourse":{"status":"yes_internal","label":"Hazırlık/DSH kursu var","name":"Intensivkurse Deutsch als Fremdsprache","type":"DSH-Vorbereitung / intensiver studienvorbereitender DaF-Kurs","duration":"intensive; prepares for DSH and subject studies; C1 level ends with DSH","weeklyHours":null,"targetExam":null,"targetDegreeLevel":"Prospective students","requiredLevel":"B1/B2 and C1 tracks","residenceRelevance":"likely_yes","criteriaMatch":"Uygun: DSH/Intensivkurs/Propädeutikum/Studienkolleg hazırlığı kriterine giriyor.","sourceUrl":"https://www.uni-muenster.de/Sprachenzentrum/ldaf/intensivkurseDaF.html","lastChecked":"2026-07-09"}},{"id":"rub-bochum","name":"Ruhr-Universität Bochum","slug":"ruhr-universitaet-bochum","city":"Bochum","state":"Nordrhein-Westfalen","type":"Universität","officialWebsite":"https://www.ruhr-uni-bochum.de","applicationPortal":"RUB online application","lastChecked":"2026-07-09","sourceUrl":"https://studium.ruhr-uni-bochum.de/en/international-applicants","qsWorldRanking2026":"#395","qsSourceUrl":"https://www.topuniversities.com/world-university-rankings?countries=de&region=Europe","schoolIntro":"Ruhr bölgesinde geniş program seçenekleri sunan büyük kampüs üniversitesi; mühendislik, sosyal bilimler, doğa bilimleri ve tıp alanlarını kapsar.","cityIntro":"Bochum Ruhr bölgesinin merkezinde, daha ulaşılabilir maliyetli ve çok şehirli iş/ulaşım ağına bağlı bir öğrenci şehridir.","popularityReason":"QS World University Rankings 2026 global top 500 Germany listesinde #395; TU9 ve önceki Saksonya ilk 5 dışında eklendi.","logoPath":null,"campusImagePath":null,"cityImagePath":null,"universityLongIntro":null,"whyChoose":null,"cityStudentLife":null,"cityTransport":null,"cityCostOfLiving":null,"cityHistory":null,"cityHistoricalNote":null,"cityEconomy":null,"cityIndustries":null,"studentJobsNote":null,"turkishStudentsNote":null,"filters":{"state":"Nordrhein-Westfalen","type":"Universität","germanCourse":"Henüz doğrulanmadı","level":"Lisans ve Master","uniAssist":"Henüz doğrulanmadı"},"deadlines":{"bachelor":{"display":"15 Temmuz 2026","date":"2026-07-15","portal":"RUB online application","portalCategory":"unknown","sourceUrl":"https://studium.ruhr-uni-bochum.de/en/application-international-prospective-students","lastChecked":"2026-07-09"},"master":{"display":"15 Temmuz 2026","date":"2026-07-15","portal":"RUB online application","portalCategory":"unknown","sourceUrl":"https://studium.ruhr-uni-bochum.de/en/application-international-prospective-students","lastChecked":"2026-07-09"}},"germanCourse":{"status":"not_confirmed","label":"Henüz doğrulanmadı","name":"No eligible internal intensive course confirmed","type":"not confirmed","duration":null,"weeklyHours":null,"targetExam":null,"targetDegreeLevel":null,"requiredLevel":"German proof by degree","residenceRelevance":"no","criteriaMatch":"Henüz doğrulanmadı: normal Sprachenzentrum dersiyle karıştırılmamalı.","sourceUrl":"https://studium.ruhr-uni-bochum.de/en/application-international-prospective-students","lastChecked":"2026-07-09"}},{"id":"uni-wuerzburg","name":"Julius-Maximilians-Universität Würzburg","slug":"universitaet-wuerzburg","city":"Würzburg","state":"Bayern","type":"Universität","officialWebsite":"https://www.uni-wuerzburg.de","applicationPortal":"WueStudy / uni-assist VPD for some","lastChecked":"2026-07-09","sourceUrl":"https://www.uni-wuerzburg.de/en/studying-at-jmu/studienangelegenheiten/dates-and-deadlines/application-deadlines/","qsWorldRanking2026":"#416","qsSourceUrl":"https://www.topuniversities.com/world-university-rankings?countries=de&region=Europe","schoolIntro":"Köklü araştırma üniversitesi; tıp, biyoloji, psikoloji, doğa bilimleri ve beşeri bilimlerde güçlü akademik altyapıya sahiptir.","cityIntro":"Würzburg tarihi, kompakt ve öğrenci dostu bir Frankonya şehridir; yaşam temposu büyük şehirlere göre daha sakin ve yönetilebilirdir.","popularityReason":"QS World University Rankings 2026 global top 500 Germany listesinde #416; TU9 ve önceki Saksonya ilk 5 dışında eklendi.","logoPath":null,"campusImagePath":null,"cityImagePath":null,"universityLongIntro":null,"whyChoose":null,"cityStudentLife":null,"cityTransport":null,"cityCostOfLiving":null,"cityHistory":null,"cityHistoricalNote":null,"cityEconomy":null,"cityIndustries":null,"studentJobsNote":null,"turkishStudentsNote":null,"filters":{"state":"Bayern","type":"Universität","germanCourse":"Henüz doğrulanmadı","level":"Lisans ve Master","uniAssist":"Program bazlı / değişken"},"deadlines":{"bachelor":{"display":"15 Temmuz 2026","date":"2026-07-15","portal":"WueStudy / uni-assist VPD for some","portalCategory":"mixed","sourceUrl":"https://www.uni-wuerzburg.de/en/studying-at-jmu/studienangelegenheiten/dates-and-deadlines/application-deadlines/","lastChecked":"2026-07-09"},"master":{"display":"Program bazlı kontrol edilmeli","date":null,"portal":"WueStudy / uni-assist VPD for some","portalCategory":"mixed","sourceUrl":"https://www.uni-wuerzburg.de/en/studying-at-jmu/studienangelegenheiten/application-and-enrolment/international-degree-seeking-students/application/","lastChecked":"2026-07-09"}},"germanCourse":{"status":"not_confirmed","label":"Henüz doğrulanmadı","name":"No eligible internal intensive course confirmed","type":"not confirmed","duration":null,"weeklyHours":null,"targetExam":null,"targetDegreeLevel":null,"requiredLevel":"German proof by programme","residenceRelevance":"no","criteriaMatch":"Henüz doğrulanmadı: normal Sprachenzentrum dersiyle karıştırılmamalı.","sourceUrl":"https://www.uni-wuerzburg.de/en/studying-at-jmu/studienangelegenheiten/dates-and-deadlines/application-deadlines/","lastChecked":"2026-07-09"}},{"id":"uni-mannheim","name":"Universität Mannheim","slug":"universitaet-mannheim","city":"Mannheim","state":"Baden-Württemberg","type":"Universität","officialWebsite":"https://www.uni-mannheim.de","applicationPortal":"University portal","lastChecked":"2026-07-09","sourceUrl":"https://www.uni-mannheim.de/en/academics/before-your-studies/application/application-periods/","qsWorldRanking2026":"#416","qsSourceUrl":"https://www.topuniversities.com/world-university-rankings?countries=de&region=Europe","schoolIntro":"İşletme, ekonomi ve sosyal bilimler alanlarında Almanya’nın en bilinen üniversitelerinden biri; özellikle business odaklı öğrenciler için güçlüdür.","cityIntro":"Mannheim grid planlı, iş ve sanayi bağlantıları güçlü bir şehir; Heidelberg’e yakınlığı ve Rhein-Neckar bölgesi avantaj sağlar.","popularityReason":"QS World University Rankings 2026 global top 500 Germany listesinde #416; TU9 ve önceki Saksonya ilk 5 dışında eklendi.","logoPath":null,"campusImagePath":null,"cityImagePath":null,"universityLongIntro":null,"whyChoose":null,"cityStudentLife":null,"cityTransport":null,"cityCostOfLiving":null,"cityHistory":null,"cityHistoricalNote":null,"cityEconomy":null,"cityIndustries":null,"studentJobsNote":null,"turkishStudentsNote":null,"filters":{"state":"Baden-Württemberg","type":"Universität","germanCourse":"Henüz doğrulanmadı","level":"Lisans ve Master","uniAssist":"Direkt başvuru"},"deadlines":{"bachelor":{"display":"15 Temmuz 2026","date":"2026-07-15","portal":"University portal","portalCategory":"direct","sourceUrl":"https://www.uni-mannheim.de/en/academics/dates/application-deadlines/","lastChecked":"2026-07-09"},"master":{"display":"Program bazlı kontrol edilmeli","date":null,"portal":"University portal","portalCategory":"direct","sourceUrl":"https://www.uni-mannheim.de/en/academics/dates/application-deadlines/","lastChecked":"2026-07-09"}},"germanCourse":{"status":"not_confirmed","label":"Henüz doğrulanmadı","name":"No eligible internal DSH intensive course confirmed","type":"not confirmed","duration":null,"weeklyHours":null,"targetExam":null,"targetDegreeLevel":null,"requiredLevel":"German proof by programme","residenceRelevance":"no","criteriaMatch":"Henüz doğrulanmadı: normal Sprachenzentrum dersiyle karıştırılmamalı.","sourceUrl":"https://www.uni-mannheim.de/en/academics/dates/application-deadlines/","lastChecked":"2026-07-09"}},{"id":"uni-konstanz","name":"Universität Konstanz","slug":"universitaet-konstanz","city":"Konstanz","state":"Baden-Württemberg","type":"Universität","officialWebsite":"https://www.uni-konstanz.de","applicationPortal":"University portal","lastChecked":"2026-07-09","sourceUrl":"https://www.uni-konstanz.de/en/study/before-you-study/application-and-enrolment/bachelors-degree-and-first-state-examination-in-law/higher-education-entrance-qualification-earned-outside-the-eu/","qsWorldRanking2026":"#440","qsSourceUrl":"https://www.topuniversities.com/world-university-rankings?countries=de&region=Europe","schoolIntro":"Daha kompakt ve araştırma odaklı bir üniversite; sosyal bilimler, politika, ekonomi, psikoloji ve yaşam bilimlerinde kaliteli bir ortam sunar.","cityIntro":"Konstanz Bodensee kıyısında çok yaşanabilir, güvenli ve uluslararası hissi güçlü bir öğrenci şehridir; İsviçre’ye yakınlığı dikkat çeker.","popularityReason":"QS World University Rankings 2026 global top 500 Germany listesinde #440; TU9 ve önceki Saksonya ilk 5 dışında eklendi.","logoPath":null,"campusImagePath":null,"cityImagePath":null,"universityLongIntro":null,"whyChoose":null,"cityStudentLife":null,"cityTransport":null,"cityCostOfLiving":null,"cityHistory":null,"cityHistoricalNote":null,"cityEconomy":null,"cityIndustries":null,"studentJobsNote":null,"turkishStudentsNote":null,"filters":{"state":"Baden-Württemberg","type":"Universität","germanCourse":"Henüz doğrulanmadı","level":"Lisans ve Master","uniAssist":"Direkt başvuru"},"deadlines":{"bachelor":{"display":"restricted: 2026-07-15; unrestricted: 2026-09-15","date":null,"portal":"University portal","portalCategory":"direct","sourceUrl":"https://www.uni-konstanz.de/en/study/before-you-study/application-and-enrolment/bachelors-degree-and-first-state-examination-in-law/higher-education-entrance-qualification-earned-outside-the-eu/","lastChecked":"2026-07-09"},"master":{"display":"Program bazlı kontrol edilmeli","date":null,"portal":"University portal","portalCategory":"direct","sourceUrl":"https://www.uni-konstanz.de/en/study/before-you-study/application-and-enrolment/masters-degree/","lastChecked":"2026-07-09"}},"germanCourse":{"status":"not_confirmed","label":"Henüz doğrulanmadı","name":"No eligible internal DSH intensive course confirmed","type":"not confirmed","duration":null,"weeklyHours":null,"targetExam":null,"targetDegreeLevel":null,"requiredLevel":"German proof by programme","residenceRelevance":"no","criteriaMatch":"Henüz doğrulanmadı: normal Sprachenzentrum dersiyle karıştırılmamalı.","sourceUrl":"https://www.uni-konstanz.de/en/study/before-you-study/application-and-enrolment/required-language-skills/","lastChecked":"2026-07-09"}},{"id":"uni-bayreuth","name":"Universität Bayreuth","slug":"universitaet-bayreuth","city":"Bayreuth","state":"Bayern","type":"Universität","officialWebsite":"https://www.uni-bayreuth.de","applicationPortal":"campusonline / VPD for some","lastChecked":"2026-07-09","sourceUrl":"https://www.international-office.uni-bayreuth.de/en/degree-programmes/4-periods-and-deadlines-for-masters/index.php","qsWorldRanking2026":"#448","qsSourceUrl":"https://www.topuniversities.com/world-university-rankings?countries=de&region=Europe","schoolIntro":"Disiplinlerarası programları, hukuk/ekonomi profili ve küçük şehir avantajıyla bilinen bir üniversite; kampüs yaşamı güçlüdür.","cityIntro":"Bayreuth daha küçük ve kampüs odaklı bir şehir; yaşam maliyeti ve ulaşılabilirlik açısından büyük şehirlere göre daha rahat olabilir.","popularityReason":"QS World University Rankings 2026 global top 500 Germany listesinde #448; TU9 ve önceki Saksonya ilk 5 dışında eklendi.","logoPath":null,"campusImagePath":null,"cityImagePath":null,"universityLongIntro":null,"whyChoose":null,"cityStudentLife":null,"cityTransport":null,"cityCostOfLiving":null,"cityHistory":null,"cityHistoricalNote":null,"cityEconomy":null,"cityIndustries":null,"studentJobsNote":null,"turkishStudentsNote":null,"filters":{"state":"Bayern","type":"Universität","germanCourse":"Henüz doğrulanmadı","level":"Lisans ve Master","uniAssist":"Direkt başvuru"},"deadlines":{"bachelor":{"display":"Program bazlı kontrol edilmeli","date":null,"portal":"campusonline / VPD for some","portalCategory":"direct","sourceUrl":"https://www.international-office.uni-bayreuth.de/en/degree-programmes/4-periods-and-deadlines-for-bachelors/index.php","lastChecked":"2026-07-09"},"master":{"display":"Program bazlı kontrol edilmeli","date":null,"portal":"campusonline / VPD for some","portalCategory":"direct","sourceUrl":"https://www.international-office.uni-bayreuth.de/en/degree-programmes/4-periods-and-deadlines-for-masters/index.php","lastChecked":"2026-07-09"}},"germanCourse":{"status":"not_confirmed","label":"Henüz doğrulanmadı","name":"No eligible internal DSH intensive course confirmed","type":"not confirmed","duration":null,"weeklyHours":null,"targetExam":null,"targetDegreeLevel":null,"requiredLevel":"German proof by programme","residenceRelevance":"no","criteriaMatch":"Henüz doğrulanmadı: normal Sprachenzentrum dersiyle karıştırılmamalı.","sourceUrl":"https://www.international-office.uni-bayreuth.de/en/degree-programmes/4-periods-and-deadlines-for-masters/index.php","lastChecked":"2026-07-09"}},{"id":"uni-mainz","name":"Johannes Gutenberg-Universität Mainz","slug":"johannes-gutenberg-universitaet-mainz","city":"Mainz","state":"Rheinland-Pfalz","type":"Universität","officialWebsite":"https://www.uni-mainz.de","applicationPortal":"JOGU-StINe / uni-assist for some","lastChecked":"2026-07-09","sourceUrl":"https://www.studium.uni-mainz.de/en/your-application/applying-with-international-certificates/applying-as-an-international-student/","qsWorldRanking2026":"#452","qsSourceUrl":"https://www.topuniversities.com/world-university-rankings?countries=de&region=Europe","schoolIntro":"Geniş program seçenekleri ve Rhein-Main bölgesine yakınlığıyla öne çıkar; medya, sosyal bilimler, doğa bilimleri ve tıp alanlarında seçenek sunar.","cityIntro":"Mainz Rhein kıyısında, öğrenci ve medya atmosferi güçlü bir şehir; Frankfurt’a yakınlığı sayesinde iş ve ulaşım avantajı sağlar.","popularityReason":"QS World University Rankings 2026 global top 500 Germany listesinde #452; TU9 ve önceki Saksonya ilk 5 dışında eklendi.","logoPath":null,"campusImagePath":null,"cityImagePath":null,"universityLongIntro":null,"whyChoose":null,"cityStudentLife":null,"cityTransport":null,"cityCostOfLiving":null,"cityHistory":null,"cityHistoricalNote":null,"cityEconomy":null,"cityIndustries":null,"studentJobsNote":null,"turkishStudentsNote":null,"filters":{"state":"Rheinland-Pfalz","type":"Universität","germanCourse":"Hazırlık/DSH kursu var","level":"Lisans ve Master","uniAssist":"Program bazlı / değişken"},"deadlines":{"bachelor":{"display":"15 Temmuz 2026","date":"2026-07-15","portal":"JOGU-StINe / uni-assist for some","portalCategory":"mixed","sourceUrl":"https://www.studium.uni-mainz.de/en/during-your-studies/dates-and-deadlines/","lastChecked":"2026-07-09"},"master":{"display":"15 Mayıs 2026","date":"2026-05-15","portal":"JOGU-StINe / uni-assist for some","portalCategory":"mixed","sourceUrl":"https://www.studium.uni-mainz.de/en/during-your-studies/dates-and-deadlines/","lastChecked":"2026-07-09"}},"germanCourse":{"status":"yes_internal","label":"Hazırlık/DSH kursu var","name":"Preparatory German language course / DSH courses","type":"DSH-Vorbereitung / preparatory German language course","duration":"usually one semester with B2 for direct HZB; can be two semesters in other cases; ends with DSH","weeklyHours":null,"targetExam":null,"targetDegreeLevel":"Applicants missing German proof for JGU degree","requiredLevel":"depends on placement/application","residenceRelevance":"likely_yes","criteriaMatch":"Uygun: DSH/Intensivkurs/Propädeutikum/Studienkolleg hazırlığı kriterine giriyor.","sourceUrl":"https://www.studium.uni-mainz.de/en/your-application/applying-with-international-certificates/language-proficiency/","lastChecked":"2026-07-09"}},{"id":"uni-potsdam","name":"Universität Potsdam","slug":"universitaet-potsdam","city":"Potsdam","state":"Brandenburg","type":"Universität","officialWebsite":"https://www.uni-potsdam.de","applicationPortal":"uni-assist / University portal","lastChecked":"2026-07-09","sourceUrl":"https://www.uni-potsdam.de/en/studium/dates-and-deadlines/application-and-enrollment-deadlines","qsWorldRanking2026":"#477","qsSourceUrl":"https://www.topuniversities.com/world-university-rankings?countries=de&region=Europe","schoolIntro":"Berlin’e yakın konumu ve daha sakin kampüs yapısıyla öne çıkar; eğitim, sosyal bilimler, doğa bilimleri ve veri odaklı alanlarda güçlüdür.","cityIntro":"Potsdam Berlin’e çok yakın, daha sakin, yeşil ve tarihi bir şehir; Berlin imkanlarına erişirken daha huzurlu yaşam isteyenler için uygundur.","popularityReason":"QS World University Rankings 2026 global top 500 Germany listesinde #477; TU9 ve önceki Saksonya ilk 5 dışında eklendi.","logoPath":null,"campusImagePath":null,"cityImagePath":null,"universityLongIntro":null,"whyChoose":null,"cityStudentLife":null,"cityTransport":null,"cityCostOfLiving":null,"cityHistory":null,"cityHistoricalNote":null,"cityEconomy":null,"cityIndustries":null,"studentJobsNote":null,"turkishStudentsNote":null,"filters":{"state":"Brandenburg","type":"Universität","germanCourse":"Hazırlık/DSH kursu var","level":"Lisans ve Master","uniAssist":"Program bazlı / değişken"},"deadlines":{"bachelor":{"display":"Program bazlı kontrol edilmeli","date":null,"portal":"uni-assist / University portal","portalCategory":"mixed","sourceUrl":"https://www.uni-potsdam.de/en/studium/dates-and-deadlines/application-and-enrollment-deadlines","lastChecked":"2026-07-09"},"master":{"display":"Program bazlı kontrol edilmeli","date":null,"portal":"uni-assist / University portal","portalCategory":"mixed","sourceUrl":"https://www.uni-potsdam.de/en/studium/application-enrollment/application-master/consecutive","lastChecked":"2026-07-09"}},"germanCourse":{"status":"yes_internal","label":"Hazırlık/DSH kursu var","name":"DSH-Course+ / Study Preparation Brandenburg","type":"DSH-Course+ / Study Preparation Brandenburg","duration":"DSH-Course+ each semester; SVB runs from winter semester to following summer semester","weeklyHours":null,"targetExam":null,"targetDegreeLevel":"International applicants","requiredLevel":"depends on DSH/study prep","residenceRelevance":"likely_yes","criteriaMatch":"Uygun: DSH/Intensivkurs/Propädeutikum/Studienkolleg hazırlığı kriterine giriyor.","sourceUrl":"https://www.uni-potsdam.de/en/studium/application-enrollment/before-application-enrollment/preparatory-courses-and-exams","lastChecked":"2026-07-09"}},{"id":"tu-freiberg","name":"TU Bergakademie Freiberg","slug":"tu-bergakademie-freiberg","city":"Freiberg","state":"Sachsen","type":"Universität","officialWebsite":"https://tu-freiberg.de","applicationPortal":"uni-assist / university","lastChecked":"2026-07-09","sourceUrl":"https://tu-freiberg.de/en/studies/application-and-enrolment","qsWorldRanking2026":"#487","qsSourceUrl":"https://www.topuniversities.com/world-university-rankings?countries=de&region=Europe","schoolIntro":"Maden, malzeme, enerji, jeoloji ve sürdürülebilir kaynak teknolojileri alanlarında uzmanlaşmış teknik ve köklü bir üniversitedir.","cityIntro":"Freiberg küçük, sakin ve öğrenci bütçesine daha uygun bir Saksonya şehridir; maden/enerji geleneği şehir kimliğinin önemli parçasıdır.","popularityReason":"QS World University Rankings 2026 global top 500 Germany listesinde #487; TU9 ve önceki Saksonya ilk 5 dışında eklendi.","logoPath":null,"campusImagePath":null,"cityImagePath":null,"universityLongIntro":null,"whyChoose":null,"cityStudentLife":null,"cityTransport":null,"cityCostOfLiving":null,"cityHistory":null,"cityHistoricalNote":null,"cityEconomy":null,"cityIndustries":null,"studentJobsNote":null,"turkishStudentsNote":null,"filters":{"state":"Sachsen","type":"Universität","germanCourse":"Hazırlık/DSH kursu var","level":"Lisans ve Master","uniAssist":"Program bazlı / değişken"},"deadlines":{"bachelor":{"display":"15 Eylül 2026","date":"2026-09-15","portal":"uni-assist / university","portalCategory":"mixed","sourceUrl":"https://tu-freiberg.de/en/study/your-studies/application","lastChecked":"2026-07-09"},"master":{"display":"Program bazlı kontrol edilmeli","date":null,"portal":"uni-assist / university","portalCategory":"mixed","sourceUrl":"https://tu-freiberg.de/en/study/your-studies/application","lastChecked":"2026-07-09"}},"germanCourse":{"status":"yes_internal","label":"Hazırlık/DSH kursu var","name":"University Preparatory Program / German language training","type":"Studienkolleg / German language training","duration":"preparatory academic year; German language training included","weeklyHours":null,"targetExam":null,"targetDegreeLevel":"Applicants needing preparation before degree","requiredLevel":"via admission test / German requirements","residenceRelevance":"possible","criteriaMatch":"Uygun: DSH/Intensivkurs/Propädeutikum/Studienkolleg hazırlığı kriterine giriyor.","sourceUrl":"https://tu-freiberg.de/en/study/your-studies/application","lastChecked":"2026-07-09"}},{"id":"uni-giessen","name":"Justus-Liebig-Universität Gießen","slug":"justus-liebig-universitaet-giessen","city":"Gießen","state":"Hessen","type":"Universität","officialWebsite":"https://www.uni-giessen.de","applicationPortal":"University portal / uni-assist depending on path","lastChecked":"2026-07-09","sourceUrl":"https://www.uni-giessen.de/en/study/application/deadlines","qsWorldRanking2026":"#496","qsSourceUrl":"https://www.topuniversities.com/world-university-rankings?countries=de&region=Europe","schoolIntro":"Hessen’de geniş program yelpazesine sahip üniversite; veterinerlik, tarım, yaşam bilimleri, öğretmenlik ve sosyal bilimlerde bilinir.","cityIntro":"Gießen güçlü öğrenci nüfusu olan orta ölçekli bir Hessen şehridir; Frankfurt ve Marburg’a yakınlığıyla ulaşım ve sosyal seçenekleri artırır.","popularityReason":"QS World University Rankings 2026 global top 500 Germany listesinde #496; TU9 ve önceki Saksonya ilk 5 dışında eklendi.","logoPath":null,"campusImagePath":null,"cityImagePath":null,"universityLongIntro":null,"whyChoose":null,"cityStudentLife":null,"cityTransport":null,"cityCostOfLiving":null,"cityHistory":null,"cityHistoricalNote":null,"cityEconomy":null,"cityIndustries":null,"studentJobsNote":null,"turkishStudentsNote":null,"filters":{"state":"Hessen","type":"Universität","germanCourse":"Program bazlı / değişken","level":"Lisans ve Master","uniAssist":"Program bazlı / değişken"},"deadlines":{"bachelor":{"display":"15 Ağustos 2026","date":"2026-08-15","portal":"University portal / uni-assist depending on path","portalCategory":"mixed","sourceUrl":"https://www.uni-giessen.de/en/study/application/deadlines","lastChecked":"2026-07-09"},"master":{"display":"15 Ağustos 2026","date":"2026-08-15","portal":"University portal / uni-assist depending on path","portalCategory":"mixed","sourceUrl":"https://www.uni-giessen.de/en/study/application/deadlines","lastChecked":"2026-07-09"}},"germanCourse":{"status":"case_specific","label":"Program bazlı / değişken","name":"German courses in Central Hesse / JLU related","type":"not confirmed as admission-linked intensive DSH course","duration":"not confirmed for §16 admission pathway","weeklyHours":null,"targetExam":null,"targetDegreeLevel":"students/prospective students","requiredLevel":"varies","residenceRelevance":"case_specific","criteriaMatch":"Program/vize/kabul belgesi bazlı kontrol edilmeli.","sourceUrl":"https://www.thm.de/site/en/international/welcome-to-stay-/living-and-studying-in-central-hesse/german-courses.html","lastChecked":"2026-07-09"}}],"filterOptions":{"state":[{"value":"Baden-Württemberg","label":{"tr":"Baden-Württemberg","de":"Baden-Württemberg","en":"Baden-Württemberg"}},{"value":"Bayern","label":{"tr":"Bavyera","de":"Bayern","en":"Bavaria"}},{"value":"Berlin","label":{"tr":"Berlin","de":"Berlin","en":"Berlin"}},{"value":"Brandenburg","label":{"tr":"Brandenburg","de":"Brandenburg","en":"Brandenburg"}},{"value":"Hamburg","label":{"tr":"Hamburg","de":"Hamburg","en":"Hamburg"}},{"value":"Hessen","label":{"tr":"Hessen","de":"Hessen","en":"Hessen"}},{"value":"Niedersachsen","label":{"tr":"Aşağı Saksonya","de":"Niedersachsen","en":"Lower Saxony"}},{"value":"Nordrhein-Westfalen","label":{"tr":"Kuzey Ren-Vestfalya","de":"Nordrhein-Westfalen","en":"North Rhine-Westphalia"}},{"value":"Rheinland-Pfalz","label":{"tr":"Rheinland-Pfalz","de":"Rheinland-Pfalz","en":"Rheinland-Pfalz"}},{"value":"Sachsen","label":{"tr":"Saksonya","de":"Sachsen","en":"Saxony"}}],"type":[{"value":"Universität","label":{"tr":"Universität","de":"Universität","en":"University"}},{"value":"Technische Universität","label":{"tr":"Technische Universität","de":"Technische Universität","en":"Technical University"}},{"value":"Hochschule","label":{"tr":"Hochschule","de":"Hochschule","en":"University of Applied Sciences"}},{"value":"Diğer","label":{"tr":"Diğer","de":"Diğer","en":"Diğer"}}],"germanCourse":[{"value":"Hazırlık/DSH kursu var","label":{"tr":"Hazırlık/DSH kursu var","de":"Vorbereitung/DSH-Kurs vorhanden","en":"Prep/DSH course available"}},{"value":"Hazırlık/DSH kursu yok","label":{"tr":"Hazırlık/DSH kursu yok","de":"Kein bestätigter Prep/DSH-Kurs","en":"No confirmed prep/DSH course"}},{"value":"Henüz doğrulanmadı","label":{"tr":"Henüz doğrulanmadı","de":"Noch nicht verifiziert","en":"Not verified yet"}},{"value":"Program bazlı / değişken","label":{"tr":"Program bazlı / değişken","de":"Programmabhängig / variabel","en":"Program-based / variable"}}],"level":[{"value":"Lisans","label":{"tr":"Lisans","de":"Bachelor","en":"Bachelor"}},{"value":"Master","label":{"tr":"Master","de":"Master","en":"Master"}},{"value":"Lisans ve Master","label":{"tr":"Lisans ve Master","de":"Bachelor und Master","en":"Bachelor and Master"}}],"uniAssist":[{"value":"Uni-Assist var","label":{"tr":"Uni-Assist var","de":"Uni-Assist vorhanden","en":"Uni-Assist available"}},{"value":"Direkt başvuru","label":{"tr":"Direkt başvuru","de":"Direktbewerbung","en":"Direct application"}},{"value":"Program bazlı / değişken","label":{"tr":"Program bazlı / değişken","de":"Programmabhängig / variabel","en":"Program-based / variable"}},{"value":"Henüz doğrulanmadı","label":{"tr":"Henüz doğrulanmadı","de":"Noch nicht verifiziert","en":"Not verified yet"}}]}};
+const UNIVERSITIES = DATASET.universities;
+const FILTER_OPTIONS = DATASET.filterOptions;
+const SITE_URL = "https://sakalmanya.com.tr";
+const TRUST_NOTICE = "Başvuru tarihleri ve kabul şartları programa, döneme ve öğrencinin durumuna göre değişebilir. En güncel bilgi için üniversitenin resmi sayfası kontrol edilmelidir.";
 
 const requestBuckets = new Map();
 const WINDOW_MS = 60 * 1000;
@@ -1149,7 +12,9 @@ const MAX_REQUESTS_PER_WINDOW = 90;
 
 function getClientKey(req) {
   const forwardedFor = req.headers["x-forwarded-for"];
-  return String(Array.isArray(forwardedFor) ? forwardedFor[0] : forwardedFor || req.socket?.remoteAddress || "unknown").split(",")[0].trim();
+  return String(Array.isArray(forwardedFor) ? forwardedFor[0] : forwardedFor || req.socket?.remoteAddress || "unknown")
+    .split(",")[0]
+    .trim();
 }
 
 function isRateLimited(req) {
@@ -1169,11 +34,20 @@ function normalise(value) {
   return String(value || "").trim();
 }
 
+function safeSlug(value) {
+  const slug = normalise(value).toLowerCase();
+  return /^[a-z0-9-]+$/.test(slug) ? slug : "";
+}
+
 function matchesFilters(item, filters) {
+  const levelMatches = !filters.level
+    || item.filters.level === filters.level
+    || (item.filters.level === "Lisans ve Master" && ["Lisans", "Master"].includes(filters.level));
+
   return (!filters.state || item.filters.state === filters.state)
     && (!filters.type || item.filters.type === filters.type)
     && (!filters.germanCourse || item.filters.germanCourse === filters.germanCourse)
-    && (!filters.level || item.filters.level.includes(filters.level))
+    && levelMatches
     && (!filters.uniAssist || item.filters.uniAssist === filters.uniAssist);
 }
 
@@ -1187,34 +61,361 @@ function publicCard(item) {
     qsWorldRanking2026: item.qsWorldRanking2026,
     schoolIntro: item.schoolIntro,
     cityIntro: item.cityIntro,
-    bachelorDeadline: item.bachelorDeadline,
-    masterDeadline: item.masterDeadline,
-    germanPrepStatus: item.germanPrepStatus,
-    uniAssistStatus: item.uniAssistStatus,
+    bachelorDeadline: item.deadlines.bachelor.display,
+    masterDeadline: item.deadlines.master.display,
+    germanPrepStatus: item.germanCourse.label,
+    uniAssistStatus: item.filters.uniAssist,
     lastChecked: item.lastChecked,
-    sourceUrl: item.sourceUrl,
-    detailUrl: item.detailUrl,
+    sourceUrl: item.sourceUrl || item.officialWebsite,
+    detailUrl: `/universiteler/${item.slug}/`,
   };
 }
 
-module.exports = function handler(req, res) {
-  res.setHeader("Content-Type", "application/json; charset=utf-8");
-  res.setHeader("Cache-Control", "s-maxage=300, stale-while-revalidate=600");
-  res.setHeader("X-Robots-Tag", "noindex, nofollow");
+function relatedUniversities(item) {
+  return UNIVERSITIES
+    .filter((candidate) => candidate.slug !== item.slug && (candidate.city === item.city || candidate.state === item.state))
+    .sort((a, b) => Number(b.city === item.city) - Number(a.city === item.city) || a.name.localeCompare(b.name, "tr"))
+    .slice(0, 6)
+    .map((candidate) => ({
+      name: candidate.name,
+      city: candidate.city,
+      state: candidate.state,
+      detailUrl: `/universiteler/${candidate.slug}/`,
+    }));
+}
 
+function publicDetail(item) {
+  return {
+    name: item.name,
+    slug: item.slug,
+    city: item.city,
+    state: item.state,
+    type: item.type,
+    officialWebsite: item.officialWebsite,
+    qsWorldRanking2026: item.qsWorldRanking2026,
+    qsSourceUrl: item.qsSourceUrl,
+    schoolIntro: item.schoolIntro,
+    cityIntro: item.cityIntro,
+    popularityReason: item.popularityReason,
+    universityLongIntro: item.universityLongIntro,
+    whyChoose: item.whyChoose,
+    cityStudentLife: item.cityStudentLife,
+    cityTransport: item.cityTransport,
+    cityCostOfLiving: item.cityCostOfLiving,
+    cityHistory: item.cityHistory,
+    cityHistoricalNote: item.cityHistoricalNote,
+    cityEconomy: item.cityEconomy,
+    cityIndustries: item.cityIndustries,
+    studentJobsNote: item.studentJobsNote,
+    turkishStudentsNote: item.turkishStudentsNote,
+    applicationPortal: item.applicationPortal,
+    uniAssistStatus: item.filters.uniAssist,
+    lastChecked: item.lastChecked,
+    sourceUrl: item.sourceUrl,
+    deadlines: item.deadlines,
+    germanCourse: item.germanCourse,
+    related: relatedUniversities(item),
+    trustNotice: TRUST_NOTICE,
+  };
+}
+
+function escapeHtml(value) {
+  return String(value ?? "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+
+function safeExternalUrl(value) {
+  try {
+    const url = new URL(String(value || ""));
+    return ["http:", "https:"].includes(url.protocol) ? url.href : "";
+  } catch {
+    return "";
+  }
+}
+
+function safeAssetPath(value, slug) {
+  const rawPath = normalise(value);
+  const path = rawPath.startsWith("/public/") ? rawPath.slice(7) : rawPath;
+  const prefix = `/assets/universities/${slug}/`;
+  return path.startsWith(prefix) && !path.includes("..") ? path : "";
+}
+
+function jsonForHtml(value) {
+  return JSON.stringify(value).replaceAll("<", "\\u003c");
+}
+
+function formatDateTr(value) {
+  if (!value) return "Henüz doğrulanmadı";
+  const date = new Date(`${value}T00:00:00Z`);
+  if (Number.isNaN(date.getTime())) return value;
+  return new Intl.DateTimeFormat("tr-TR", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" }).format(date);
+}
+
+function factRow(label, value) {
+  if (!value) return "";
+  return `<tr><th>${escapeHtml(label)}</th><td>${escapeHtml(value)}</td></tr>`;
+}
+
+function externalButton(url, label, className = "button button-secondary") {
+  const safeUrl = safeExternalUrl(url);
+  if (!safeUrl) return "";
+  return `<a class="${className}" href="${escapeHtml(safeUrl)}" target="_blank" rel="noopener noreferrer">${escapeHtml(label)}</a>`;
+}
+
+function externalSourceItem(url, label) {
+  const safeUrl = safeExternalUrl(url);
+  if (!safeUrl) return "";
+  return `<li><a href="${escapeHtml(safeUrl)}" target="_blank" rel="noopener noreferrer">${escapeHtml(label)}</a></li>`;
+}
+
+function deadlineCard(label, deadline) {
+  const portal = deadline.portal ? `<p><strong>Başvuru portalı:</strong> ${escapeHtml(deadline.portal)}</p>` : "";
+  const source = externalButton(deadline.sourceUrl, `${label} kaynağı`, "text-link");
+  return `<article class="university-info-card">
+    <p class="section-label">${escapeHtml(label)}</p>
+    <h3>${escapeHtml(deadline.display || "Program bazlı kontrol edilmeli")}</h3>
+    ${portal}
+    ${source}
+  </article>`;
+}
+
+function buildFaq(item) {
+  const courseAnswer = item.germanCourse.label === "Hazırlık/DSH kursu var"
+    ? `${item.name} için dataset'te doğrulanmış hazırlık/DSH yolu bulunuyor: ${item.germanCourse.name || item.germanCourse.type}. Katılım ve kabul şartları resmi kaynaktan kontrol edilmelidir.`
+    : `Bu üniversitede Türkiye'deki hazırlık sınıfı mantığına yakın, DSH/Intensivkurs formatında bir hazırlık kursu resmi kaynakla net doğrulanamadı. Güncel durum resmi kaynaktan kontrol edilmelidir.`;
+
+  return [
+    {
+      question: `${item.name} başvurusu Uni-Assist üzerinden mi?`,
+      answer: `Dataset'te son kontrol edilen bilgiye göre durum: ${item.filters.uniAssist}. Başvuru yolu programa göre değişebilir; resmi program sayfası kontrol edilmelidir.`,
+    },
+    {
+      question: `${item.name} lisans başvuru tarihi ne?`,
+      answer: `Son kontrol edilen lisans başvuru bilgisi: ${item.deadlines.bachelor.display}. Tarih programa ve döneme göre değişebilir; resmi kaynak kontrol edilmelidir.`,
+    },
+    {
+      question: `${item.name} master başvuru tarihi ne?`,
+      answer: `Son kontrol edilen master başvuru bilgisi: ${item.deadlines.master.display}. Master tarihleri bölüm bazında değişebileceği için resmi kaynak kontrol edilmelidir.`,
+    },
+    {
+      question: `${item.name} içinde Almanca hazırlık veya DSH kursu var mı?`,
+      answer: courseAnswer,
+    },
+    {
+      question: `${item.name} QS 2026 sıralaması nedir?`,
+      answer: `Dataset'te yer alan QS 2026 bilgisi: ${item.qsWorldRanking2026}. Sıralamalar yıllara göre değişebilir.`,
+    },
+    {
+      question: `${item.city} öğrenciler için nasıl bir şehir?`,
+      answer: item.cityIntro,
+    },
+  ];
+}
+
+function renderUniversityPage(item) {
+  const canonical = `${SITE_URL}/universiteler/${item.slug}/`;
+  const title = `${item.name} Başvuru Tarihleri, Almanca Hazırlık ve Şehir Rehberi`;
+  const description = `${item.name} için lisans/master başvuru bilgileri, Almanca hazırlık/DSH kursu, QS 2026 sıralaması ve ${item.city} öğrenci yaşamı.`;
+  const image = `${SITE_URL}/assets/hero-germany-study.png`;
+  const faq = buildFaq(item);
+  const sources = [
+    externalSourceItem(item.officialWebsite, "Resmi üniversite sayfası"),
+    externalSourceItem(item.deadlines.bachelor.sourceUrl, "Lisans başvuru kaynağı"),
+    externalSourceItem(item.deadlines.master.sourceUrl, "Master başvuru kaynağı"),
+    externalSourceItem(item.germanCourse.sourceUrl, "Almanca hazırlık / DSH kaynağı"),
+    externalSourceItem(item.qsSourceUrl, "QS 2026 sıralama kaynağı"),
+  ].filter(Boolean);
+  const uniqueSources = [...new Set(sources)];
+  const related = relatedUniversities(item);
+  const logoPath = safeAssetPath(item.logoPath, item.slug);
+  const campusPath = safeAssetPath(item.campusImagePath, item.slug) || safeAssetPath(item.cityImagePath, item.slug);
+  const visualCard = (path, label, fallback) => path
+    ? `<figure class="university-visual-image"><img src="${escapeHtml(path)}" alt="${escapeHtml(label)}" loading="lazy" /><figcaption>${escapeHtml(label)}</figcaption></figure>`
+    : `<div class="university-visual-placeholder"><span>${escapeHtml(label)}</span><strong>${escapeHtml(fallback)}</strong></div>`;
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faq.map((entry) => ({
+      "@type": "Question",
+      name: entry.question,
+      acceptedAnswer: { "@type": "Answer", text: entry.answer },
+    })),
+  };
+  const universitySchema = {
+    "@context": "https://schema.org",
+    "@type": "CollegeOrUniversity",
+    name: item.name,
+    url: canonical,
+    description: item.schoolIntro,
+    address: {
+      "@type": "PostalAddress",
+      addressLocality: item.city,
+      addressRegion: item.state,
+      addressCountry: "DE",
+    },
+    ...(safeExternalUrl(item.officialWebsite) ? { sameAs: [safeExternalUrl(item.officialWebsite)] } : {}),
+  };
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Ana Sayfa", item: `${SITE_URL}/` },
+      { "@type": "ListItem", position: 2, name: "Almanya Üniversiteleri", item: `${SITE_URL}/universite-tanitimlari/` },
+      { "@type": "ListItem", position: 3, name: item.name, item: canonical },
+    ],
+  };
+  const courseDetails = [
+    item.germanCourse.name && factRow("Kurs adı", item.germanCourse.name),
+    item.germanCourse.type && factRow("Kurs türü", item.germanCourse.type),
+    item.germanCourse.duration && factRow("Süre / yoğunluk", item.germanCourse.duration),
+    item.germanCourse.weeklyHours && factRow("Haftalık ders", item.germanCourse.weeklyHours),
+    item.germanCourse.targetExam && factRow("Hedef sınav", item.germanCourse.targetExam),
+    item.germanCourse.requiredLevel && factRow("Giriş seviyesi", item.germanCourse.requiredLevel),
+    item.germanCourse.targetDegreeLevel && factRow("Hedef eğitim seviyesi", item.germanCourse.targetDegreeLevel),
+    item.germanCourse.residenceRelevance && factRow("Oturum §16 açısından not", item.germanCourse.residenceRelevance),
+  ].filter(Boolean).join("");
+  const verifiedCourse = item.germanCourse.label === "Hazırlık/DSH kursu var";
+  const courseFallback = "Bu üniversitede Türkiye’deki hazırlık sınıfı mantığına yakın, DSH/Intensivkurs formatında bir hazırlık kursu resmi kaynakla net doğrulanamadı.";
+  const courseIntro = verifiedCourse
+    ? item.germanCourse.criteriaMatch || "Resmi kaynakta hazırlık/DSH yolu doğrulandı; kabul ve katılım şartları ayrıca kontrol edilmelidir."
+    : courseFallback;
+  const relatedSection = related.length
+    ? `<h2>Bu Eyaletteki Diğer Üniversiteler</h2><div class="inline-links">${related.map((entry) => `<a href="${escapeHtml(entry.detailUrl)}">${escapeHtml(entry.name)} <span>${escapeHtml(entry.city)}</span></a>`).join("")}</div>`
+    : "";
+
+  return `<!doctype html>
+<html lang="tr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="google-site-verification" content="google600d9d87c71c7a8e.html" />
+    <title>${escapeHtml(title)}</title>
+    <meta name="description" content="${escapeHtml(description)}" />
+    <link rel="canonical" href="${escapeHtml(canonical)}" />
+    <meta name="theme-color" content="#111111" />
+    <meta property="og:title" content="${escapeHtml(title)}" />
+    <meta property="og:description" content="${escapeHtml(description)}" />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="${escapeHtml(canonical)}" />
+    <meta property="og:image" content="${escapeHtml(image)}" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="${escapeHtml(title)}" />
+    <meta name="twitter:description" content="${escapeHtml(description)}" />
+    <meta name="twitter:image" content="${escapeHtml(image)}" />
+    <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Serif:wght@600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/styles.css" />
+    <script>window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };</script>
+    <script defer src="/_vercel/insights/script.js"></script>
+    <script type="application/ld+json">${jsonForHtml(universitySchema)}</script>
+    <script type="application/ld+json">${jsonForHtml(breadcrumbSchema)}</script>
+    <script type="application/ld+json">${jsonForHtml(faqSchema)}</script>
+  </head>
+  <body>
+    <div class="flag-strip" aria-hidden="true"><span class="strip-black"></span><span class="strip-red"></span><span class="strip-gold"></span></div>
+    <header class="site-header" data-header>
+      <a class="brand" href="/" aria-label="ŞAK Almanya Ana sayfa"><img class="brand-mark" src="/assets/logoask.svg" alt="ŞAK Almanya logosu" width="50" height="50" /><span><strong>Almanya</strong></span></a>
+      <nav class="main-nav" aria-label="Türkçe menü" data-nav><a href="/#hakkimda">Hakkımda</a><a href="/#hizmetler">Hizmetler</a><a href="/#basarilar">Başarılar</a><a href="/#surec">Süreç</a><a href="/universite-tanitimlari/" aria-current="page">Üniversite Tanıtımları</a><a href="/blog/">Blog</a><a href="/sss/">SSS</a></nav>
+      <div class="language-switcher" aria-label="Dil seçimi"><a href="${escapeHtml(canonical)}" lang="tr" aria-current="true">TR</a><span>|</span><a href="/de/universitaeten/" lang="de">DE</a><span>|</span><a href="/en/universities/" lang="en">EN</a></div>
+    </header>
+    <main>
+      <section class="page-hero university-dataset-hero">
+        <div class="container">
+          <nav class="breadcrumb" aria-label="Breadcrumb"><a href="/">Ana Sayfa</a> / <a href="/universite-tanitimlari/">Almanya Üniversiteleri</a> / <span>${escapeHtml(item.name)}</span></nav>
+          <p class="section-label">${escapeHtml(item.city)} / ${escapeHtml(item.state)}</p>
+          <h1>${escapeHtml(item.name)}</h1>
+          <p>${escapeHtml(item.schoolIntro)}</p>
+          <div class="university-hero-facts"><span>${escapeHtml(item.type)}</span><span>QS 2026: ${escapeHtml(item.qsWorldRanking2026)}</span><span>Son kontrol: ${escapeHtml(formatDateTr(item.lastChecked))}</span></div>
+          <div class="hero-actions">${externalButton(item.officialWebsite, "Resmi üniversite sitesi", "button button-primary")}<a class="button button-secondary" href="#basvuru-bilgileri">Başvuru bilgileri</a></div>
+        </div>
+      </section>
+      <section class="section page-content">
+        <div class="container article-layout university-detail university-dataset-detail">
+          <p class="notice-box">${escapeHtml(TRUST_NOTICE)}</p>
+          <section class="university-visual-grid" aria-label="Üniversite görselleri">${visualCard(logoPath, `${item.name} logosu`, item.name)}${visualCard(campusPath, `${item.name} kampüs veya ${item.city} şehir görseli`, item.city)}</section>
+          <h2>Hızlı Bilgi</h2>
+          <div class="table-wrap"><table class="info-table"><tbody>${factRow("Üniversite", item.name)}${factRow("Şehir", item.city)}${factRow("Eyalet", item.state)}${factRow("Tür", item.type)}${factRow("QS 2026", item.qsWorldRanking2026)}${factRow("Uni-Assist", item.filters.uniAssist)}${factRow("Son kontrol", formatDateTr(item.lastChecked))}</tbody></table></div>
+          <h2>Üniversite Hakkında</h2><p>${escapeHtml(item.schoolIntro)}</p>${item.universityLongIntro ? `<p>${escapeHtml(item.universityLongIntro)}</p>` : ""}${item.whyChoose ? `<p>${escapeHtml(item.whyChoose)}</p>` : ""}${item.popularityReason ? `<p>${escapeHtml(item.popularityReason)}</p>` : ""}
+          <h2>Şehir Hakkında</h2><p>${escapeHtml(item.cityIntro)}</p>${item.cityStudentLife ? `<p>${escapeHtml(item.cityStudentLife)}</p>` : ""}${item.cityTransport ? `<p>${escapeHtml(item.cityTransport)}</p>` : ""}${item.cityCostOfLiving ? `<p>${escapeHtml(item.cityCostOfLiving)}</p>` : ""}
+          ${(item.cityHistory || item.cityHistoricalNote) ? `<h2>Şehrin Kısa Tarihi</h2>${item.cityHistory ? `<p>${escapeHtml(item.cityHistory)}</p>` : ""}${item.cityHistoricalNote ? `<p>${escapeHtml(item.cityHistoricalNote)}</p>` : ""}` : ""}
+          ${(item.cityEconomy || item.cityIndustries || item.studentJobsNote) ? `<h2>Ekonomi ve Kariyer Çevresi</h2>${item.cityEconomy ? `<p>${escapeHtml(item.cityEconomy)}</p>` : ""}${item.cityIndustries ? `<p>${escapeHtml(item.cityIndustries)}</p>` : ""}${item.studentJobsNote ? `<p>${escapeHtml(item.studentJobsNote)}</p>` : ""}` : ""}
+          <section id="basvuru-bilgileri" class="university-anchor-section"><h2>Başvuru Bilgileri</h2><p><strong>Genel başvuru yolu:</strong> ${escapeHtml(item.applicationPortal || item.filters.uniAssist)}</p><div class="university-info-grid">${deadlineCard("Lisans", item.deadlines.bachelor)}${deadlineCard("Master", item.deadlines.master)}</div><p class="notice-box">${escapeHtml(TRUST_NOTICE)}</p></section>
+          <h2>Almanca Hazırlık / DSH Kursu</h2><p><strong>Durum:</strong> ${escapeHtml(item.germanCourse.label)}</p><p>${escapeHtml(courseIntro)}</p>${courseDetails ? `<div class="table-wrap"><table class="info-table"><tbody>${courseDetails}</tbody></table></div>` : ""}${externalButton(item.germanCourse.sourceUrl, "Almanca hazırlık kaynağı", "text-link")}
+          <h2>QS 2026 Sıralaması</h2><p><strong>${escapeHtml(item.qsWorldRanking2026)}</strong>. Sıralamalar yıldan yıla değişebilir; karar verirken program içeriği, şehir, bütçe ve kabul şartları birlikte değerlendirilmelidir.</p>${externalButton(item.qsSourceUrl, "QS kaynağını aç", "text-link")}
+          ${item.turkishStudentsNote ? `<h2>Türk Öğrenciler İçin Notlar</h2><p>${escapeHtml(item.turkishStudentsNote)}</p>` : ""}
+          ${relatedSection}
+          <h2>Sık Sorulan Sorular</h2><div class="faq-list">${faq.map((entry) => `<details><summary>${escapeHtml(entry.question)}</summary><p>${escapeHtml(entry.answer)}</p></details>`).join("")}</div>
+          <h2>Kaynaklar</h2>${uniqueSources.length ? `<ul class="university-source-list">${uniqueSources.join("")}</ul>` : ""}<p><strong>Son kontrol tarihi:</strong> ${escapeHtml(formatDateTr(item.lastChecked))}</p>
+          <a class="text-link university-back-link" href="/universite-tanitimlari/">← Tüm üniversitelere dön</a>
+        </div>
+      </section>
+    </main>
+    <footer class="site-footer"><div class="container footer-grid"><div class="footer-about"><strong>ŞAK Almanya</strong><p>Almanca, Almanya eğitim, Hochschule ve Ausbildung danışmanlığı.</p><p class="legal-note">Resmi kurum değildir. Kabul, vize veya yerleşim garantisi verilmez.</p></div><div class="footer-links-panel"><nav class="footer-nav" aria-label="Türkçe footer menüsü"><a href="/#iletisim">İletişim</a></nav><div class="social-links" aria-label="Sosyal medya hesapları"><a class="social-instagram" href="https://www.instagram.com/andaykahveci" target="_blank" rel="noopener noreferrer">Instagram</a><a class="social-youtube" href="https://www.youtube.com/@andaykhvc" target="_blank" rel="noopener noreferrer">YouTube</a><a class="social-linkedin" href="https://www.linkedin.com/in/andaykahveci/" target="_blank" rel="noopener noreferrer">LinkedIn</a><a class="footer-look-link" href="https://github.com/andaykhvc" target="_blank" rel="noopener noreferrer" aria-label="ŞAK Almanya GitHub profilini aç"><img src="/assets/buraya-bakarlar.jpg" alt="buraya bakarlar" /></a></div><span>© <span data-year></span> ŞAK Almanya</span><span class="footer-domain">sakalmanya.com.tr</span></div></div></footer>
+    <script src="/script.js"></script>
+  </body>
+</html>`;
+}
+
+function renderNotFoundPage() {
+  return `<!doctype html><html lang="tr"><head><meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" /><meta name="robots" content="noindex, follow" /><title>Üniversite bulunamadı | ŞAK Almanya</title><link rel="stylesheet" href="/styles.css" /></head><body><main><section class="page-hero"><div class="container"><p class="section-label">404</p><h1>Üniversite bulunamadı</h1><p>Bu bağlantı geçerli değil veya üniversite kaydı güncellenmiş olabilir.</p><a class="button button-primary" href="/universite-tanitimlari/">Tüm üniversitelere dön</a></div></section></main></body></html>`;
+}
+
+function sendJson(res, statusCode, payload) {
+  res.statusCode = statusCode;
+  res.setHeader("Content-Type", "application/json; charset=utf-8");
+  res.setHeader("Cache-Control", statusCode === 200 ? "s-maxage=300, stale-while-revalidate=600" : "no-store");
+  res.setHeader("X-Robots-Tag", "noindex, nofollow");
+  res.end(JSON.stringify(payload));
+}
+
+function sendHtml(res, statusCode, html) {
+  res.statusCode = statusCode;
+  res.setHeader("Content-Type", "text/html; charset=utf-8");
+  res.setHeader("Cache-Control", statusCode === 200 ? "s-maxage=3600, stale-while-revalidate=86400" : "no-store");
+  res.setHeader("X-Robots-Tag", statusCode === 200 ? "index, follow" : "noindex, follow");
+  res.end(html);
+}
+
+module.exports = function handler(req, res) {
   if (req.method !== "GET") {
-    res.statusCode = 405;
-    res.end(JSON.stringify({ error: "Method not allowed" }));
+    sendJson(res, 405, { error: "Method not allowed" });
+    return;
+  }
+
+  const url = new URL(req.url || "/api/universities", SITE_URL);
+  const slug = safeSlug(url.searchParams.get("slug"));
+  const view = normalise(url.searchParams.get("view"));
+  const selectedUniversity = slug ? UNIVERSITIES.find((item) => item.slug === slug) : null;
+
+  if (view === "page") {
+    if (!selectedUniversity) {
+      sendHtml(res, 404, renderNotFoundPage());
+      return;
+    }
+    sendHtml(res, 200, renderUniversityPage(selectedUniversity));
     return;
   }
 
   if (isRateLimited(req)) {
-    res.statusCode = 429;
-    res.end(JSON.stringify({ error: "Too many requests" }));
+    sendJson(res, 429, { error: "Too many requests" });
     return;
   }
 
-  const url = new URL(req.url || "/api/universities", "https://sakalmanya.com.tr");
+  if (slug) {
+    if (!selectedUniversity) {
+      sendJson(res, 404, { error: "University not found" });
+      return;
+    }
+    sendJson(res, 200, { item: publicDetail(selectedUniversity) });
+    return;
+  }
+
   const page = Math.max(1, Number.parseInt(url.searchParams.get("page") || "1", 10) || 1);
   const requestedLimit = Number.parseInt(url.searchParams.get("limit") || "12", 10) || 12;
   const limit = Math.min(Math.max(1, requestedLimit), 24);
@@ -1225,13 +426,11 @@ module.exports = function handler(req, res) {
     level: normalise(url.searchParams.get("level")),
     uniAssist: normalise(url.searchParams.get("uniAssist")),
   };
-
   const matched = UNIVERSITIES.filter((item) => matchesFilters(item, filters));
   const start = (page - 1) * limit;
   const items = matched.slice(start, start + limit).map(publicCard);
 
-  res.statusCode = 200;
-  res.end(JSON.stringify({
+  sendJson(res, 200, {
     items,
     pagination: {
       page,
@@ -1241,5 +440,5 @@ module.exports = function handler(req, res) {
       hasMore: start + limit < matched.length,
     },
     filters: FILTER_OPTIONS,
-  }));
+  });
 };

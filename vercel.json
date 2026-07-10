@@ -1,0 +1,12 @@
+{
+  "redirects": [
+    { "source": "/universite-tanitimlari/tu-dresden", "destination": "/universiteler/tu-dresden/", "permanent": true },
+    { "source": "/universite-tanitimlari/htw-dresden", "destination": "/universiteler/htw-dresden/", "permanent": true },
+    { "source": "/universite-tanitimlari/universitat-leipzig", "destination": "/universiteler/universitaet-leipzig/", "permanent": true },
+    { "source": "/universite-tanitimlari/universitat-stuttgart", "destination": "/universiteler/universitaet-stuttgart/", "permanent": true },
+    { "source": "/universite-tanitimlari/universitat-tubingen", "destination": "/universiteler/universitaet-tuebingen/", "permanent": true }
+  ],
+  "rewrites": [
+    { "source": "/universiteler/:slug", "destination": "/api/universities?view=page&slug=:slug" }
+  ]
+}

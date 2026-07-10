@@ -4,3 +4,5 @@ server-data/
 data/
 tmp/
 assets/logo-export/
+scripts/
+types/

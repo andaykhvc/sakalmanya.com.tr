@@ -63,6 +63,7 @@ const universityCopy = {
     error: "Üniversite verileri şu an yüklenemedi.",
     loadMore: "Daha fazla göster",
     source: "Resmi kaynak",
+    details: "Detayları gör",
     qs: "QS 2026",
     bachelor: "Lisans",
     master: "Master",
@@ -77,6 +78,7 @@ const universityCopy = {
     error: "Universitätsdaten konnten gerade nicht geladen werden.",
     loadMore: "Mehr anzeigen",
     source: "Offizielle Quelle",
+    details: "Details ansehen",
     qs: "QS 2026",
     bachelor: "Bachelor",
     master: "Master",
@@ -91,6 +93,7 @@ const universityCopy = {
     error: "University data could not be loaded right now.",
     loadMore: "Show more",
     source: "Official source",
+    details: "View details",
     qs: "QS 2026",
     bachelor: "Bachelor",
     master: "Master",
@@ -198,14 +201,26 @@ if (universityFilters && universityGrid) {
     const cityIntro = document.createElement("p");
     cityIntro.textContent = item.cityIntro;
 
-    const source = document.createElement("a");
-    source.className = "button button-secondary";
-    source.href = item.sourceUrl || "#";
-    source.target = "_blank";
-    source.rel = "noopener noreferrer";
-    source.textContent = activeUniversityCopy.source;
+    const actions = document.createElement("div");
+    actions.className = "university-card-actions";
 
-    card.append(location, title, type, meta, facts, schoolIntro, cityIntro, source);
+    if (item.sourceUrl) {
+      const source = document.createElement("a");
+      source.className = "button button-secondary";
+      source.href = item.sourceUrl;
+      source.target = "_blank";
+      source.rel = "noopener noreferrer";
+      source.textContent = activeUniversityCopy.source;
+      actions.append(source);
+    }
+
+    const details = document.createElement("a");
+    details.className = "button button-primary";
+    details.href = item.detailUrl;
+    details.textContent = activeUniversityCopy.details;
+    actions.append(details);
+
+    card.append(location, title, type, meta, facts, schoolIntro, cityIntro, actions);
     return card;
   };
 

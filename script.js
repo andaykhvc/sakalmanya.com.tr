@@ -15,6 +15,218 @@ const floatingWhatsappMessages = {
 };
 
 const pageLanguage = document.documentElement.lang || "tr";
+
+const mobileNavigationCopy = {
+  tr: {
+    menu: "Menüyü aç",
+    close: "Menüyü kapat",
+    navigation: "Mobil menü",
+    cta: "Ücretsiz ön görüşme al",
+    language: "Dil seçimi",
+    links: [
+      ["Ana Sayfa", "/"],
+      ["Hizmetler", "/hizmetler/"],
+      ["Üniversiteler", "/universite-tanitimlari/"],
+      ["Almanya’da Eğitim", "/almanya-egitim-danismanligi/"],
+      ["Başarılarımız", "/#basarilar"],
+      ["Hakkımızda", "/#hakkimda"],
+      ["Sık Sorulan Sorular", "/sss/"],
+      ["İletişim", "/#iletisim"],
+    ],
+  },
+  de: {
+    menu: "Menü öffnen",
+    close: "Menü schließen",
+    navigation: "Mobile Navigation",
+    cta: "Kostenloses Erstgespräch",
+    language: "Sprachauswahl",
+    links: [
+      ["Startseite", "/de/"],
+      ["Leistungen", "/de/leistungen/"],
+      ["Universitäten", "/de/universitaeten/"],
+      ["Erfolge", "/de/#erfolge"],
+      ["Über mich", "/de/#ueber-mich"],
+      ["FAQ", "/de/faq/"],
+      ["Kontakt", "/de/#kontakt"],
+    ],
+  },
+  en: {
+    menu: "Open menu",
+    close: "Close menu",
+    navigation: "Mobile navigation",
+    cta: "Get a free consultation",
+    language: "Language selection",
+    links: [
+      ["Home", "/en/"],
+      ["Services", "/en/services/"],
+      ["Universities", "/en/universities/"],
+      ["Success Stories", "/en/#success-stories"],
+      ["About", "/en/#about"],
+      ["Frequently Asked Questions", "/en/faq/"],
+      ["Contact", "/en/#contact"],
+    ],
+  },
+};
+
+const setupMobileNavigation = () => {
+  const header = document.querySelector("[data-header]");
+  const desktopNavigation = header?.querySelector("[data-nav]");
+  const languageSwitcher = header?.querySelector(".language-switcher");
+  if (!header || !desktopNavigation || !languageSwitcher || document.querySelector("[data-mobile-drawer]")) return;
+
+  const copy = mobileNavigationCopy[pageLanguage] || mobileNavigationCopy.tr;
+  const activeLanguage = languageSwitcher.querySelector('[aria-current="true"]') || languageSwitcher.querySelector("a");
+  const controls = document.createElement("div");
+  const toggle = document.createElement("button");
+  const overlay = document.createElement("div");
+  const drawer = document.createElement("aside");
+  const drawerHeader = document.createElement("div");
+  const drawerTitle = document.createElement("strong");
+  const closeButton = document.createElement("button");
+  const navigation = document.createElement("nav");
+  const drawerFooter = document.createElement("div");
+  const cta = document.createElement("a");
+  const drawerLanguages = document.createElement("div");
+  const drawerSocials = document.querySelector(".site-footer .social-links")?.cloneNode(true);
+  const drawerId = "mobile-navigation-drawer";
+  let previouslyFocused = null;
+  let closeTimer = null;
+
+  controls.className = "mobile-nav-controls";
+  languageSwitcher.classList.add("header-language-switcher");
+  toggle.className = "mobile-menu-toggle";
+  toggle.type = "button";
+  toggle.setAttribute("aria-label", copy.menu);
+  toggle.setAttribute("aria-expanded", "false");
+  toggle.setAttribute("aria-controls", drawerId);
+  toggle.innerHTML = '<span aria-hidden="true"></span><span aria-hidden="true"></span><span aria-hidden="true"></span>';
+  controls.append(languageSwitcher, toggle);
+  header.append(controls);
+
+  overlay.className = "mobile-nav-overlay";
+  overlay.hidden = true;
+  overlay.setAttribute("data-mobile-overlay", "");
+
+  drawer.className = "mobile-nav-drawer";
+  drawer.id = drawerId;
+  drawer.hidden = true;
+  drawer.setAttribute("data-mobile-drawer", "");
+  drawer.setAttribute("aria-hidden", "true");
+  drawer.setAttribute("aria-label", copy.navigation);
+
+  drawerHeader.className = "mobile-drawer-header";
+  drawerTitle.textContent = "ŞAK Almanya";
+  closeButton.className = "mobile-menu-close";
+  closeButton.type = "button";
+  closeButton.setAttribute("aria-label", copy.close);
+  closeButton.innerHTML = '<span aria-hidden="true"></span><span aria-hidden="true"></span>';
+  drawerHeader.append(drawerTitle, closeButton);
+
+  navigation.className = "mobile-drawer-nav";
+  navigation.setAttribute("aria-label", copy.navigation);
+  const currentPath = window.location.pathname.replace(/\/+$/, "/") || "/";
+  copy.links.forEach(([label, href]) => {
+    const link = document.createElement("a");
+    const target = new URL(href, window.location.origin);
+    const targetPath = target.pathname.replace(/\/+$/, "/") || "/";
+    const exactSection = target.hash && currentPath === targetPath && window.location.hash === target.hash;
+    const routeMatch = !target.hash && (currentPath === targetPath || (targetPath !== "/" && currentPath.startsWith(targetPath)));
+    link.href = href;
+    link.textContent = label;
+    if (exactSection || routeMatch) link.setAttribute("aria-current", "page");
+    navigation.append(link);
+  });
+
+  drawerFooter.className = "mobile-drawer-footer";
+  cta.className = "button button-primary mobile-drawer-cta";
+  cta.href = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(
+    floatingWhatsappMessages[pageLanguage] || floatingWhatsappMessages.tr
+  )}`;
+  cta.target = "_blank";
+  cta.rel = "noopener noreferrer";
+  cta.textContent = copy.cta;
+  cta.setAttribute("data-whatsapp-link", "");
+
+  drawerLanguages.className = "mobile-drawer-languages";
+  drawerLanguages.setAttribute("aria-label", copy.language);
+  languageSwitcher.querySelectorAll("a").forEach((languageLink) => drawerLanguages.append(languageLink.cloneNode(true)));
+  drawerFooter.append(cta, drawerLanguages);
+  if (drawerSocials) {
+    drawerSocials.classList.add("mobile-drawer-socials");
+    drawerSocials.querySelector(".footer-look-link")?.remove();
+    drawerFooter.append(drawerSocials);
+  }
+  drawer.append(drawerHeader, navigation, drawerFooter);
+  document.body.append(overlay, drawer);
+
+  const focusableElements = () => Array.from(drawer.querySelectorAll('a[href], button:not([disabled])'));
+  const setOpen = (open) => {
+    window.clearTimeout(closeTimer);
+    if (open) previouslyFocused = document.activeElement;
+    drawer.hidden = false;
+    overlay.hidden = false;
+    requestAnimationFrame(() => {
+      drawer.classList.toggle("is-open", open);
+      overlay.classList.toggle("is-open", open);
+    });
+    drawer.setAttribute("aria-hidden", String(!open));
+    toggle.setAttribute("aria-expanded", String(open));
+    toggle.setAttribute("aria-label", open ? copy.close : copy.menu);
+    document.body.classList.toggle("is-mobile-menu-open", open);
+    document.documentElement.classList.toggle("is-mobile-menu-open", open);
+    if (open) {
+      window.setTimeout(() => closeButton.focus(), 60);
+    } else {
+      closeTimer = window.setTimeout(() => {
+        drawer.hidden = true;
+        overlay.hidden = true;
+      }, 240);
+      previouslyFocused?.focus();
+    }
+  };
+
+  toggle.addEventListener("click", () => setOpen(toggle.getAttribute("aria-expanded") !== "true"));
+  closeButton.addEventListener("click", () => setOpen(false));
+  overlay.addEventListener("click", () => setOpen(false));
+  drawer.querySelectorAll("a").forEach((link) => link.addEventListener("click", () => setOpen(false)));
+  drawer.addEventListener("keydown", (event) => {
+    if (event.key !== "Tab") return;
+    const elements = focusableElements();
+    const first = elements[0];
+    const last = elements[elements.length - 1];
+    if (event.shiftKey && document.activeElement === first) {
+      event.preventDefault();
+      last.focus();
+    } else if (!event.shiftKey && document.activeElement === last) {
+      event.preventDefault();
+      first.focus();
+    }
+  });
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && toggle.getAttribute("aria-expanded") === "true") setOpen(false);
+  });
+  window.addEventListener("resize", () => {
+    if (window.innerWidth > 768 && toggle.getAttribute("aria-expanded") === "true") setOpen(false);
+  });
+
+  if (activeLanguage) activeLanguage.setAttribute("data-active-language", "");
+};
+
+const setupFooterBottomRows = () => {
+  document.querySelectorAll(".site-footer .footer-links-panel").forEach((panel) => {
+    if (panel.querySelector(":scope > .footer-bottom-row")) return;
+    const metadata = Array.from(panel.children).filter((child) => child.tagName === "SPAN");
+    if (!metadata.length) return;
+    const bottomRow = document.createElement("div");
+    bottomRow.className = "footer-bottom-row";
+    metadata.forEach((item) => bottomRow.append(item));
+    panel.append(bottomRow);
+  });
+};
+
+setupMobileNavigation();
+setupFooterBottomRows();
+
 const floatingWhatsapp = document.createElement("a");
 floatingWhatsapp.className = "floating-whatsapp";
 floatingWhatsapp.href = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(
@@ -30,6 +242,15 @@ floatingWhatsapp.innerHTML = `
   <span>WhatsApp</span>
 `;
 document.body.appendChild(floatingWhatsapp);
+
+const siteFooter = document.querySelector(".site-footer");
+if (siteFooter && "IntersectionObserver" in window) {
+  const footerObserver = new IntersectionObserver(
+    ([entry]) => floatingWhatsapp.classList.toggle("is-footer-visible", entry.isIntersecting),
+    { threshold: 0.02 }
+  );
+  footerObserver.observe(siteFooter);
+}
 
 document.querySelectorAll("[data-document-carousel]").forEach((carousel) => {
   const items = Array.from(carousel.querySelectorAll(".document-previews a"));

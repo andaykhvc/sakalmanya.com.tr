@@ -36,15 +36,23 @@ EXCLUDED_TITLE_WORDS = (
     "innen", "portrait", "selfie", "student", "aula", "auditorium", "mensa",
 )
 BUILDING_WORDS = ("universit", "university", "hochschule", "campus", "gebäude", "gebaeude", "hauptgebäude", "hauptgebaeude", "building")
-# The automatic search can find associated but unsuitable media (a seal, a document,
-# a hospital sign, etc.). Keep those out rather than publishing a misleading image.
-REJECTED_AUTOMATIC_CANDIDATES = {
-    "fau-erlangen-nuernberg", "goethe-universitaet-frankfurt", "tum",
-    "universitaet-bayreuth", "universitaet-bonn", "universitaet-goettingen",
-    "universitaet-hamburg", "universitaet-leipzig",
-    "johannes-gutenberg-universitaet-mainz", "universitaet-stuttgart",
-    "universitaet-wuerzburg",
+# Targeted Commons terms for schools whose broad search produced a document, a seal,
+# a hospital sign, or another associated but unusable image.
+CAMPUS_SEARCH_OVERRIDES = {
+    "universitaet-leipzig": ("Universität Leipzig Augustusplatz", "Leipzig", 0),
+    "tum": ("Technische Universität München campus", "München", 0),
+    "universitaet-stuttgart": ("Universität Stuttgart Campus Vaihingen", "Stuttgart", 1),
+    "universitaet-hamburg": ("Universität Hamburg", "Hamburg", 1),
+    "fau-erlangen-nuernberg": ("Friedrich-Alexander-Universität", "Erlangen", 1),
+    "universitaet-goettingen": ("Universität Göttingen building", "Göttingen", 0),
+    "goethe-universitaet-frankfurt": ("Goethe Universität Frankfurt Campus", "Frankfurt", 1),
+    "universitaet-wuerzburg": ("University of Würzburg", "Würzburg", 0),
+    "universitaet-bayreuth": ("Universität Bayreuth campus", "Bayreuth", 0),
+    "johannes-gutenberg-universitaet-mainz": ("Johannes Gutenberg-Universität Mainz", "Mainz", 1),
 }
+# There was no clearly matching exterior candidate for this school; do not substitute
+# an unrelated Bonn landmark merely to fill the visual slot.
+SKIP_CAMPUS_AUTOMATION = {"universitaet-bonn"}
 
 
 def plain(value):
@@ -123,6 +131,49 @@ def commons_candidates(name, city):
     return sorted(result, key=lambda item: (-item["score"], item["title"]))
 
 
+def commons_logo_candidates(name):
+    """Find logo files and retain their Commons source metadata for attribution."""
+    params = {
+        "action": "query",
+        "format": "json",
+        "generator": "search",
+        "gsrsearch": f"{name} logo",
+        "gsrnamespace": "6",
+        "gsrlimit": "12",
+        "prop": "imageinfo",
+        "iiprop": "url|extmetadata|size|mime",
+    }
+    payload = request_json(f"{COMMONS_API}?{urlencode(params)}")
+    pages = payload.get("query", {}).get("pages", {}).values()
+    name_tokens = {token for token in re.split(r"[^a-z0-9]+", name.lower()) if len(token) > 2}
+    result = []
+    for page in pages:
+        info = (page.get("imageinfo") or [{}])[0]
+        title = page.get("title", "")
+        title_lower = title.lower()
+        mime = info.get("mime")
+        if mime not in {"image/svg+xml", "image/png"} or "logo" not in title_lower:
+            continue
+        meta = info.get("extmetadata") or {}
+        licence = plain((meta.get("LicenseShortName") or {}).get("value"))
+        score = sum(token in title_lower for token in name_tokens) * 5
+        if title_lower.endswith(".svg"):
+            score += 3
+        if "campus" in title_lower or "alumni" in title_lower:
+            score -= 4
+        result.append({
+            "score": score,
+            "title": title,
+            "pageUrl": info.get("descriptionurl"),
+            "originalFileUrl": info.get("url"),
+            "license": licence,
+            "licenseUrl": plain((meta.get("LicenseUrl") or {}).get("value")),
+            "author": plain((meta.get("Artist") or {}).get("value")),
+            "mime": mime,
+        })
+    return sorted(result, key=lambda item: (-item["score"], item["title"]))
+
+
 def convert_to_webp(content, output_path):
     """Create a metadata-free, reasonably small WebP without excessive compression."""
     with Image.open(BytesIO(content)) as source:
@@ -174,13 +225,30 @@ def make_contact_sheet(entries, output_path):
     sheet.save(output_path, "JPEG", quality=88)
 
 
-def logo_record(university):
+def logo_record(university, candidate=None):
+    if candidate:
+        extension = "svg" if candidate["mime"] == "image/svg+xml" else "png"
+        author = candidate["author"] or "Bilinmeyen yazar"
+        return {
+            "status": "available",
+            "path": f"/assets/universities/{university['slug']}/logo.{extension}",
+            "sourceUrl": candidate["pageUrl"],
+            "originalFileUrl": candidate["originalFileUrl"],
+            "sourceType": "wikimedia-commons",
+            "license": candidate["license"],
+            "attribution": f"Logo kaynağı: {author}, Wikimedia Commons" + (f", {candidate['license']}" if candidate["license"] else ""),
+            "licenseUrl": candidate["licenseUrl"],
+            "accessedAt": str(date.today()),
+            "notes": "Kullanım izni proje sahibi tarafından beyan edilmiştir; kaynak bağlantısı korunmuştur.",
+        }
     return {
         "status": "needs-manual-review",
         "path": None,
         "sourceUrl": university["officialWebsite"],
+        "originalFileUrl": None,
         "sourceType": "official-website",
         "license": None,
+        "licenseUrl": None,
         "attribution": None,
         "accessedAt": str(date.today()),
         "notes": "Logo indirilmedi. Üniversitenin marka kullanım koşulları manuel olarak doğrulanmalıdır.",
@@ -232,6 +300,9 @@ def main():
     parser.add_argument("--package-dir", type=Path, default=ROOT / "outputs" / "university-media")
     parser.add_argument("--zip", type=Path, default=ROOT / "outputs" / "sakalmanya_university_media.zip")
     parser.add_argument("--preview-dir", type=Path, default=Path("/tmp/sakalmanya-media-previews"))
+    parser.add_argument("--start-index", type=int, default=0)
+    parser.add_argument("--end-index", type=int)
+    parser.add_argument("--reset", action="store_true", help="Remove an existing package before the first batch.")
     parser.add_argument("--dry-run", action="store_true")
     args = parser.parse_args()
 
@@ -243,14 +314,16 @@ def main():
     if missing:
         raise SystemExit(f"Universities sheet eksik kolonlar: {', '.join(sorted(missing))}")
 
-    if args.package_dir.exists():
+    if args.reset and args.package_dir.exists():
         shutil.rmtree(args.package_dir)
     package_root = args.package_dir
     package_universities = package_root / "universities"
     staged = []
     manifest = []
 
-    for row in universities.to_dict("records"):
+    rows = universities.to_dict("records")
+    end_index = args.end_index if args.end_index is not None else len(rows)
+    for row in rows[args.start_index:end_index]:
         university = {
             "universityId": plain(row["university_id"]),
             "universityName": plain(row["name"]),
@@ -258,10 +331,21 @@ def main():
             "city": plain(row["city"]),
             "officialWebsite": plain(row["official_website"]),
         }
-        candidates = commons_candidates(university["universityName"], university["city"])
-        candidate = candidates[0] if candidates else None
-        if university["slug"] in REJECTED_AUTOMATIC_CANDIDATES:
-            candidate = None
+        query_name, query_city, candidate_index = CAMPUS_SEARCH_OVERRIDES.get(
+            university["slug"], (university["universityName"], university["city"], 0)
+        )
+        try:
+            candidates = [] if university["slug"] in SKIP_CAMPUS_AUTOMATION else commons_candidates(query_name, query_city)
+        except Exception as error:
+            print(f"WARN campus search failed {university['slug']}: {error}", file=sys.stderr)
+            candidates = []
+        candidate = candidates[candidate_index] if len(candidates) > candidate_index else None
+        try:
+            logo_candidates = commons_logo_candidates(university["universityName"])
+        except Exception as error:
+            print(f"WARN logo search failed {university['slug']}: {error}", file=sys.stderr)
+            logo_candidates = []
+        logo_candidate = logo_candidates[0] if logo_candidates else None
         if candidate:
             preview_path = args.preview_dir / f"{university['slug']}.jpg"
             try:
@@ -275,7 +359,7 @@ def main():
                 print(f"WARN preview failed {university['slug']}: {error}", file=sys.stderr)
                 candidate = None
 
-        logo = logo_record(university)
+        logo = logo_record(university, logo_candidate)
         campus = campus_record(candidate, university["slug"])
         source_payload = {**university, "logo": logo, "campus": campus}
         university_package = package_universities / university["slug"]
@@ -294,6 +378,22 @@ def main():
                 write_json(university_package / "sources.json", source_payload)
                 print(f"WARN campus conversion failed {university['slug']}: {error}", file=sys.stderr)
 
+        if logo_candidate and not args.dry_run:
+            extension = "svg" if logo_candidate["mime"] == "image/svg+xml" else "png"
+            try:
+                content, _ = download(logo_candidate["originalFileUrl"])
+                if not content:
+                    raise ValueError("Empty logo response")
+                for root in (university_package, args.assets_root / university["slug"]):
+                    logo_path = root / f"logo.{extension}"
+                    logo_path.parent.mkdir(parents=True, exist_ok=True)
+                    logo_path.write_bytes(content)
+            except Exception as error:
+                logo = logo_record(university)
+                source_payload["logo"] = logo
+                write_json(university_package / "sources.json", source_payload)
+                print(f"WARN logo download failed {university['slug']}: {error}", file=sys.stderr)
+
         manifest.append({
             "universityId": university["universityId"],
             "slug": university["slug"],
@@ -307,10 +407,37 @@ def main():
             "licenseUrl": campus["licenseUrl"],
             "sourceUrl": campus["sourceUrl"],
             "originalFileUrl": campus["originalFileUrl"],
+            "logoAttribution": logo.get("attribution"),
+            "logoLicenseUrl": logo.get("licenseUrl"),
+            "logoSourceUrl": logo.get("sourceUrl"),
             "sourceFile": f"universities/{university['slug']}/sources.json",
         })
         time.sleep(0.2)
 
+    # Batches may be generated independently. Rebuild the final manifest from every
+    # source record that is now present in the package instead of just this batch.
+    manifest = []
+    for source_path in sorted(package_universities.glob("*/sources.json")):
+        source_payload = json.loads(source_path.read_text(encoding="utf-8"))
+        university = {key: source_payload[key] for key in ("universityId", "universityName", "slug")}
+        logo = source_payload["logo"]
+        campus = source_payload["campus"]
+        manifest.append({
+            **university,
+            "logoPath": logo["path"],
+            "campusImagePath": campus["path"],
+            "logoStatus": logo["status"],
+            "campusStatus": campus["status"],
+            "requiresAttribution": bool(campus["attribution"]),
+            "attribution": campus["attribution"],
+            "licenseUrl": campus["licenseUrl"],
+            "sourceUrl": campus["sourceUrl"],
+            "originalFileUrl": campus["originalFileUrl"],
+            "logoAttribution": logo.get("attribution"),
+            "logoLicenseUrl": logo.get("licenseUrl"),
+            "logoSourceUrl": logo["sourceUrl"],
+            "sourceFile": f"universities/{university['slug']}/sources.json",
+        })
     write_json(package_root / "manifest.json", manifest)
     write_json(args.server_data / "university-media-manifest.json", manifest)
     sources_root = args.server_data / "university-media-sources"

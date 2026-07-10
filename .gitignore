@@ -2,6 +2,7 @@ node_modules/
 .env
 .env.*
 tmp/
+outputs/
 .DS_Store
 *.log
 *.xlsx

@@ -112,6 +112,12 @@ function publicDetail(item) {
     uniAssistStatus: item.filters.uniAssist,
     lastChecked: item.lastChecked,
     sourceUrl: item.sourceUrl,
+    logoPath: item.logoPath,
+    campusImagePath: item.campusImagePath,
+    campusStatus: item.campusStatus,
+    campusAttribution: item.campusAttribution,
+    campusLicenseUrl: item.campusLicenseUrl,
+    campusSourceUrl: item.campusSourceUrl,
     deadlines: item.deadlines,
     germanCourse: item.germanCourse,
     related: relatedUniversities(item),
@@ -228,13 +234,14 @@ function renderUniversityPage(item) {
     externalSourceItem(item.deadlines.master.sourceUrl, "Master başvuru kaynağı"),
     externalSourceItem(item.germanCourse.sourceUrl, "Almanca hazırlık / DSH kaynağı"),
     externalSourceItem(item.qsSourceUrl, "QS 2026 sıralama kaynağı"),
+    item.campusAttribution && externalSourceItem(item.campusLicenseUrl || item.campusSourceUrl, item.campusAttribution),
   ].filter(Boolean);
   const uniqueSources = [...new Set(sources)];
   const related = relatedUniversities(item);
   const logoPath = safeAssetPath(item.logoPath, item.slug);
   const campusPath = safeAssetPath(item.campusImagePath, item.slug) || safeAssetPath(item.cityImagePath, item.slug);
-  const visualCard = (path, label, fallback) => path
-    ? `<figure class="university-visual-image"><img src="${escapeHtml(path)}" alt="${escapeHtml(label)}" loading="lazy" /><figcaption>${escapeHtml(label)}</figcaption></figure>`
+  const visualCard = (path, label, fallback, kind) => path
+    ? `<figure class="university-visual-image university-visual-image--${escapeHtml(kind)}"><img src="${escapeHtml(path)}" alt="${escapeHtml(label)}" loading="lazy" /><figcaption>${escapeHtml(label)}</figcaption></figure>`
     : `<div class="university-visual-placeholder"><span>${escapeHtml(label)}</span><strong>${escapeHtml(fallback)}</strong></div>`;
   const faqSchema = {
     "@context": "https://schema.org",
@@ -338,7 +345,7 @@ function renderUniversityPage(item) {
       <section class="section page-content">
         <div class="container article-layout university-detail university-dataset-detail">
           <p class="notice-box">${escapeHtml(TRUST_NOTICE)}</p>
-          <section class="university-visual-grid" aria-label="Üniversite görselleri">${visualCard(logoPath, `${item.name} logosu`, item.name)}${visualCard(campusPath, `${item.name} kampüs veya ${item.city} şehir görseli`, item.city)}</section>
+          <section class="university-visual-grid" aria-label="Üniversite görselleri">${visualCard(logoPath, `${item.name} logosu`, item.name, "logo")}${visualCard(campusPath, `${item.name} kampüs veya ${item.city} şehir görseli`, item.city, "campus")}</section>
           <h2>Hızlı Bilgi</h2>
           <div class="table-wrap"><table class="info-table"><tbody>${factRow("Üniversite", item.name)}${factRow("Şehir", item.city)}${factRow("Eyalet", item.state)}${factRow("Tür", item.type)}${factRow("QS 2026", item.qsWorldRanking2026)}${factRow("Uni-Assist", item.filters.uniAssist)}${factRow("Son kontrol", formatDateTr(item.lastChecked))}</tbody></table></div>
           <h2>Üniversite Hakkında</h2><p>${escapeHtml(item.schoolIntro)}</p>${item.universityLongIntro ? `<p>${escapeHtml(item.universityLongIntro)}</p>` : ""}${item.whyChoose ? `<p>${escapeHtml(item.whyChoose)}</p>` : ""}${item.popularityReason ? `<p>${escapeHtml(item.popularityReason)}</p>` : ""}

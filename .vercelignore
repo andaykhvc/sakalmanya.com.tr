@@ -3,6 +3,7 @@
 server-data/
 data/
 tmp/
+outputs/
 assets/logo-export/
 scripts/
 types/

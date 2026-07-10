@@ -15,6 +15,7 @@ ROOT = Path(__file__).resolve().parents[1]
 TEMPLATE_PATH = ROOT / "scripts" / "universities-api-template.js"
 OUTPUT_PATH = ROOT / "api" / "universities.js"
 SITEMAP_PATH = ROOT / "sitemap.xml"
+MEDIA_MANIFEST_PATH = ROOT / "server-data" / "university-media-manifest.json"
 
 
 def text(value):
@@ -41,6 +42,22 @@ def read_required_sheet(path, sheet, columns):
     if missing:
         raise ValueError(f"{sheet} sheet eksik kolonlar içeriyor: {', '.join(missing)}")
     return frame
+
+
+def load_media_manifest():
+    """Load generated media metadata without making the raw package public."""
+    if not MEDIA_MANIFEST_PATH.exists():
+        return {}
+    manifest = json.loads(MEDIA_MANIFEST_PATH.read_text(encoding="utf-8"))
+    if not isinstance(manifest, list):
+        raise ValueError("university-media-manifest.json bir liste olmalıdır")
+    media_by_slug = {}
+    for item in manifest:
+        slug = text(item.get("slug"))
+        if not slug:
+            continue
+        media_by_slug[slug] = item
+    return media_by_slug
 
 
 def localized_option(group, value):
@@ -127,6 +144,7 @@ def build_dataset(path):
             "lastChecked": text(record["last_checked_at"]),
         }
 
+    media_by_slug = load_media_manifest()
     records = []
     for record in universities.to_dict("records"):
         university_id = text(record["university_id"])
@@ -135,10 +153,12 @@ def build_dataset(path):
         course = course_lookup.get(university_id)
         if not bachelor or not master or not course:
             raise ValueError(f"{university_id} için deadline veya kurs kaydı eksik")
+        slug = text(record["slug"])
+        media = media_by_slug.get(slug, {})
         records.append({
             "id": university_id,
             "name": text(record["name"]),
-            "slug": text(record["slug"]),
+            "slug": slug,
             "city": text(record["city"]),
             "state": text(record["state"]),
             "type": text(record["type"]),
@@ -151,9 +171,13 @@ def build_dataset(path):
             "schoolIntro": text(record["school_intro_tr"]),
             "cityIntro": text(record["city_intro_tr"]),
             "popularityReason": text(record["popularity_reason_tr"]),
-            "logoPath": text(record.get("logoPath")) or text(record.get("logo_path")),
-            "campusImagePath": text(record.get("campusImagePath")) or text(record.get("campus_image_path")),
+            "logoPath": text(record.get("logoPath")) or text(record.get("logo_path")) or text(media.get("logoPath")),
+            "campusImagePath": text(record.get("campusImagePath")) or text(record.get("campus_image_path")) or text(media.get("campusImagePath")),
             "cityImagePath": text(record.get("cityImagePath")) or text(record.get("city_image_path")),
+            "campusStatus": text(media.get("campusStatus")),
+            "campusAttribution": text(media.get("attribution")),
+            "campusLicenseUrl": text(media.get("licenseUrl")),
+            "campusSourceUrl": text(media.get("sourceUrl")),
             "universityLongIntro": text(record.get("university_long_intro_tr")),
             "whyChoose": text(record.get("why_choose_this_university_tr")),
             "cityStudentLife": text(record.get("city_student_life_tr")),

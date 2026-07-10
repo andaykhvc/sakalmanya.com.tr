@@ -1,0 +1,21 @@
+{
+  "name": "sakalmanya-com-tr",
+  "version": "1.0.0",
+  "description": "Almanya Eğitim Danışmanlığı ve Almanca Özel Ders",
+  "type": "module",
+  "scripts": {
+    "dev": "python3 -m http.server 8000",
+    "lint": "echo 'No linter configured for static HTML project'",
+    "test": "echo 'No tests configured for static HTML project'"
+  },
+  "keywords": [
+    "germany",
+    "education",
+    "german-language"
+  ],
+  "author": "Anday Kahveci",
+  "license": "MIT",
+  "dependencies": {
+    "@vercel/analytics": "^1.4.1"
+  }
+}

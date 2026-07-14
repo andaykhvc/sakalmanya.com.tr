@@ -182,6 +182,23 @@ function externalSourceItem(url, label) {
   return `<li><a href="${escapeHtml(safeUrl)}" target="_blank" rel="noopener noreferrer">${escapeHtml(label)}</a></li>`;
 }
 
+function seoUniversityName(item) {
+  const tuCitySlugs = {
+    "tu-berlin": "TU Berlin",
+    "tu-braunschweig": "TU Braunschweig",
+    "tu-chemnitz": "TU Chemnitz",
+    "tu-darmstadt": "TU Darmstadt",
+    "tu-dresden": "TU Dresden",
+  };
+  const aliases = {
+    kit: "KIT",
+    "lmu-muenchen": "LMU München",
+    tum: "TUM",
+    "tu-bergakademie-freiberg": "TU Bergakademie Freiberg",
+  };
+  return tuCitySlugs[item.slug] || aliases[item.slug] || item.name;
+}
+
 function deadlineCard(label, deadline) {
   const portal = deadline.portal ? `<p><strong>Başvuru portalı:</strong> ${escapeHtml(deadline.portal)}</p>` : "";
   const source = externalButton(deadline.sourceUrl, `${label} kaynağı`, "text-link");
@@ -194,29 +211,34 @@ function deadlineCard(label, deadline) {
 }
 
 function buildFaq(item) {
+  const seoName = seoUniversityName(item);
   const courseAnswer = item.germanCourse.label === "Hazırlık/DSH kursu var"
-    ? `${item.name} için dataset'te doğrulanmış hazırlık/DSH yolu bulunuyor: ${item.germanCourse.name || item.germanCourse.type}. Katılım ve kabul şartları resmi kaynaktan kontrol edilmelidir.`
-    : `Bu üniversitede Türkiye'deki hazırlık sınıfı mantığına yakın, DSH/Intensivkurs formatında bir hazırlık kursu resmi kaynakla net doğrulanamadı. Güncel durum resmi kaynaktan kontrol edilmelidir.`;
+    ? `${seoName} için dataset'te doğrulanmış Almanca hazırlık/DSH yolu bulunuyor: ${item.germanCourse.name || item.germanCourse.type}. Katılım ve kabul şartları resmi kaynaktan kontrol edilmelidir.`
+    : `${seoName} için Türkiye'deki hazırlık sınıfı mantığına yakın, DSH/Intensivkurs formatında bir Almanca hazırlık kursu resmi kaynakla net doğrulanamadı. Güncel durum resmi kaynaktan kontrol edilmelidir.`;
 
   return [
     {
-      question: `${item.name} başvurusu Uni-Assist üzerinden mi?`,
-      answer: `Dataset'te son kontrol edilen bilgiye göre durum: ${item.filters.uniAssist}. Başvuru yolu programa göre değişebilir; resmi program sayfası kontrol edilmelidir.`,
+      question: `${seoName} son başvuru tarihi ne?`,
+      answer: `${seoName} son başvuru tarihi lisans için ${item.deadlines.bachelor.display}, master için ${item.deadlines.master.display} olarak işlenmiştir. Başvuru tarihleri programa ve döneme göre değişebileceği için resmi kaynak kontrol edilmelidir.`,
     },
     {
-      question: `${item.name} lisans başvuru tarihi ne?`,
-      answer: `Son kontrol edilen lisans başvuru bilgisi: ${item.deadlines.bachelor.display}. Tarih programa ve döneme göre değişebilir; resmi kaynak kontrol edilmelidir.`,
+      question: `${seoName} lisans son başvuru tarihi ne?`,
+      answer: `${seoName} lisans son başvuru tarihi için son kontrol edilen bilgi: ${item.deadlines.bachelor.display}. Tarih programa göre değişebilir; resmi kaynak kontrol edilmelidir.`,
     },
     {
-      question: `${item.name} master başvuru tarihi ne?`,
-      answer: `Son kontrol edilen master başvuru bilgisi: ${item.deadlines.master.display}. Master tarihleri bölüm bazında değişebileceği için resmi kaynak kontrol edilmelidir.`,
+      question: `${seoName} master son başvuru tarihi ne?`,
+      answer: `${seoName} master son başvuru tarihi için son kontrol edilen bilgi: ${item.deadlines.master.display}. Master tarihleri bölüm bazında değişebileceği için resmi kaynak kontrol edilmelidir.`,
     },
     {
-      question: `${item.name} içinde Almanca hazırlık veya DSH kursu var mı?`,
+      question: `${seoName} başvurusu Uni-Assist üzerinden mi?`,
+      answer: `Dataset'te son kontrol edilen bilgiye göre ${seoName} başvuru yolu: ${item.filters.uniAssist}. Başvuru yolu programa göre değişebilir; resmi program sayfası kontrol edilmelidir.`,
+    },
+    {
+      question: `${seoName} Almanca hazırlık veya DSH kursu sunuyor mu?`,
       answer: courseAnswer,
     },
     {
-      question: `${item.name} QS 2026 sıralaması nedir?`,
+      question: `${seoName} QS 2026 sıralaması nedir?`,
       answer: `Dataset'te yer alan QS 2026 bilgisi: ${item.qsWorldRanking2026}. Sıralamalar yıllara göre değişebilir.`,
     },
     {
@@ -228,8 +250,9 @@ function buildFaq(item) {
 
 function renderUniversityPage(item) {
   const canonical = `${SITE_URL}/universiteler/${item.slug}/`;
-  const title = `${item.name} Başvuru Tarihleri, Almanca Hazırlık ve Şehir Rehberi`;
-  const description = `${item.name} için lisans/master başvuru bilgileri, Almanca hazırlık/DSH kursu, QS 2026 sıralaması ve ${item.city} öğrenci yaşamı.`;
+  const seoName = seoUniversityName(item);
+  const title = `${seoName} Son Başvuru Tarihleri | Lisans, Master ve Almanca Hazırlık`;
+  const description = `${seoName} son başvuru tarihleri, lisans ve master başvuru bilgileri, Uni-Assist durumu, Almanca hazırlık/DSH kursu ve ${item.city} öğrenci yaşamı.`;
   const image = `${SITE_URL}/assets/hero-germany-study.png`;
   const faq = buildFaq(item);
   const sources = [
@@ -341,8 +364,8 @@ function renderUniversityPage(item) {
         <div class="container">
           <nav class="breadcrumb" aria-label="Breadcrumb"><a href="/">Ana Sayfa</a> / <a href="/universite-tanitimlari/">Almanya Üniversiteleri</a> / <span>${escapeHtml(item.name)}</span></nav>
           <p class="section-label">${escapeHtml(item.city)} / ${escapeHtml(item.state)}</p>
-          <h1>${escapeHtml(item.name)}</h1>
-          <p>${escapeHtml(item.schoolIntro)}</p>
+          <h1>${escapeHtml(seoName)} Son Başvuru Tarihleri ve Başvuru Rehberi</h1>
+          <p>${escapeHtml(item.schoolIntro)} ${escapeHtml(seoName)} son başvuru tarihi, lisans ve master başvuru yolu, Uni-Assist durumu ve Almanca hazırlık bilgileri aşağıda kaynaklı şekilde özetlenmiştir.</p>
           <div class="university-hero-facts"><span>${escapeHtml(item.type)}</span><span>QS 2026: ${escapeHtml(item.qsWorldRanking2026)}</span><span>Son kontrol: ${escapeHtml(formatDateTr(item.lastChecked))}</span></div>
           <div class="hero-actions">${externalButton(item.officialWebsite, "Resmi üniversite sitesi", "button button-primary")}<a class="button button-secondary" href="#basvuru-bilgileri">Başvuru bilgileri</a></div>
         </div>
@@ -357,8 +380,8 @@ function renderUniversityPage(item) {
           <h2>Şehir Hakkında</h2><p>${escapeHtml(item.cityIntro)}</p>${item.cityStudentLife ? `<p>${escapeHtml(item.cityStudentLife)}</p>` : ""}${item.cityTransport ? `<p>${escapeHtml(item.cityTransport)}</p>` : ""}${item.cityCostOfLiving ? `<p>${escapeHtml(item.cityCostOfLiving)}</p>` : ""}
           ${(item.cityHistory || item.cityHistoricalNote) ? `<h2>Şehrin Kısa Tarihi</h2>${item.cityHistory ? `<p>${escapeHtml(item.cityHistory)}</p>` : ""}${item.cityHistoricalNote ? `<p>${escapeHtml(item.cityHistoricalNote)}</p>` : ""}` : ""}
           ${(item.cityEconomy || item.cityIndustries || item.studentJobsNote) ? `<h2>Ekonomi ve Kariyer Çevresi</h2>${item.cityEconomy ? `<p>${escapeHtml(item.cityEconomy)}</p>` : ""}${item.cityIndustries ? `<p>${escapeHtml(item.cityIndustries)}</p>` : ""}${item.studentJobsNote ? `<p>${escapeHtml(item.studentJobsNote)}</p>` : ""}` : ""}
-          <section id="basvuru-bilgileri" class="university-anchor-section"><h2>Başvuru Bilgileri</h2><p><strong>Genel başvuru yolu:</strong> ${escapeHtml(item.applicationPortal || item.filters.uniAssist)}</p><div class="university-info-grid">${deadlineCard("Lisans", item.deadlines.bachelor)}${deadlineCard("Master", item.deadlines.master)}</div><p class="notice-box">${escapeHtml(TRUST_NOTICE)}</p></section>
-          <h2>Almanca Hazırlık / DSH Kursu</h2><p><strong>Durum:</strong> ${escapeHtml(item.germanCourse.label)}</p><p>${escapeHtml(courseIntro)}</p>${courseDetails ? `<div class="table-wrap"><table class="info-table"><tbody>${courseDetails}</tbody></table></div>` : ""}${externalButton(item.germanCourse.sourceUrl, "Almanca hazırlık kaynağı", "text-link")}
+          <section id="basvuru-bilgileri" class="university-anchor-section"><h2>${escapeHtml(seoName)} Son Başvuru Tarihleri</h2><p>${escapeHtml(seoName)} son başvuru tarihi lisans ve master seviyesinde farklı olabilir. Aşağıdaki bilgiler Türkiye’den başvuran adaylar için resmi kaynaklardan kontrol edilmiş özet niteliğindedir.</p><p><strong>Genel başvuru yolu:</strong> ${escapeHtml(item.applicationPortal || item.filters.uniAssist)}</p><h2>${escapeHtml(seoName)} Lisans Son Başvuru Tarihi</h2>${deadlineCard("Lisans", item.deadlines.bachelor)}<h2>${escapeHtml(seoName)} Master Son Başvuru Tarihi</h2>${deadlineCard("Master", item.deadlines.master)}<h2>${escapeHtml(seoName)} Uni-Assist Başvurusu</h2><p>${escapeHtml(seoName)} için Uni-Assist durumu: <strong>${escapeHtml(item.filters.uniAssist)}</strong>. Bazı üniversitelerde başvuru yolu programa, dereceye veya önceki eğitim belgesine göre değişebilir.</p><p class="notice-box">${escapeHtml(TRUST_NOTICE)}</p></section>
+          <h2>${escapeHtml(seoName)} Almanca Hazırlık / DSH Kursu</h2><p><strong>Durum:</strong> ${escapeHtml(item.germanCourse.label)}</p><p>${escapeHtml(courseIntro)}</p>${courseDetails ? `<div class="table-wrap"><table class="info-table"><tbody>${courseDetails}</tbody></table></div>` : ""}${externalButton(item.germanCourse.sourceUrl, "Almanca hazırlık kaynağı", "text-link")}
           <h2>QS 2026 Sıralaması</h2><p><strong>${escapeHtml(item.qsWorldRanking2026)}</strong>. Sıralamalar yıldan yıla değişebilir; karar verirken program içeriği, şehir, bütçe ve kabul şartları birlikte değerlendirilmelidir.</p>${externalButton(item.qsSourceUrl, "QS kaynağını aç", "text-link")}
           ${item.turkishStudentsNote ? `<h2>Türk Öğrenciler İçin Notlar</h2><p>${escapeHtml(item.turkishStudentsNote)}</p>` : ""}
           ${relatedSection}
@@ -395,7 +418,7 @@ function sendHtml(res, statusCode, html) {
 }
 
 module.exports = function handler(req, res) {
-  if (req.method !== "GET") {
+  if (!["GET", "HEAD"].includes(req.method)) {
     sendJson(res, 405, { error: "Method not allowed" });
     return;
   }

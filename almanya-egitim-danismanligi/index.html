@@ -30,6 +30,19 @@
       gtag('js', new Date());
       gtag('config', 'G-P7JNVHYCS2');
       gtag('config', 'AW-18308696518');
+      function gtag_report_conversion(url) {
+        var callback = function () {
+          if (typeof url !== 'undefined') {
+            window.location = url;
+          }
+        };
+        gtag('event', 'conversion', {
+          'send_to': 'AW-18308696518/j_j_CMuy_swcEMaToppE',
+          'event_callback': callback,
+          'event_timeout': 2000
+        });
+        return false;
+      }
     </script>
     <script>window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };</script>
     <script defer src="/_vercel/insights/script.js"></script>

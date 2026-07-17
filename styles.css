@@ -1285,6 +1285,16 @@ details p {
   display: flex;
   width: fit-content;
   margin: 28px auto 0;
+  border-color: var(--ink);
+  background: var(--white);
+  color: var(--ink);
+  opacity: 1;
+}
+
+.university-load-more:hover {
+  border-color: var(--red);
+  background: var(--red);
+  color: var(--white);
 }
 
 .university-load-more[hidden] {

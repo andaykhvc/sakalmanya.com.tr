@@ -51,6 +51,16 @@ function matchesFilters(item, filters) {
     && (!filters.uniAssist || item.filters.uniAssist === filters.uniAssist);
 }
 
+function rankingScore(item) {
+  const rawRank = String(item.qsWorldRanking2026 || "");
+  const rank = Number.parseInt(rawRank.replace(/[^0-9]/g, ""), 10);
+  return Number.isFinite(rank) ? rank : Number.MAX_SAFE_INTEGER;
+}
+
+function sortByPopularity(a, b) {
+  return rankingScore(a) - rankingScore(b) || a.name.localeCompare(b.name, "tr");
+}
+
 function publicCard(item) {
   return {
     name: item.name,
@@ -464,7 +474,7 @@ module.exports = function handler(req, res) {
     level: normalise(url.searchParams.get("level")),
     uniAssist: normalise(url.searchParams.get("uniAssist")),
   };
-  const matched = UNIVERSITIES.filter((item) => matchesFilters(item, filters));
+  const matched = UNIVERSITIES.filter((item) => matchesFilters(item, filters)).sort(sortByPopularity);
   const start = (page - 1) * limit;
   const items = matched.slice(start, start + limit).map(publicCard);
 

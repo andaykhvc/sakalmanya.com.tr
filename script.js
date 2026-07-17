@@ -118,6 +118,26 @@ const setupDeutschlaenderLinks = () => {
     link.rel = "noopener noreferrer";
   });
 
+  document.querySelectorAll(".site-header [data-nav]").forEach((navigation) => {
+    if (navigation.querySelector("[data-deutschlaender-header-link]")) return;
+    const link = document.createElement("a");
+    link.href = buildDeutschlaenderUrl("/forum", "header_nav_forum");
+    link.target = "_blank";
+    link.rel = "noopener noreferrer";
+    link.textContent = "Deutschländer Forum";
+    link.setAttribute("data-deutschlaender-link", "");
+    link.setAttribute("data-deutschlaender-header-link", "");
+    link.dataset.deutschlaenderPath = "/forum";
+    link.dataset.deutschlaenderContent = "header_nav_forum";
+
+    const universityLink = Array.from(navigation.querySelectorAll("a")).find((item) => item.href.includes("/universite-tanitimlari/") || item.href.includes("/universitaeten/") || item.href.includes("/universities/"));
+    if (universityLink) {
+      universityLink.after(link);
+    } else {
+      navigation.append(link);
+    }
+  });
+
   const footerLabels = {
     tr: "Almanca öğren & forum",
     de: "Deutsch lernen & Forum",
@@ -464,6 +484,7 @@ const mobileNavigationCopy = {
       ["Ana Sayfa", "/"],
       ["Hizmetler", "/hizmetler/"],
       ["Üniversiteler", "/universite-tanitimlari/"],
+      ["Deutschländer Forum", "https://deutschlaender.com.tr/forum"],
       ["Almanya’da Eğitim", "/almanya-egitim-danismanligi/"],
       ["Başarılarımız", "/#basarilar"],
       ["Hakkımızda", "/#hakkimda"],
@@ -481,6 +502,7 @@ const mobileNavigationCopy = {
       ["Startseite", "/de/"],
       ["Leistungen", "/de/leistungen/"],
       ["Universitäten", "/de/universitaeten/"],
+      ["Deutschländer Forum", "https://deutschlaender.com.tr/forum"],
       ["Erfolge", "/de/#erfolge"],
       ["Über mich", "/de/#ueber-mich"],
       ["FAQ", "/de/faq/"],
@@ -497,6 +519,7 @@ const mobileNavigationCopy = {
       ["Home", "/en/"],
       ["Services", "/en/services/"],
       ["Universities", "/en/universities/"],
+      ["Deutschländer Forum", "https://deutschlaender.com.tr/forum"],
       ["Success Stories", "/en/#success-stories"],
       ["About", "/en/#about"],
       ["Frequently Asked Questions", "/en/faq/"],
@@ -565,11 +588,19 @@ const setupMobileNavigation = () => {
   copy.links.forEach(([label, href]) => {
     const link = document.createElement("a");
     const target = new URL(href, window.location.origin);
+    const isDeutschlaenderLink = target.hostname === "deutschlaender.com.tr" || target.hostname === "www.deutschlaender.com.tr";
     const targetPath = target.pathname.replace(/\/+$/, "/") || "/";
     const exactSection = target.hash && currentPath === targetPath && window.location.hash === target.hash;
     const routeMatch = !target.hash && (currentPath === targetPath || (targetPath !== "/" && currentPath.startsWith(targetPath)));
-    link.href = href;
+    link.href = isDeutschlaenderLink ? buildDeutschlaenderUrl(target.pathname, "mobile_drawer_forum") : href;
     link.textContent = label;
+    if (isDeutschlaenderLink) {
+      link.target = "_blank";
+      link.rel = "noopener noreferrer";
+      link.setAttribute("data-deutschlaender-link", "");
+      link.dataset.deutschlaenderPath = target.pathname;
+      link.dataset.deutschlaenderContent = "mobile_drawer_forum";
+    }
     if (exactSection || routeMatch) link.setAttribute("aria-current", "page");
     navigation.append(link);
   });

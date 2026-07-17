@@ -1,21 +1,399 @@
 const yearElement = document.querySelector("[data-year]");
 
 const whatsappNumber = "905452013570";
-const whatsappMessage =
-  "Merhaba Anday, sakalmanya.com.tr üzerinden yazıyorum. Almanya eğitim danışmanlığı veya Almanca özel ders için ön görüşme almak istiyorum. Hedefim ve mevcut Almanca seviyem hakkında bilgi paylaşabilirim.";
+const pageLanguage = document.documentElement.lang || "tr";
+const analyticsStorageKey = "sak-attribution-v1";
+const consentStorageKey = "sak-consent-v1";
+const campaignParameterNames = ["utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term", "gclid", "gbraid", "wbraid"];
 
-document.querySelectorAll("[data-whatsapp-link]").forEach((link) => {
-  link.href = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(whatsappMessage)}`;
-});
+const safelyReadStorage = (key) => {
+  try {
+    return JSON.parse(window.localStorage.getItem(key));
+  } catch (_error) {
+    return null;
+  }
+};
+
+const safelyWriteStorage = (key, value) => {
+  try {
+    window.localStorage.setItem(key, JSON.stringify(value));
+  } catch (_error) {
+    // Tracking remains functional when storage is unavailable.
+  }
+};
+
+const safelyRemoveStorage = (key) => {
+  try {
+    window.localStorage.removeItem(key);
+  } catch (_error) {
+    // The preference update still applies to the current page.
+  }
+};
+
+const captureAttribution = () => {
+  const current = safelyReadStorage(analyticsStorageKey) || {};
+  const consent = safelyReadStorage(consentStorageKey);
+  const search = new URLSearchParams(window.location.search);
+  const incoming = {};
+  campaignParameterNames.forEach((name) => {
+    const value = search.get(name);
+    if (value) incoming[name] = value.slice(0, 180);
+  });
+  const attribution = {
+    ...current,
+    ...incoming,
+    first_landing_page: current.first_landing_page || `${window.location.pathname}${window.location.search}`.slice(0, 500),
+    last_landing_page: `${window.location.pathname}${window.location.search}`.slice(0, 500),
+    captured_at: current.captured_at || new Date().toISOString(),
+  };
+  if ((consent?.analytics || consent?.marketing) && (Object.keys(incoming).length || !current.captured_at)) {
+    safelyWriteStorage(analyticsStorageKey, attribution);
+  }
+  return attribution;
+};
+
+const attribution = captureAttribution();
+
+const getPageType = () => {
+  const path = window.location.pathname.replace(/\/+$/, "/") || "/";
+  if (/^\/(universiteler|universite-tanitimlari|de\/universitaeten|en\/universities)\/[^/]+\/$/.test(path)) return "university_detail";
+  if (/^\/(universite-tanitimlari|de\/universitaeten|en\/universities)\/$/.test(path)) return "university_list";
+  if (/^\/(blog|de\/blog|en\/blog)\/[^/]+\/$/.test(path)) return "blog_article";
+  if (path === "/" || path === "/de/" || path === "/en/") return "home";
+  return "content_page";
+};
+
+const getUniversitySlug = () => {
+  if (getPageType() !== "university_detail") return undefined;
+  return window.location.pathname.split("/").filter(Boolean).pop();
+};
+
+const getElementLocation = (element) => {
+  if (!element) return "unknown";
+  if (element.classList.contains("floating-whatsapp")) return "floating_button";
+  if (element.closest(".mobile-nav-drawer")) return "mobile_drawer";
+  if (element.closest(".hero, .page-hero, .university-hero")) return "hero";
+  if (element.closest(".cta-band")) return "cta_band";
+  if (element.closest(".contact-section")) return "contact_section";
+  if (element.closest(".site-footer")) return "footer";
+  if (element.closest(".university-card")) return "university_card";
+  return "content";
+};
+
+const analyticsContext = (element) => {
+  const context = {
+    page_type: getPageType(),
+    content_language: pageLanguage,
+    cta_location: getElementLocation(element),
+  };
+  const universitySlug = getUniversitySlug();
+  if (universitySlug) context.university_slug = universitySlug;
+  ["utm_source", "utm_medium", "utm_campaign", "utm_content"].forEach((name) => {
+    if (attribution[name]) context[name] = attribution[name];
+  });
+  return context;
+};
+
+const trackEvent = (eventName, parameters = {}) => {
+  if (typeof window.gtag !== "function") return;
+  const { element, ...eventParameters } = parameters;
+  window.gtag("event", eventName, { ...analyticsContext(element), ...eventParameters });
+};
+
+const whatsappMessages = {
+  tr: "Merhaba Anday, sakalmanya.com.tr üzerinden yazıyorum. Almanya eğitim danışmanlığı veya Almanca özel ders için ön görüşme almak istiyorum.",
+  de: "Hallo Anday, ich schreibe über sakalmanya.com.tr. Ich möchte ein Erstgespräch über Studium oder Deutschlernen in Deutschland.",
+  en: "Hello Anday, I am contacting you through sakalmanya.com.tr. I would like an initial consultation about studying in Germany or German lessons.",
+};
+
+const buildWhatsappMessage = () => {
+  const base = whatsappMessages[pageLanguage] || whatsappMessages.tr;
+  const universityName = getPageType() === "university_detail"
+    ? document.body.dataset.universityName || document.querySelector("h1")?.textContent?.trim()
+    : "";
+  const pageNote = universityName
+    ? pageLanguage === "de"
+      ? ` Ich interessiere mich für ${universityName}.`
+      : pageLanguage === "en"
+        ? ` I am interested in ${universityName}.`
+        : ` ${universityName} hakkında bilgi almak istiyorum.`
+    : "";
+  const source = attribution.utm_source?.replace(/[^a-z0-9._-]/gi, "").slice(0, 40);
+  const sourceNote = source ? ` [Kaynak: ${source}]` : "";
+  return `${base}${pageNote}${sourceNote}`;
+};
+
+const updateWhatsappLinks = (root = document) => {
+  root.querySelectorAll("[data-whatsapp-link]").forEach((link) => {
+    link.href = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(buildWhatsappMessage())}`;
+  });
+};
+
+const consentCopy = {
+  tr: {
+    title: "Çerez tercihlerin",
+    description: "Site performansını ölçmek ve reklam dönüşümlerini anlamak için isteğe bağlı Analytics ve pazarlama teknolojileri kullanıyoruz.",
+    accept: "Tümünü kabul et",
+    reject: "İsteğe bağlıları reddet",
+    customize: "Tercihleri yönet",
+    settingsTitle: "Çerez tercihlerini yönet",
+    necessary: "Gerekli",
+    necessaryDescription: "Sitenin ve tercih panelinin çalışması için her zaman aktiftir.",
+    analytics: "Analytics",
+    analyticsDescription: "Hangi sayfaların ve içeriklerin faydalı olduğunu anlamamıza yardımcı olur.",
+    marketing: "Pazarlama",
+    marketingDescription: "Google Ads dönüşümlerini ölçmeye ve reklam performansını geliştirmeye yardımcı olur.",
+    alwaysOn: "Her zaman açık",
+    save: "Tercihleri kaydet",
+    close: "Kapat",
+    footer: "Çerez tercihleri",
+  },
+  de: {
+    title: "Cookie-Einstellungen",
+    description: "Wir verwenden optionale Analytics- und Marketing-Technologien, um die Website- und Anzeigenleistung zu messen.",
+    accept: "Alle akzeptieren",
+    reject: "Optionale ablehnen",
+    customize: "Einstellungen verwalten",
+    settingsTitle: "Cookie-Einstellungen verwalten",
+    necessary: "Erforderlich",
+    necessaryDescription: "Für die Website und das Einstellungsfenster immer aktiv.",
+    analytics: "Analytics",
+    analyticsDescription: "Hilft uns zu verstehen, welche Seiten und Inhalte nützlich sind.",
+    marketing: "Marketing",
+    marketingDescription: "Hilft bei der Messung von Google-Ads-Conversions und der Anzeigenleistung.",
+    alwaysOn: "Immer aktiv",
+    save: "Einstellungen speichern",
+    close: "Schließen",
+    footer: "Cookie-Einstellungen",
+  },
+  en: {
+    title: "Cookie preferences",
+    description: "We use optional Analytics and marketing technologies to measure website and advertising performance.",
+    accept: "Accept all",
+    reject: "Reject optional",
+    customize: "Manage preferences",
+    settingsTitle: "Manage cookie preferences",
+    necessary: "Necessary",
+    necessaryDescription: "Always active so the website and preference panel can work.",
+    analytics: "Analytics",
+    analyticsDescription: "Helps us understand which pages and content are useful.",
+    marketing: "Marketing",
+    marketingDescription: "Helps measure Google Ads conversions and improve advertising performance.",
+    alwaysOn: "Always on",
+    save: "Save preferences",
+    close: "Close",
+    footer: "Cookie preferences",
+  },
+};
+
+const setupConsentManager = () => {
+  if (document.querySelector("[data-consent-banner]")) return;
+  const copy = consentCopy[pageLanguage] || consentCopy.tr;
+  const existingConsent = safelyReadStorage(consentStorageKey);
+  const banner = document.createElement("section");
+  const settingsOverlay = document.createElement("div");
+  const settings = document.createElement("section");
+  const analyticsInputId = "consent-analytics";
+  const marketingInputId = "consent-marketing";
+
+  banner.className = "consent-banner";
+  banner.setAttribute("data-consent-banner", "");
+  banner.setAttribute("role", "region");
+  banner.setAttribute("aria-label", copy.title);
+  banner.innerHTML = `
+    <div class="consent-banner-copy"><strong>${copy.title}</strong><p>${copy.description}</p></div>
+    <div class="consent-banner-actions">
+      <button class="button button-primary" type="button" data-consent-accept>${copy.accept}</button>
+      <button class="button button-secondary" type="button" data-consent-reject>${copy.reject}</button>
+      <button class="consent-text-button" type="button" data-consent-customize>${copy.customize}</button>
+    </div>`;
+
+  settingsOverlay.className = "consent-settings-overlay";
+  settingsOverlay.hidden = true;
+  settingsOverlay.setAttribute("data-consent-overlay", "");
+
+  settings.className = "consent-settings";
+  settings.hidden = true;
+  settings.setAttribute("data-consent-settings", "");
+  settings.setAttribute("role", "dialog");
+  settings.setAttribute("aria-modal", "true");
+  settings.setAttribute("aria-labelledby", "consent-settings-title");
+  settings.innerHTML = `
+    <div class="consent-settings-header">
+      <h2 id="consent-settings-title">${copy.settingsTitle}</h2>
+      <button class="consent-close" type="button" aria-label="${copy.close}" data-consent-close>×</button>
+    </div>
+    <div class="consent-option consent-option--fixed">
+      <div><strong>${copy.necessary}</strong><p>${copy.necessaryDescription}</p></div><span>${copy.alwaysOn}</span>
+    </div>
+    <label class="consent-option" for="${analyticsInputId}">
+      <div><strong>${copy.analytics}</strong><p>${copy.analyticsDescription}</p></div><input id="${analyticsInputId}" type="checkbox" />
+    </label>
+    <label class="consent-option" for="${marketingInputId}">
+      <div><strong>${copy.marketing}</strong><p>${copy.marketingDescription}</p></div><input id="${marketingInputId}" type="checkbox" />
+    </label>
+    <button class="button button-primary consent-save" type="button" data-consent-save>${copy.save}</button>`;
+
+  document.body.append(banner, settingsOverlay, settings);
+
+  const analyticsInput = settings.querySelector(`#${analyticsInputId}`);
+  const marketingInput = settings.querySelector(`#${marketingInputId}`);
+  let previouslyFocused = null;
+
+  const persistConsent = (analytics, marketing) => {
+    const consent = { analytics, marketing, updatedAt: new Date().toISOString() };
+    safelyWriteStorage(consentStorageKey, consent);
+    if (analytics || marketing) {
+      safelyWriteStorage(analyticsStorageKey, attribution);
+    } else {
+      safelyRemoveStorage(analyticsStorageKey);
+    }
+    window.sakUpdateGoogleConsent?.(consent);
+    banner.hidden = true;
+    closeSettings();
+    if (analytics) trackEvent("consent_update", { analytics_consent: analytics ? "granted" : "denied", marketing_consent: marketing ? "granted" : "denied" });
+  };
+
+  const openSettings = () => {
+    previouslyFocused = document.activeElement;
+    const consent = safelyReadStorage(consentStorageKey) || existingConsent || {};
+    analyticsInput.checked = consent.analytics === true;
+    marketingInput.checked = consent.marketing === true;
+    settingsOverlay.hidden = false;
+    settings.hidden = false;
+    document.body.classList.add("is-consent-open");
+    window.setTimeout(() => settings.querySelector("[data-consent-close]")?.focus(), 20);
+  };
+
+  function closeSettings() {
+    settingsOverlay.hidden = true;
+    settings.hidden = true;
+    document.body.classList.remove("is-consent-open");
+    previouslyFocused?.focus();
+  }
+
+  banner.querySelector("[data-consent-accept]").addEventListener("click", () => persistConsent(true, true));
+  banner.querySelector("[data-consent-reject]").addEventListener("click", () => persistConsent(false, false));
+  banner.querySelector("[data-consent-customize]").addEventListener("click", openSettings);
+  settings.querySelector("[data-consent-save]").addEventListener("click", () => persistConsent(analyticsInput.checked, marketingInput.checked));
+  settings.querySelector("[data-consent-close]").addEventListener("click", closeSettings);
+  settingsOverlay.addEventListener("click", closeSettings);
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && !settings.hidden) closeSettings();
+  });
+
+  document.querySelectorAll(".site-footer .footer-nav").forEach((navigation) => {
+    if (navigation.querySelector("[data-consent-preferences]")) return;
+    const button = document.createElement("button");
+    button.className = "consent-preferences-link";
+    button.type = "button";
+    button.textContent = copy.footer;
+    button.setAttribute("data-consent-preferences", "");
+    button.addEventListener("click", openSettings);
+    navigation.append(button);
+  });
+
+  if (existingConsent) banner.hidden = true;
+};
+
+const setupAnalyticsTracking = () => {
+  const universitySlug = getUniversitySlug();
+  if (universitySlug) {
+    trackEvent("view_university", {
+      university_slug: universitySlug,
+      university_name: document.querySelector("h1")?.textContent?.trim().slice(0, 100),
+    });
+  } else if (getPageType() === "university_list") {
+    trackEvent("view_university_list");
+  }
+
+  document.addEventListener("click", (event) => {
+    const link = event.target.closest("a[href]");
+    if (!link || link.hasAttribute("data-whatsapp-link")) return;
+    const href = link.getAttribute("href") || "";
+
+    if (href.startsWith("mailto:")) {
+      trackEvent("click_email", { element: link, link_domain: "email" });
+      return;
+    }
+
+    let target;
+    try {
+      target = new URL(link.href, window.location.origin);
+    } catch (_error) {
+      return;
+    }
+
+    if (target.origin === window.location.origin && /^\/universiteler\/[^/]+\/?$/.test(target.pathname)) {
+      trackEvent("select_university", {
+        element: link,
+        university_slug: target.pathname.split("/").filter(Boolean).pop(),
+        link_text: link.textContent.trim().slice(0, 100),
+      });
+      return;
+    }
+
+    if (target.origin !== window.location.origin) {
+      const socialPlatform = ["instagram.com", "youtube.com", "linkedin.com"].find((domain) => target.hostname.includes(domain));
+      trackEvent(socialPlatform ? "click_social" : "click_official_source", {
+        element: link,
+        link_domain: target.hostname.replace(/^www\./, ""),
+        link_text: link.textContent.trim().slice(0, 100),
+        ...(socialPlatform ? { social_platform: socialPlatform.replace(".com", "") } : {}),
+      });
+    }
+  });
+
+  document.querySelectorAll("details").forEach((details) => {
+    details.addEventListener("toggle", () => {
+      if (!details.open) return;
+      trackEvent("open_faq", {
+        element: details,
+        faq_question: details.querySelector("summary")?.textContent?.trim().slice(0, 100),
+      });
+    });
+  });
+
+  document.querySelectorAll(".language-switcher a, .mobile-drawer-languages a").forEach((link) => {
+    link.addEventListener("click", () => {
+      trackEvent("change_language", {
+        element: link,
+        selected_language: link.getAttribute("lang") || link.textContent.trim().toLowerCase(),
+      });
+    });
+  });
+
+  const reachedDepths = new Set();
+  const trackScrollDepth = () => {
+    const scrollable = document.documentElement.scrollHeight - window.innerHeight;
+    if (scrollable <= 0) return;
+    const percent = Math.round((window.scrollY / scrollable) * 100);
+    [50, 90].forEach((depth) => {
+      if (percent < depth || reachedDepths.has(depth)) return;
+      reachedDepths.add(depth);
+      trackEvent("scroll_depth", { percent_scrolled: depth });
+    });
+  };
+  window.addEventListener("scroll", trackScrollDepth, { passive: true });
+};
 
 const bindGoogleAdsConversion = (link) => {
   if (!link || link.dataset.googleAdsConversionBound === "true") return;
   link.dataset.googleAdsConversionBound = "true";
   link.addEventListener("click", (event) => {
     if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+    trackEvent("click_whatsapp", {
+      element: link,
+      link_domain: "wa.me",
+      university_slug: getUniversitySlug(),
+    });
     if (typeof window.gtag_report_conversion !== "function") return;
+    if (link.target === "_blank") {
+      window.gtag_report_conversion(undefined, analyticsContext(link));
+      return;
+    }
     event.preventDefault();
-    window.gtag_report_conversion(link.href);
+    window.gtag_report_conversion(link.href, analyticsContext(link));
   });
 };
 
@@ -28,8 +406,6 @@ const floatingWhatsappMessages = {
   de: "Hallo, ich möchte Informationen zum Deutschland-Prozess erhalten.",
   en: "Hello, I would like to get information about the Germany process.",
 };
-
-const pageLanguage = document.documentElement.lang || "tr";
 
 const mobileNavigationCopy = {
   tr: {
@@ -239,9 +615,12 @@ const setupFooterBottomRows = () => {
   });
 };
 
+setupConsentManager();
 setupMobileNavigation();
 setupFooterBottomRows();
+updateWhatsappLinks();
 bindGoogleAdsConversions();
+setupAnalyticsTracking();
 
 const floatingWhatsapp = document.createElement("a");
 floatingWhatsapp.className = "floating-whatsapp";
@@ -259,6 +638,7 @@ floatingWhatsapp.innerHTML = `
   <span>WhatsApp</span>
 `;
 document.body.appendChild(floatingWhatsapp);
+updateWhatsappLinks();
 bindGoogleAdsConversion(floatingWhatsapp);
 
 const siteFooter = document.querySelector(".site-footer");
@@ -489,6 +869,12 @@ if (universityFilters && universityGrid) {
   };
 
   universityFilters.addEventListener("change", () => {
+    const changedFilter = document.activeElement?.matches?.("[data-filter]") ? document.activeElement : null;
+    trackEvent("use_university_filter", {
+      element: changedFilter || universityFilters,
+      filter_name: changedFilter?.dataset.filter || "multiple",
+      filter_value: changedFilter?.value || "all",
+    });
     loadUniversities({ reset: true }).catch(() => {
       universityLoadMore.hidden = true;
       setUniversityMessage(activeUniversityCopy.error);
@@ -497,6 +883,7 @@ if (universityFilters && universityGrid) {
 
   universityLoadMore.addEventListener("click", () => {
     if (!hasMoreUniversities) return;
+    trackEvent("load_more_universities", { page_number: universityPage + 1 });
     universityPage += 1;
     loadUniversities().catch(() => {
       universityLoadMore.hidden = true;

@@ -346,35 +346,15 @@ function renderUniversityPage(item) {
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Serif:wght@600;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="/styles.css" />
-    <!-- Google tag (gtag.js) -->
+    <script src="/analytics.js"></script>
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-P7JNVHYCS2"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-P7JNVHYCS2');
-      gtag('config', 'AW-18308696518');
-      function gtag_report_conversion(url) {
-        var callback = function () {
-          if (typeof url !== 'undefined') {
-            window.location = url;
-          }
-        };
-        gtag('event', 'conversion', {
-          'send_to': 'AW-18308696518/j_j_CMuy_swcEMaToppE',
-          'event_callback': callback,
-          'event_timeout': 2000
-        });
-        return false;
-      }
-    </script>
     <script>window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };</script>
     <script defer src="/_vercel/insights/script.js"></script>
     <script type="application/ld+json">${jsonForHtml(universitySchema)}</script>
     <script type="application/ld+json">${jsonForHtml(breadcrumbSchema)}</script>
     <script type="application/ld+json">${jsonForHtml(faqSchema)}</script>
   </head>
-  <body>
+  <body data-university-name="${escapeHtml(item.name)}">
     <div class="flag-strip" aria-hidden="true"><span class="strip-black"></span><span class="strip-red"></span><span class="strip-gold"></span></div>
     <header class="site-header" data-header>
       <a class="brand" href="/" aria-label="ŞAK Almanya Ana sayfa"><img class="brand-mark" src="/assets/logoask.svg" alt="ŞAK Almanya logosu" width="50" height="50" /><span><strong>Almanya</strong></span></a>

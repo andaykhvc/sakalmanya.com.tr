@@ -30,7 +30,12 @@
   window.gtag("set", "ads_data_redaction", true);
   window.gtag("set", "url_passthrough", true);
   window.gtag("js", new Date());
-  window.gtag("config", "G-P7JNVHYCS2");
+  window.gtag("config", "G-P7JNVHYCS2", {
+    linker: {
+      domains: ["sakalmanya.com.tr", "deutschlaender.com.tr"],
+      accept_incoming: true,
+    },
+  });
   window.gtag("config", "AW-18308696518");
 
   window.sakUpdateGoogleConsent = function (consent) {

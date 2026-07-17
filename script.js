@@ -5,6 +5,8 @@ const pageLanguage = document.documentElement.lang || "tr";
 const analyticsStorageKey = "sak-attribution-v1";
 const consentStorageKey = "sak-consent-v1";
 const campaignParameterNames = ["utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term", "gclid", "gbraid", "wbraid"];
+const deutschlaenderOrigin = "https://deutschlaender.com.tr";
+const deutschlaenderCampaign = "deutschlaender_ecosystem";
 
 const safelyReadStorage = (key) => {
   try {
@@ -98,6 +100,40 @@ const trackEvent = (eventName, parameters = {}) => {
   if (typeof window.gtag !== "function") return;
   const { element, ...eventParameters } = parameters;
   window.gtag("event", eventName, { ...analyticsContext(element), ...eventParameters });
+};
+
+const buildDeutschlaenderUrl = (path = "/", content = "sitewide") => {
+  const target = new URL(path, deutschlaenderOrigin);
+  target.searchParams.set("utm_source", "sakalmanya");
+  target.searchParams.set("utm_medium", "referral");
+  target.searchParams.set("utm_campaign", deutschlaenderCampaign);
+  target.searchParams.set("utm_content", content);
+  return target.toString();
+};
+
+const setupDeutschlaenderLinks = () => {
+  document.querySelectorAll("[data-deutschlaender-link]").forEach((link) => {
+    link.href = buildDeutschlaenderUrl(link.dataset.deutschlaenderPath || "/", link.dataset.deutschlaenderContent || getPageType());
+    link.target = "_blank";
+    link.rel = "noopener noreferrer";
+  });
+
+  const footerLabels = {
+    tr: "Almanca öğren & forum",
+    de: "Deutsch lernen & Forum",
+    en: "Learn German & forum",
+  };
+  document.querySelectorAll(".site-footer .footer-nav").forEach((navigation) => {
+    if (navigation.querySelector("[data-deutschlaender-link]")) return;
+    const link = document.createElement("a");
+    link.href = buildDeutschlaenderUrl("/", "footer");
+    link.target = "_blank";
+    link.rel = "noopener noreferrer";
+    link.textContent = footerLabels[pageLanguage] || footerLabels.tr;
+    link.setAttribute("data-deutschlaender-link", "");
+    link.dataset.deutschlaenderContent = "footer";
+    navigation.append(link);
+  });
 };
 
 const whatsappMessages = {
@@ -334,6 +370,16 @@ const setupAnalyticsTracking = () => {
     }
 
     if (target.origin !== window.location.origin) {
+      if (target.hostname === "deutschlaender.com.tr" || target.hostname === "www.deutschlaender.com.tr") {
+        trackEvent("click_deutschlaender", {
+          element: link,
+          link_domain: "deutschlaender.com.tr",
+          destination_path: target.pathname,
+          link_text: link.textContent.trim().slice(0, 100),
+          cross_site_content: link.dataset.deutschlaenderContent || getPageType(),
+        });
+        return;
+      }
       const socialPlatform = ["instagram.com", "youtube.com", "linkedin.com"].find((domain) => target.hostname.includes(domain));
       trackEvent(socialPlatform ? "click_social" : "click_official_source", {
         element: link,
@@ -618,6 +664,7 @@ const setupFooterBottomRows = () => {
 setupConsentManager();
 setupMobileNavigation();
 setupFooterBottomRows();
+setupDeutschlaenderLinks();
 updateWhatsappLinks();
 bindGoogleAdsConversions();
 setupAnalyticsTracking();

@@ -92,10 +92,14 @@ and others. Index: https://sakalmanya.com.tr/universite-tanitimlari/
 
 ## Dresden city guide
 
-ŞAK Almanya publishes a sourced Turkish city guide covering Dresden from
-Augustus the Strong and the destruction of 1945 through the GDR period, TU
-Dresden, HTW Dresden, Ausbildung, Silicon Saxony and the TSMC-led ESMC
-semiconductor investment. Guide: https://sakalmanya.com.tr/dresden/
+ŞAK Almanya publishes a sourced city guide in Turkish, German and English
+covering Dresden from Augustus the Strong and the destruction of 1945 through
+the GDR period, TU Dresden, HTW Dresden, Ausbildung, Silicon Saxony and the
+TSMC-led ESMC semiconductor investment.
+
+- Turkish: https://sakalmanya.com.tr/dresden/
+- German: https://sakalmanya.com.tr/de/dresden/
+- English: https://sakalmanya.com.tr/en/dresden/
 
 ## Key pages
 
@@ -104,6 +108,8 @@ semiconductor investment. Guide: https://sakalmanya.com.tr/dresden/
 - FAQ (SSS): https://sakalmanya.com.tr/sss/
 - University guides: https://sakalmanya.com.tr/universite-tanitimlari/
 - Dresden city guide: https://sakalmanya.com.tr/dresden/
+- Dresden city guide (German): https://sakalmanya.com.tr/de/dresden/
+- Dresden city guide (English): https://sakalmanya.com.tr/en/dresden/
 
 ## Contact
 

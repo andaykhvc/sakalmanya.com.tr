@@ -158,13 +158,20 @@ const setupDeutschlaenderLinks = () => {
 };
 
 const setupDresdenNavigation = () => {
+  const dresdenPaths = {
+    tr: "/dresden/",
+    de: "/de/dresden/",
+    en: "/en/dresden/",
+  };
+  const dresdenPath = dresdenPaths[pageLanguage] || dresdenPaths.tr;
+
   document.querySelectorAll(".site-header [data-nav]").forEach((navigation) => {
     if (navigation.querySelector("[data-dresden-header-link]")) return;
     const link = document.createElement("a");
-    link.href = "/dresden/";
+    link.href = dresdenPath;
     link.textContent = "Dresden";
     link.setAttribute("data-dresden-header-link", "");
-    if (window.location.pathname.startsWith("/dresden/")) link.setAttribute("aria-current", "page");
+    if (window.location.pathname === dresdenPath) link.setAttribute("aria-current", "page");
 
     const universityLink = Array.from(navigation.querySelectorAll("a")).find(
       (item) =>
@@ -527,7 +534,7 @@ const mobileNavigationCopy = {
       ["Startseite", "/de/"],
       ["Leistungen", "/de/leistungen/"],
       ["Universitäten", "/de/universitaeten/"],
-      ["Dresden", "/dresden/"],
+      ["Dresden", "/de/dresden/"],
       ["Deutschländer Forum", "https://deutschlaender.com.tr/forum"],
       ["Erfolge", "/de/#erfolge"],
       ["Über mich", "/de/#ueber-mich"],
@@ -545,7 +552,7 @@ const mobileNavigationCopy = {
       ["Home", "/en/"],
       ["Services", "/en/services/"],
       ["Universities", "/en/universities/"],
-      ["Dresden", "/dresden/"],
+      ["Dresden", "/en/dresden/"],
       ["Deutschländer Forum", "https://deutschlaender.com.tr/forum"],
       ["Success Stories", "/en/#success-stories"],
       ["About", "/en/#about"],
@@ -618,7 +625,9 @@ const setupMobileNavigation = () => {
     const isDeutschlaenderLink = target.hostname === "deutschlaender.com.tr" || target.hostname === "www.deutschlaender.com.tr";
     const targetPath = target.pathname.replace(/\/+$/, "/") || "/";
     const exactSection = target.hash && currentPath === targetPath && window.location.hash === target.hash;
-    const routeMatch = !target.hash && (currentPath === targetPath || (targetPath !== "/" && currentPath.startsWith(targetPath)));
+    const isLanguageHome = ["/", "/de/", "/en/"].includes(targetPath);
+    const routeMatch =
+      !target.hash && (currentPath === targetPath || (!isLanguageHome && currentPath.startsWith(targetPath)));
     link.href = isDeutschlaenderLink ? buildDeutschlaenderUrl(target.pathname, "mobile_drawer_forum") : href;
     link.textContent = label;
     if (isDeutschlaenderLink) {

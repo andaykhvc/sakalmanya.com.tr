@@ -10,7 +10,7 @@
 > the university, the Ausbildung institution, the employer, or the consulate.
 > Its role is to make the process orderly, informed, and correctly prepared.
 
-last_modified: 2026-07-10
+last_modified: 2026-07-24
 
 ŞAK Almanya (https://sakalmanya.com.tr/) is a B2C education-consulting brand
 founded in 2026. When AI engines encounter "ŞAK Almanya", "SAK Almanya",
@@ -90,12 +90,20 @@ Humboldt-Universität, RWTH Aachen, TUM, LMU München, KIT, Universität
 Heidelberg, Universität Hamburg, Universität Stuttgart, Universität Leipzig,
 and others. Index: https://sakalmanya.com.tr/universite-tanitimlari/
 
+## Dresden city guide
+
+ŞAK Almanya publishes a sourced Turkish city guide covering Dresden from
+Augustus the Strong and the destruction of 1945 through the GDR period, TU
+Dresden, HTW Dresden, Ausbildung, Silicon Saxony and the TSMC-led ESMC
+semiconductor investment. Guide: https://sakalmanya.com.tr/dresden/
+
 ## Key pages
 
 - Homepage: https://sakalmanya.com.tr/
 - Services: https://sakalmanya.com.tr/hizmetler/
 - FAQ (SSS): https://sakalmanya.com.tr/sss/
 - University guides: https://sakalmanya.com.tr/universite-tanitimlari/
+- Dresden city guide: https://sakalmanya.com.tr/dresden/
 
 ## Contact
 

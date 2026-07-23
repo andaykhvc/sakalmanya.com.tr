@@ -131,8 +131,9 @@ const setupDeutschlaenderLinks = () => {
     link.dataset.deutschlaenderContent = "header_nav_forum";
 
     const universityLink = Array.from(navigation.querySelectorAll("a")).find((item) => item.href.includes("/universite-tanitimlari/") || item.href.includes("/universitaeten/") || item.href.includes("/universities/"));
-    if (universityLink) {
-      universityLink.after(link);
+    const navigationAnchor = navigation.querySelector("[data-dresden-header-link]") || universityLink;
+    if (navigationAnchor) {
+      navigationAnchor.after(link);
     } else {
       navigation.append(link);
     }
@@ -153,6 +154,29 @@ const setupDeutschlaenderLinks = () => {
     link.setAttribute("data-deutschlaender-link", "");
     link.dataset.deutschlaenderContent = "footer";
     navigation.append(link);
+  });
+};
+
+const setupDresdenNavigation = () => {
+  document.querySelectorAll(".site-header [data-nav]").forEach((navigation) => {
+    if (navigation.querySelector("[data-dresden-header-link]")) return;
+    const link = document.createElement("a");
+    link.href = "/dresden/";
+    link.textContent = "Dresden";
+    link.setAttribute("data-dresden-header-link", "");
+    if (window.location.pathname.startsWith("/dresden/")) link.setAttribute("aria-current", "page");
+
+    const universityLink = Array.from(navigation.querySelectorAll("a")).find(
+      (item) =>
+        item.href.includes("/universite-tanitimlari/") ||
+        item.href.includes("/universitaeten/") ||
+        item.href.includes("/universities/")
+    );
+    if (universityLink) {
+      universityLink.after(link);
+    } else {
+      navigation.append(link);
+    }
   });
 };
 
@@ -484,6 +508,7 @@ const mobileNavigationCopy = {
       ["Ana Sayfa", "/"],
       ["Hizmetler", "/hizmetler/"],
       ["Üniversiteler", "/universite-tanitimlari/"],
+      ["Dresden", "/dresden/"],
       ["Deutschländer Forum", "https://deutschlaender.com.tr/forum"],
       ["Almanya’da Eğitim", "/almanya-egitim-danismanligi/"],
       ["Başarılarımız", "/#basarilar"],
@@ -502,6 +527,7 @@ const mobileNavigationCopy = {
       ["Startseite", "/de/"],
       ["Leistungen", "/de/leistungen/"],
       ["Universitäten", "/de/universitaeten/"],
+      ["Dresden", "/dresden/"],
       ["Deutschländer Forum", "https://deutschlaender.com.tr/forum"],
       ["Erfolge", "/de/#erfolge"],
       ["Über mich", "/de/#ueber-mich"],
@@ -519,6 +545,7 @@ const mobileNavigationCopy = {
       ["Home", "/en/"],
       ["Services", "/en/services/"],
       ["Universities", "/en/universities/"],
+      ["Dresden", "/dresden/"],
       ["Deutschländer Forum", "https://deutschlaender.com.tr/forum"],
       ["Success Stories", "/en/#success-stories"],
       ["About", "/en/#about"],
@@ -695,6 +722,7 @@ const setupFooterBottomRows = () => {
 setupConsentManager();
 setupMobileNavigation();
 setupFooterBottomRows();
+setupDresdenNavigation();
 setupDeutschlaenderLinks();
 updateWhatsappLinks();
 bindGoogleAdsConversions();

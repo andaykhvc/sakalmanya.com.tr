@@ -233,9 +233,28 @@ button {
 
 .hero-media {
   z-index: -3;
-  background-image: url("assets/hero-germany-study.png");
+  background-image: url("assets/dresden/dresden-elbe-evening.webp");
   background-position: center;
   background-size: cover;
+}
+
+.hero-photo-credit {
+  position: absolute;
+  z-index: 2;
+  right: max(16px, env(safe-area-inset-right));
+  bottom: 14px;
+  padding: 5px 8px;
+  border-radius: 4px;
+  background: rgba(17, 17, 17, 0.58);
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.68rem;
+  backdrop-filter: blur(8px);
+}
+
+.hero-photo-credit:hover {
+  color: var(--white);
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 
 .hero-overlay {
@@ -980,6 +999,260 @@ details p {
     url("/assets/hero-germany-study.png") center / cover;
 }
 
+.dresden-hero {
+  position: relative;
+  display: grid;
+  min-height: 670px;
+  align-items: end;
+  padding: 120px 0 84px;
+  overflow: hidden;
+  background:
+    linear-gradient(90deg, rgba(12, 15, 20, 0.92) 0%, rgba(12, 15, 20, 0.72) 48%, rgba(12, 15, 20, 0.2) 100%),
+    linear-gradient(180deg, rgba(12, 15, 20, 0.04), rgba(12, 15, 20, 0.72)),
+    url("/assets/dresden/dresden-elbe-evening.webp") center / cover;
+}
+
+.dresden-hero .container {
+  position: relative;
+  z-index: 1;
+}
+
+.dresden-hero h1 {
+  max-width: 920px;
+  margin-bottom: 22px;
+  font-size: clamp(4rem, 10vw, 8.6rem);
+  letter-spacing: -0.05em;
+}
+
+.dresden-hero p:not(.section-label) {
+  max-width: 760px;
+  color: rgba(255, 255, 255, 0.86);
+  font-family: var(--serif);
+  font-size: clamp(1.2rem, 2.4vw, 1.75rem);
+  line-height: 1.42;
+}
+
+.dresden-hero .section-label {
+  color: var(--gold);
+}
+
+.dresden-hero-credit {
+  position: absolute;
+  z-index: 2;
+  right: max(18px, env(safe-area-inset-right));
+  bottom: 16px;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.7rem;
+}
+
+.dresden-hero-credit:hover {
+  color: var(--white);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.dresden-story {
+  max-width: 1080px;
+}
+
+.dresden-lede {
+  max-width: 880px;
+  margin-bottom: 46px;
+  color: var(--ink);
+  font-family: var(--serif);
+  font-size: clamp(1.4rem, 3vw, 2.2rem);
+  line-height: 1.42;
+}
+
+.dresden-lede::first-letter {
+  float: left;
+  margin: 7px 10px 0 0;
+  color: var(--red);
+  font-size: 4.9rem;
+  font-weight: 700;
+  line-height: 0.74;
+}
+
+.dresden-story h2 {
+  max-width: 860px;
+  margin-top: 68px;
+  font-size: clamp(2.2rem, 4.8vw, 4rem);
+  letter-spacing: -0.035em;
+}
+
+.dresden-story h3 {
+  margin: 0 0 12px;
+  font-family: var(--serif);
+  font-size: clamp(1.4rem, 2.4vw, 2rem);
+  line-height: 1.15;
+}
+
+.dresden-story > p,
+.dresden-copy > p {
+  max-width: 860px;
+}
+
+.dresden-figure {
+  margin: 38px 0 48px;
+  border: 1px solid rgba(17, 17, 17, 0.12);
+  background: var(--white);
+  box-shadow: 0 22px 50px rgba(17, 17, 17, 0.1);
+}
+
+.dresden-figure img {
+  display: block;
+  width: 100%;
+  max-height: 680px;
+  object-fit: cover;
+}
+
+.dresden-figure figcaption {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 8px 18px;
+  padding: 12px 16px;
+  color: var(--muted);
+  font-size: 0.78rem;
+}
+
+.dresden-figure figcaption a {
+  color: var(--red-dark);
+  font-weight: 700;
+}
+
+.dresden-pullquote {
+  position: relative;
+  margin: 58px 0;
+  padding: clamp(28px, 6vw, 58px);
+  overflow: hidden;
+  border-left: 6px solid var(--gold);
+  background: #111820;
+  color: var(--white);
+  box-shadow: 0 24px 60px rgba(17, 17, 17, 0.18);
+}
+
+.dresden-pullquote::after {
+  position: absolute;
+  right: -18px;
+  bottom: -94px;
+  color: rgba(255, 255, 255, 0.05);
+  content: "D";
+  font-family: var(--serif);
+  font-size: 17rem;
+  line-height: 1;
+}
+
+.dresden-pullquote p {
+  position: relative;
+  z-index: 1;
+  max-width: 850px;
+  margin: 0;
+  color: var(--white);
+  font-family: var(--serif);
+  font-size: clamp(1.45rem, 3.4vw, 2.5rem);
+  line-height: 1.35;
+}
+
+.dresden-duo,
+.dresden-stat-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 22px;
+  margin: 36px 0 52px;
+}
+
+.dresden-card,
+.dresden-stat {
+  border: 1px solid var(--line);
+  background: var(--white);
+  box-shadow: 0 16px 36px rgba(17, 17, 17, 0.07);
+}
+
+.dresden-card {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+}
+
+.dresden-card img {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+}
+
+.dresden-card-copy {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  padding: 24px;
+}
+
+.dresden-card-copy p {
+  color: var(--ink-soft);
+}
+
+.dresden-card-copy .text-link {
+  margin-top: auto;
+}
+
+.dresden-card figcaption {
+  padding: 0 24px 20px;
+  color: var(--muted);
+  font-size: 0.72rem;
+}
+
+.dresden-card figcaption a {
+  color: var(--red-dark);
+  font-weight: 700;
+}
+
+.dresden-stat {
+  padding: 26px;
+  border-top: 5px solid var(--red);
+}
+
+.dresden-stat strong {
+  display: block;
+  margin-bottom: 8px;
+  font-family: var(--serif);
+  font-size: clamp(2rem, 4vw, 3.4rem);
+  line-height: 1;
+}
+
+.dresden-stat span {
+  color: var(--muted);
+}
+
+.dresden-source-box {
+  margin-top: 64px;
+  padding: clamp(24px, 4vw, 38px);
+  border-top: 5px solid var(--red);
+  background: var(--white);
+}
+
+.dresden-source-box h2 {
+  margin-top: 0;
+}
+
+.dresden-source-box ul {
+  display: grid;
+  gap: 10px;
+  padding-left: 20px;
+}
+
+.dresden-source-box a {
+  color: var(--red-dark);
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.dresden-editorial-note {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
 .page-content {
   background: var(--paper);
 }
@@ -1551,6 +1824,11 @@ details p {
     padding-top: 96px;
   }
 
+  .dresden-hero {
+    min-height: 600px;
+    background-position: 58% center;
+  }
+
   .intro-grid,
   .two-column,
   .contact-panel,
@@ -1601,6 +1879,48 @@ details p {
     min-height: 70px;
     padding-right: max(16px, env(safe-area-inset-right));
     padding-left: max(16px, env(safe-area-inset-left));
+  }
+
+  .hero-media {
+    background-position: 62% center;
+  }
+
+  .hero-photo-credit {
+    max-width: calc(100% - 32px);
+    font-size: 0.62rem;
+  }
+
+  .dresden-hero {
+    min-height: 560px;
+    padding: 96px 0 72px;
+  }
+
+  .dresden-hero h1 {
+    font-size: clamp(3.5rem, 19vw, 6rem);
+  }
+
+  .dresden-hero-credit {
+    right: 16px;
+    bottom: 10px;
+    left: 16px;
+  }
+
+  .dresden-story h2 {
+    margin-top: 52px;
+  }
+
+  .dresden-duo,
+  .dresden-stat-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .dresden-figure {
+    margin-right: -16px;
+    margin-left: -16px;
+  }
+
+  .dresden-figure figcaption {
+    padding: 11px 16px 14px;
   }
 
   .site-header > .language-switcher {

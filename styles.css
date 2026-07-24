@@ -1455,6 +1455,9 @@ details p {
 }
 
 .university-card {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
   gap: 14px;
@@ -1464,6 +1467,36 @@ details p {
   border: 1px solid var(--line);
   background: var(--white);
   box-shadow: 0 12px 28px rgba(17, 17, 17, 0.05);
+}
+
+.university-card > :not(.university-card-logo) {
+  position: relative;
+  z-index: 2;
+}
+
+.university-card-logo {
+  position: absolute;
+  z-index: 1;
+  top: 34px;
+  right: 20px;
+  width: 58%;
+  height: 170px;
+  object-fit: contain;
+  object-position: right top;
+  opacity: 0.1;
+  filter: grayscale(1);
+  mix-blend-mode: multiply;
+  pointer-events: none;
+  user-select: none;
+}
+
+.university-card.has-logo::after {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.9) 58%, rgba(255, 255, 255, 1));
+  content: "";
+  pointer-events: none;
 }
 
 .university-card h2 {

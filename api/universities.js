@@ -68,6 +68,7 @@ function publicCard(item) {
     city: item.city,
     state: item.state,
     type: item.type,
+    logoPath: item.logoPath,
     qsWorldRanking2026: item.qsWorldRanking2026,
     schoolIntro: item.schoolIntro,
     cityIntro: item.cityIntro,

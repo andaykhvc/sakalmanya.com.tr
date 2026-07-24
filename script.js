@@ -908,6 +908,22 @@ if (universityFilters && universityGrid) {
     const card = document.createElement("article");
     card.className = "university-card";
 
+    if (item.logoPath) {
+      const logo = document.createElement("img");
+      logo.className = "university-card-logo";
+      logo.src = item.logoPath;
+      logo.alt = "";
+      logo.setAttribute("aria-hidden", "true");
+      logo.loading = "lazy";
+      logo.decoding = "async";
+      logo.addEventListener("error", () => {
+        logo.remove();
+        card.classList.remove("has-logo");
+      }, { once: true });
+      card.classList.add("has-logo");
+      card.append(logo);
+    }
+
     const location = document.createElement("p");
     location.className = "section-label";
     location.textContent = [item.city, item.state].filter(Boolean).join(" / ");

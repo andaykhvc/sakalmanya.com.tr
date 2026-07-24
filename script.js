@@ -581,20 +581,21 @@ const setupMobileNavigation = () => {
   const drawerFooter = document.createElement("div");
   const cta = document.createElement("a");
   const drawerLanguages = document.createElement("div");
+  const mobileLanguageSwitcher = languageSwitcher.cloneNode(true);
   const drawerSocials = document.querySelector(".site-footer .social-links")?.cloneNode(true);
   const drawerId = "mobile-navigation-drawer";
   let previouslyFocused = null;
   let closeTimer = null;
 
   controls.className = "mobile-nav-controls";
-  languageSwitcher.classList.add("header-language-switcher");
+  mobileLanguageSwitcher.classList.add("header-language-switcher");
   toggle.className = "mobile-menu-toggle";
   toggle.type = "button";
   toggle.setAttribute("aria-label", copy.menu);
   toggle.setAttribute("aria-expanded", "false");
   toggle.setAttribute("aria-controls", drawerId);
   toggle.innerHTML = '<span aria-hidden="true"></span><span aria-hidden="true"></span><span aria-hidden="true"></span>';
-  controls.append(languageSwitcher, toggle);
+  controls.append(mobileLanguageSwitcher, toggle);
   header.append(controls);
 
   overlay.className = "mobile-nav-overlay";
@@ -713,7 +714,10 @@ const setupMobileNavigation = () => {
     if (window.innerWidth > 768 && toggle.getAttribute("aria-expanded") === "true") setOpen(false);
   });
 
-  if (activeLanguage) activeLanguage.setAttribute("data-active-language", "");
+  if (activeLanguage) {
+    activeLanguage.setAttribute("data-active-language", "");
+    mobileLanguageSwitcher.querySelector(`[lang="${activeLanguage.getAttribute("lang")}"]`)?.setAttribute("data-active-language", "");
+  }
 };
 
 const setupFooterBottomRows = () => {

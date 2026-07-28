@@ -4,6 +4,9 @@ const whatsappNumber = "905452013570";
 const pageLanguage = document.documentElement.lang || "tr";
 const analyticsStorageKey = "sak-attribution-v1";
 const consentStorageKey = "sak-consent-v1";
+const pilotNoticeAcceptedAtKey = "sakPilotNoticeAcceptedAt";
+const pilotNoticeLanguageKey = "sakPilotNoticeLanguage";
+const pilotNoticeCooldownMs = 7 * 24 * 60 * 60 * 1000;
 const campaignParameterNames = ["utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term", "gclid", "gbraid", "wbraid"];
 const deutschlaenderOrigin = "https://deutschlaender.com.tr";
 const deutschlaenderCampaign = "deutschlaender_ecosystem";
@@ -188,9 +191,9 @@ const setupDresdenNavigation = () => {
 };
 
 const whatsappMessages = {
-  tr: "Merhaba Anday, sakalmanya.com.tr üzerinden yazıyorum. Almanya eğitim danışmanlığı veya Almanca özel ders için ön görüşme almak istiyorum.",
-  de: "Hallo Anday, ich schreibe über sakalmanya.com.tr. Ich möchte ein Erstgespräch über Studium oder Deutschlernen in Deutschland.",
-  en: "Hello Anday, I am contacting you through sakalmanya.com.tr. I would like an initial consultation about studying in Germany or German lessons.",
+  tr: "Merhaba Anday, sakalmanya.com.tr üzerinden yazıyorum. Almanya eğitimi veya Almanca öğrenme hedefim için ücretsiz pilot görüşmeye başvurmak istiyorum.",
+  de: "Hallo Anday, ich schreibe über sakalmanya.com.tr. Ich möchte ein kostenloses Pilotgespräch zu meinem Ziel Studium in Deutschland oder Deutschlernen anfragen.",
+  en: "Hello Anday, I am contacting you through sakalmanya.com.tr. I would like to apply for a free pilot conversation about studying in Germany or learning German.",
 };
 
 const buildWhatsappMessage = () => {
@@ -271,6 +274,146 @@ const consentCopy = {
     close: "Close",
     footer: "Cookie preferences",
   },
+};
+
+const pilotNoticeCopy = {
+  de: {
+    title: "Wichtiger Hinweis",
+    paragraphs: [
+      "ŞAK Almanya befindet sich derzeit in einer nicht kommerziellen Vorbereitungs- und Pilotphase. Über diese Website werden aktuell keine kostenpflichtige Beratung, kein entgeltlicher Sprachunterricht und keine sonstigen kostenpflichtigen Leistungen angeboten.",
+      "Lediglich einer begrenzten Anzahl von Personen wird unentgeltlich und zu Testzwecken eine allgemeine Orientierungshilfe angeboten. Es werden keine Vergütungen angenommen und keine Rechnungen oder entgeltlichen Dienstleistungsverträge erstellt.",
+      "Kostenpflichtige Leistungen werden erst nach Abschluss der in Deutschland erforderlichen Genehmigungs- und Registrierungsschritte angeboten.",
+    ],
+    confirm: "Verstanden",
+    languageButton: "TR",
+    languageLabel: "Türkçe göster",
+  },
+  tr: {
+    title: "Önemli Bilgilendirme",
+    paragraphs: [
+      "ŞAK Almanya şu anda ticari olmayan bir hazırlık ve pilot çalışma aşamasındadır. Bu internet sitesi üzerinden hâlen ücretli danışmanlık, özel ders veya başka bir ücretli hizmet sunulmamaktadır.",
+      "Sınırlı sayıdaki kişiye yalnızca ücretsiz ve deneme amaçlı bilgilendirme desteği verilmektedir. Herhangi bir ücret alınmamakta; fatura, ücretli hizmet sözleşmesi veya ticari ödeme oluşturulmamaktadır.",
+      "Ücretli hizmetler ancak Almanya’daki gerekli izin ve kayıt süreçleri tamamlandıktan sonra başlayacaktır.",
+    ],
+    confirm: "Anladım",
+    languageButton: "DE",
+    languageLabel: "Auf Deutsch anzeigen",
+  },
+};
+
+const setupPilotNotice = () => {
+  if (document.querySelector("[data-pilot-notice]")) return;
+
+  const acceptedAt = Number(safelyReadStorage(pilotNoticeAcceptedAtKey));
+  const hasAcceptedRecently = Number.isFinite(acceptedAt)
+    && acceptedAt > 0
+    && Date.now() - acceptedAt < pilotNoticeCooldownMs;
+  if (hasAcceptedRecently) return;
+
+  const hasExpiredAcceptance = Number.isFinite(acceptedAt) && acceptedAt > 0;
+  const savedLanguage = safelyReadStorage(pilotNoticeLanguageKey);
+  let activeLanguage = hasExpiredAcceptance
+    ? "de"
+    : savedLanguage === "tr"
+      ? "tr"
+      : "de";
+  let previouslyFocused = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+
+  const modal = document.createElement("div");
+  const overlay = document.createElement("div");
+  const dialog = document.createElement("section");
+  const header = document.createElement("div");
+  const title = document.createElement("h2");
+  const languageButton = document.createElement("button");
+  const description = document.createElement("div");
+  const confirmButton = document.createElement("button");
+  const titleId = "sak-pilot-notice-title";
+  const descriptionId = "sak-pilot-notice-description";
+
+  modal.className = "pilot-notice";
+  modal.setAttribute("data-pilot-notice", "");
+  overlay.className = "pilot-notice__overlay";
+  overlay.setAttribute("aria-hidden", "true");
+  dialog.className = "pilot-notice__dialog";
+  dialog.setAttribute("role", "dialog");
+  dialog.setAttribute("aria-modal", "true");
+  dialog.setAttribute("aria-labelledby", titleId);
+  dialog.setAttribute("aria-describedby", descriptionId);
+  dialog.tabIndex = -1;
+  header.className = "pilot-notice__header";
+  title.id = titleId;
+  languageButton.className = "pilot-notice__language";
+  languageButton.type = "button";
+  description.className = "pilot-notice__description";
+  description.id = descriptionId;
+  confirmButton.className = "button button-primary pilot-notice__confirm";
+  confirmButton.type = "button";
+  header.append(title, languageButton);
+  dialog.append(header, description, confirmButton);
+  modal.append(overlay, dialog);
+
+  const render = () => {
+    const copy = pilotNoticeCopy[activeLanguage];
+    title.textContent = copy.title;
+    languageButton.textContent = copy.languageButton;
+    languageButton.setAttribute("aria-label", copy.languageLabel);
+    confirmButton.textContent = copy.confirm;
+    dialog.lang = activeLanguage;
+    description.replaceChildren(...copy.paragraphs.map((paragraph) => {
+      const element = document.createElement("p");
+      element.textContent = paragraph;
+      return element;
+    }));
+  };
+
+  const focusableElements = () => [languageButton, confirmButton].filter((element) => !element.disabled);
+
+  const close = () => {
+    document.removeEventListener("keydown", handleKeydown);
+    document.documentElement.classList.remove("is-pilot-notice-open");
+    document.body.classList.remove("is-pilot-notice-open");
+    modal.remove();
+    if (previouslyFocused?.isConnected) previouslyFocused.focus();
+    previouslyFocused = null;
+  };
+
+  const handleKeydown = (event) => {
+    if (event.key === "Escape") {
+      event.preventDefault();
+      return;
+    }
+    if (event.key !== "Tab") return;
+    const elements = focusableElements();
+    const first = elements[0];
+    const last = elements[elements.length - 1];
+    if (!first || !last) return;
+    if (event.shiftKey && document.activeElement === first) {
+      event.preventDefault();
+      last.focus();
+    } else if (!event.shiftKey && document.activeElement === last) {
+      event.preventDefault();
+      first.focus();
+    }
+  };
+
+  languageButton.addEventListener("click", () => {
+    activeLanguage = activeLanguage === "de" ? "tr" : "de";
+    safelyWriteStorage(pilotNoticeLanguageKey, activeLanguage);
+    render();
+    languageButton.focus();
+  });
+  confirmButton.addEventListener("click", () => {
+    safelyWriteStorage(pilotNoticeAcceptedAtKey, Date.now());
+    safelyWriteStorage(pilotNoticeLanguageKey, activeLanguage);
+    close();
+  });
+
+  render();
+  document.body.append(modal);
+  document.documentElement.classList.add("is-pilot-notice-open");
+  document.body.classList.add("is-pilot-notice-open");
+  document.addEventListener("keydown", handleKeydown);
+  languageButton.focus();
 };
 
 const setupConsentManager = () => {
@@ -509,11 +652,11 @@ const mobileNavigationCopy = {
     menu: "Menüyü aç",
     close: "Menüyü kapat",
     navigation: "Mobil menü",
-    cta: "Ücretsiz ön görüşme al",
+    cta: "Ücretsiz pilot görüşmeye başvur",
     language: "Dil seçimi",
     links: [
       ["Ana Sayfa", "/"],
-      ["Hizmetler", "/hizmetler/"],
+      ["Planlanan destek alanları", "/hizmetler/"],
       ["Üniversiteler", "/universite-tanitimlari/"],
       ["Dresden", "/dresden/"],
       ["Deutschländer Forum", "https://deutschlaender.com.tr/forum"],
@@ -528,11 +671,11 @@ const mobileNavigationCopy = {
     menu: "Menü öffnen",
     close: "Menü schließen",
     navigation: "Mobile Navigation",
-    cta: "Kostenloses Erstgespräch",
+    cta: "Kostenloses Pilotgespräch anfragen",
     language: "Sprachauswahl",
     links: [
       ["Startseite", "/de/"],
-      ["Leistungen", "/de/leistungen/"],
+      ["Geplante Unterstützungsbereiche", "/de/leistungen/"],
       ["Universitäten", "/de/universitaeten/"],
       ["Dresden", "/de/dresden/"],
       ["Deutschländer Forum", "https://deutschlaender.com.tr/forum"],
@@ -546,11 +689,11 @@ const mobileNavigationCopy = {
     menu: "Open menu",
     close: "Close menu",
     navigation: "Mobile navigation",
-    cta: "Get a free consultation",
+    cta: "Apply for a free pilot consultation",
     language: "Language selection",
     links: [
       ["Home", "/en/"],
-      ["Services", "/en/services/"],
+      ["Planned support areas", "/en/services/"],
       ["Universities", "/en/universities/"],
       ["Dresden", "/en/dresden/"],
       ["Deutschländer Forum", "https://deutschlaender.com.tr/forum"],
@@ -733,6 +876,7 @@ const setupFooterBottomRows = () => {
 };
 
 setupConsentManager();
+setupPilotNotice();
 setupMobileNavigation();
 setupFooterBottomRows();
 setupDresdenNavigation();

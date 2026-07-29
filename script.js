@@ -4,12 +4,10 @@ const whatsappNumber = "905452013570";
 const pageLanguage = document.documentElement.lang || "tr";
 const analyticsStorageKey = "sak-attribution-v1";
 const consentStorageKey = "sak-consent-v1";
-const pilotNoticeAcceptedAtKey = "sakPilotNoticeAcceptedAt";
-const pilotNoticeLanguageKey = "sakPilotNoticeLanguage";
-const pilotNoticeCooldownMs = 7 * 24 * 60 * 60 * 1000;
 const campaignParameterNames = ["utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term", "gclid", "gbraid", "wbraid"];
 const deutschlaenderOrigin = "https://deutschlaender.com.tr";
 const deutschlaenderCampaign = "deutschlaender_ecosystem";
+let isPilotNoticeDismissed = false;
 
 const safelyReadStorage = (key) => {
   try {
@@ -302,21 +300,10 @@ const pilotNoticeCopy = {
 };
 
 const setupPilotNotice = () => {
+  if (isPilotNoticeDismissed) return;
   if (document.querySelector("[data-pilot-notice]")) return;
 
-  const acceptedAt = Number(safelyReadStorage(pilotNoticeAcceptedAtKey));
-  const hasAcceptedRecently = Number.isFinite(acceptedAt)
-    && acceptedAt > 0
-    && Date.now() - acceptedAt < pilotNoticeCooldownMs;
-  if (hasAcceptedRecently) return;
-
-  const hasExpiredAcceptance = Number.isFinite(acceptedAt) && acceptedAt > 0;
-  const savedLanguage = safelyReadStorage(pilotNoticeLanguageKey);
-  let activeLanguage = hasExpiredAcceptance
-    ? "de"
-    : savedLanguage === "tr"
-      ? "tr"
-      : "de";
+  let activeLanguage = "de";
   let previouslyFocused = document.activeElement instanceof HTMLElement ? document.activeElement : null;
 
   const modal = document.createElement("div");
@@ -369,6 +356,7 @@ const setupPilotNotice = () => {
   const focusableElements = () => [languageButton, confirmButton].filter((element) => !element.disabled);
 
   const close = () => {
+    isPilotNoticeDismissed = true;
     document.removeEventListener("keydown", handleKeydown);
     document.documentElement.classList.remove("is-pilot-notice-open");
     document.body.classList.remove("is-pilot-notice-open");
@@ -398,13 +386,10 @@ const setupPilotNotice = () => {
 
   languageButton.addEventListener("click", () => {
     activeLanguage = activeLanguage === "de" ? "tr" : "de";
-    safelyWriteStorage(pilotNoticeLanguageKey, activeLanguage);
     render();
     languageButton.focus();
   });
   confirmButton.addEventListener("click", () => {
-    safelyWriteStorage(pilotNoticeAcceptedAtKey, Date.now());
-    safelyWriteStorage(pilotNoticeLanguageKey, activeLanguage);
     close();
   });
 

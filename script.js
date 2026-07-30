@@ -188,6 +188,36 @@ const setupDresdenNavigation = () => {
   });
 };
 
+const setupStudienkollegNavigation = () => {
+  const studienkollegPaths = {
+    tr: "/studienkolleg/",
+    de: "/de/studienkolleg/",
+    en: "/en/studienkolleg/",
+  };
+  const studienkollegPath = studienkollegPaths[pageLanguage] || studienkollegPaths.tr;
+
+  document.querySelectorAll(".site-header [data-nav]").forEach((navigation) => {
+    if (navigation.querySelector("[data-studienkolleg-header-link]")) return;
+    const link = document.createElement("a");
+    link.href = studienkollegPath;
+    link.textContent = "Studienkolleg";
+    link.setAttribute("data-studienkolleg-header-link", "");
+    if (window.location.pathname === studienkollegPath) link.setAttribute("aria-current", "page");
+
+    const universityLink = Array.from(navigation.querySelectorAll("a")).find(
+      (item) =>
+        item.href.includes("/universite-tanitimlari/") ||
+        item.href.includes("/universitaeten/") ||
+        item.href.includes("/universities/")
+    );
+    if (universityLink) {
+      universityLink.after(link);
+    } else {
+      navigation.append(link);
+    }
+  });
+};
+
 const whatsappMessages = {
   tr: "Merhaba Anday, sakalmanya.com.tr üzerinden yazıyorum. Almanya eğitimi veya Almanca öğrenme hedefim için ücretsiz pilot görüşmeye başvurmak istiyorum.",
   de: "Hallo Anday, ich schreibe über sakalmanya.com.tr. Ich möchte ein kostenloses Pilotgespräch zu meinem Ziel Studium in Deutschland oder Deutschlernen anfragen.",
@@ -868,6 +898,7 @@ setupPilotNotice();
 setupMobileNavigation();
 setupFooterBottomRows();
 setupDresdenNavigation();
+setupStudienkollegNavigation();
 setupDeutschlaenderLinks();
 updateWhatsappLinks();
 bindGoogleAdsConversions();

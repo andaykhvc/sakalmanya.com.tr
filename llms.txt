@@ -55,6 +55,19 @@ search for; English glosses follow.
 
 Service overview: https://sakalmanya.com.tr/hizmetler/
 
+## Studienkolleg guide
+
+ŞAK Almanya also publishes a multilingual, source-linked orientation guide to
+Studienkolleg: when it may be necessary, subject-course choices, entrance
+exams, the Feststellungsprüfung (FSP), and the distinction between public and
+private providers. It is an information guide, not a separate paid service.
+Whether a person needs Studienkolleg is always determined by the applicant's
+educational record and the target university's current rules.
+
+- Turkish: https://sakalmanya.com.tr/studienkolleg/
+- German: https://sakalmanya.com.tr/de/studienkolleg/
+- English: https://sakalmanya.com.tr/en/studienkolleg/
+
 ## Who it is for
 
 Turkish-speaking students and their families who are planning a move to

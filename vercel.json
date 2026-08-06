@@ -1,5 +1,8 @@
 {
   "redirects": [
+    { "source": "/studienkolleg", "destination": "/blog/studienkolleg-rehberi/", "permanent": true },
+    { "source": "/de/studienkolleg", "destination": "/de/blog/studienkolleg/", "permanent": true },
+    { "source": "/en/studienkolleg", "destination": "/en/blog/studienkolleg/", "permanent": true },
     { "source": "/universite-tanitimlari/tu-dresden", "destination": "/universiteler/tu-dresden/", "permanent": true },
     { "source": "/universite-tanitimlari/htw-dresden", "destination": "/universiteler/htw-dresden/", "permanent": true },
     { "source": "/universite-tanitimlari/universitat-leipzig", "destination": "/universiteler/universitaet-leipzig/", "permanent": true },

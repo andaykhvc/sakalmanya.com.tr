@@ -188,36 +188,6 @@ const setupDresdenNavigation = () => {
   });
 };
 
-const setupStudienkollegNavigation = () => {
-  const studienkollegPaths = {
-    tr: "/studienkolleg/",
-    de: "/de/studienkolleg/",
-    en: "/en/studienkolleg/",
-  };
-  const studienkollegPath = studienkollegPaths[pageLanguage] || studienkollegPaths.tr;
-
-  document.querySelectorAll(".site-header [data-nav]").forEach((navigation) => {
-    if (navigation.querySelector("[data-studienkolleg-header-link]")) return;
-    const link = document.createElement("a");
-    link.href = studienkollegPath;
-    link.textContent = "Studienkolleg";
-    link.setAttribute("data-studienkolleg-header-link", "");
-    if (window.location.pathname === studienkollegPath) link.setAttribute("aria-current", "page");
-
-    const universityLink = Array.from(navigation.querySelectorAll("a")).find(
-      (item) =>
-        item.href.includes("/universite-tanitimlari/") ||
-        item.href.includes("/universitaeten/") ||
-        item.href.includes("/universities/")
-    );
-    if (universityLink) {
-      universityLink.after(link);
-    } else {
-      navigation.append(link);
-    }
-  });
-};
-
 const setupAboutNavigation = () => {
   const aboutPaths = {
     tr: "/hakkimizda/",
@@ -737,7 +707,6 @@ const mobileNavigationCopy = {
     links: [
       ["Ana Sayfa", "/"],
       ["Planlanan destek alanları", "/hizmetler/"],
-      ["Studienkolleg Rehberi", "/studienkolleg/"],
       ["Üniversiteler", "/universite-tanitimlari/"],
       ["Dresden", "/dresden/"],
       ["Deutschländer Forum", "https://deutschlaender.com.tr/forum"],
@@ -757,7 +726,6 @@ const mobileNavigationCopy = {
     links: [
       ["Startseite", "/de/"],
       ["Geplante Unterstützungsbereiche", "/de/leistungen/"],
-      ["Studienkolleg", "/de/studienkolleg/"],
       ["Universitäten", "/de/universitaeten/"],
       ["Dresden", "/de/dresden/"],
       ["Deutschländer Forum", "https://deutschlaender.com.tr/forum"],
@@ -776,7 +744,6 @@ const mobileNavigationCopy = {
     links: [
       ["Home", "/en/"],
       ["Planned support areas", "/en/services/"],
-      ["Studienkolleg guide", "/en/studienkolleg/"],
       ["Universities", "/en/universities/"],
       ["Dresden", "/en/dresden/"],
       ["Deutschländer Forum", "https://deutschlaender.com.tr/forum"],
@@ -964,7 +931,6 @@ setupAboutNavigation();
 setupMobileNavigation();
 setupFooterBottomRows();
 setupDresdenNavigation();
-setupStudienkollegNavigation();
 setupDeutschlaenderLinks();
 updateWhatsappLinks();
 bindGoogleAdsConversions();

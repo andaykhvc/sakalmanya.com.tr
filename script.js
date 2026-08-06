@@ -218,6 +218,71 @@ const setupStudienkollegNavigation = () => {
   });
 };
 
+const setupAboutNavigation = () => {
+  const aboutPaths = {
+    tr: "/hakkimizda/",
+    de: "/de/ueber-uns/",
+    en: "/en/about/",
+  };
+  const aboutLabels = {
+    tr: "Hakkımızda",
+    de: "Über uns",
+    en: "About",
+  };
+  const aboutPath = aboutPaths[pageLanguage] || aboutPaths.tr;
+  const aboutLabel = aboutLabels[pageLanguage] || aboutLabels.tr;
+  const currentPath = window.location.pathname.replace(/\/+$/, "/") || "/";
+
+  document.querySelectorAll(".site-header [data-nav]").forEach((navigation) => {
+    const link = Array.from(navigation.querySelectorAll("a")).find((item) => {
+      const href = item.getAttribute("href") || "";
+      return href === aboutPath || href.includes("#hakkimda") || href.includes("#ueber-mich") || href.includes("#about") || item.hasAttribute("data-about-header-link");
+    });
+    if (!link) return;
+    link.href = aboutPath;
+    link.textContent = aboutLabel;
+    link.setAttribute("data-about-header-link", "");
+    link.removeAttribute("aria-current");
+    if (currentPath === aboutPath) link.setAttribute("aria-current", "page");
+  });
+
+  document.querySelectorAll(".site-footer .footer-nav").forEach((navigation) => {
+    let link = navigation.querySelector("[data-about-footer-link]") || Array.from(navigation.querySelectorAll("a")).find((item) => {
+      const href = item.getAttribute("href") || "";
+      return href === aboutPath || href.includes("#hakkimda") || href.includes("#ueber-mich") || href.includes("#about");
+    });
+    if (!link) {
+      link = document.createElement("a");
+      navigation.prepend(link);
+    }
+    link.setAttribute("data-about-footer-link", "");
+    link.href = aboutPath;
+    link.textContent = aboutLabel;
+    link.removeAttribute("aria-current");
+    if (currentPath === aboutPath) link.setAttribute("aria-current", "page");
+  });
+
+  const servicePaths = ["/hizmetler/", "/de/leistungen/", "/en/services/"];
+  if (servicePaths.includes(currentPath) && !document.querySelector("[data-about-context-link]")) {
+    const cta = document.querySelector(".services-section .cta-band");
+    if (cta) {
+      const paragraph = document.createElement("p");
+      const link = document.createElement("a");
+      paragraph.className = "about-context-link";
+      paragraph.setAttribute("data-about-context-link", "");
+      link.className = "text-link";
+      link.href = aboutPath;
+      link.textContent = pageLanguage === "de"
+        ? "Mehr über den Gründer und die Entstehung von ŞAK Almanya erfahren"
+        : pageLanguage === "en"
+          ? "Learn more about the founder and how ŞAK Almanya was built"
+          : "Kurucuyu ve ŞAK Almanya’nın nasıl ortaya çıktığını tanıyın";
+      paragraph.append(link);
+      cta.before(paragraph);
+    }
+  }
+};
+
 const whatsappMessages = {
   tr: "Merhaba Anday, sakalmanya.com.tr üzerinden yazıyorum. Almanya eğitimi veya Almanca öğrenme hedefim için ücretsiz pilot görüşmeye başvurmak istiyorum.",
   de: "Hallo Anday, ich schreibe über sakalmanya.com.tr. Ich möchte ein kostenloses Pilotgespräch zu meinem Ziel Studium in Deutschland oder Deutschlernen anfragen.",
@@ -678,7 +743,7 @@ const mobileNavigationCopy = {
       ["Deutschländer Forum", "https://deutschlaender.com.tr/forum"],
       ["Almanya’da Eğitim", "/almanya-egitim-danismanligi/"],
       ["Başarılarımız", "/#basarilar"],
-      ["Hakkımızda", "/#hakkimda"],
+      ["Hakkımızda", "/hakkimizda/"],
       ["Sık Sorulan Sorular", "/sss/"],
       ["İletişim", "/#iletisim"],
     ],
@@ -697,7 +762,7 @@ const mobileNavigationCopy = {
       ["Dresden", "/de/dresden/"],
       ["Deutschländer Forum", "https://deutschlaender.com.tr/forum"],
       ["Erfolge", "/de/#erfolge"],
-      ["Über mich", "/de/#ueber-mich"],
+      ["Über uns", "/de/ueber-uns/"],
       ["FAQ", "/de/faq/"],
       ["Kontakt", "/de/#kontakt"],
     ],
@@ -716,7 +781,7 @@ const mobileNavigationCopy = {
       ["Dresden", "/en/dresden/"],
       ["Deutschländer Forum", "https://deutschlaender.com.tr/forum"],
       ["Success Stories", "/en/#success-stories"],
-      ["About", "/en/#about"],
+      ["About", "/en/about/"],
       ["Frequently Asked Questions", "/en/faq/"],
       ["Contact", "/en/#contact"],
     ],
@@ -895,6 +960,7 @@ const setupFooterBottomRows = () => {
 
 setupConsentManager();
 setupPilotNotice();
+setupAboutNavigation();
 setupMobileNavigation();
 setupFooterBottomRows();
 setupDresdenNavigation();

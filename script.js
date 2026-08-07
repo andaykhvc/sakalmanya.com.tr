@@ -188,25 +188,36 @@ const setupDresdenNavigation = () => {
   });
 };
 
-const setupStudienkollegNavigation = () => {
-  const studienkollegPaths = {
-    tr: "/studienkolleg/",
-    de: "/de/studienkolleg/",
-    en: "/en/studienkolleg/",
+const setupMasterNavigation = () => {
+  const masterPaths = {
+    tr: "/almanya-yuksek-lisans-sartlari/",
+    de: "/de/almanya-yuksek-lisans-sartlari/",
+    en: "/en/almanya-yuksek-lisans-sartlari/",
   };
-  const studienkollegPath = studienkollegPaths[pageLanguage] || studienkollegPaths.tr;
+  const masterPath = masterPaths[pageLanguage] || masterPaths.tr;
 
   document.querySelectorAll(".site-header [data-nav]").forEach((navigation) => {
-    if (navigation.querySelector("[data-studienkolleg-header-link]")) return;
+    if (navigation.querySelector("[data-master-header-link]")) return;
     const link = document.createElement("a");
-    link.href = studienkollegPath;
-    link.textContent = "Studienkolleg";
-    link.setAttribute("data-studienkolleg-header-link", "");
-    if (window.location.pathname === studienkollegPath) link.setAttribute("aria-current", "page");
+    link.href = masterPath;
+    link.textContent = "Yüksek Lisans";
+    link.setAttribute("data-master-header-link", "");
+    if (window.location.pathname === masterPath) link.setAttribute("aria-current", "page");
 
-    const universityLink = Array.from(navigation.querySelectorAll("a")).find(
-      (item) =>
-        item.href.includes("/universite-tanitimlari/") ||
+    const dresdenLink = Array.from(navigation.querySelectorAll("a")).find(
+      (item) => item.getAttribute("data-dresden-header-link")
+    );
+    if (dresdenLink) {
+      dresdenLink.after(link);
+    } else {
+      navigation.append(link);
+    }
+  });
+};
+
+const setupStudienkollegNavigation = () => {
+  // Moved to blog: /blog/studienkolleg-rehberi/ instead of /studienkolleg/
+  // Header nav removed per site redesign
         item.href.includes("/universitaeten/") ||
         item.href.includes("/universities/")
     );
@@ -964,7 +975,7 @@ setupAboutNavigation();
 setupMobileNavigation();
 setupFooterBottomRows();
 setupDresdenNavigation();
-setupStudienkollegNavigation();
+setupMasterNavigation();
 setupDeutschlaenderLinks();
 updateWhatsappLinks();
 bindGoogleAdsConversions();

@@ -204,11 +204,14 @@ const setupMasterNavigation = () => {
     link.setAttribute("data-master-header-link", "");
     if (window.location.pathname === masterPath) link.setAttribute("aria-current", "page");
 
-    const dresdenLink = Array.from(navigation.querySelectorAll("a")).find(
-      (item) => item.getAttribute("data-dresden-header-link")
+    const universityLink = Array.from(navigation.querySelectorAll("a")).find(
+      (item) =>
+        item.href.includes("/universite-tanitimlari/") ||
+        item.href.includes("/universitaeten/") ||
+        item.href.includes("/universities/")
     );
-    if (dresdenLink) {
-      dresdenLink.after(link);
+    if (universityLink) {
+      universityLink.after(link);
     } else {
       navigation.append(link);
     }

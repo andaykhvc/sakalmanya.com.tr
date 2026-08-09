@@ -400,6 +400,51 @@ const pilotNoticeCopy = {
   },
 };
 
+const routeTestPromptCopy = {
+  tr: {
+    title: "Rota testini çözmek ister misin?",
+    description: "Mevcut durumuna göre Almanya’da sana en uygun eğitim rotasını yaklaşık 2 dakikada keşfedebilirsin.",
+    start: "Evet, testi başlat",
+    skip: "Şimdilik geç",
+    languageLabel: "Dil seçimi",
+    currentLanguage: "Türkçe",
+  },
+  de: {
+    title: "Möchtest du den Routen-Test machen?",
+    description: "Finde in etwa zwei Minuten heraus, welcher Bildungsweg in Deutschland am besten zu deiner aktuellen Situation passt.",
+    start: "Ja, Test starten",
+    skip: "Vorerst überspringen",
+    languageLabel: "Sprachauswahl",
+    currentLanguage: "Deutsch",
+  },
+  en: {
+    title: "Would you like to take the route test?",
+    description: "In about two minutes, you can discover which education route in Germany best fits your current situation.",
+    start: "Yes, start the test",
+    skip: "Maybe later",
+    languageLabel: "Language selection",
+    currentLanguage: "English",
+  },
+};
+
+const routeTestPromptStorageKey = "sak-route-test-prompt-v1";
+
+const hasSeenRouteTestPrompt = () => {
+  try {
+    return window.sessionStorage.getItem(routeTestPromptStorageKey) === "shown";
+  } catch (_error) {
+    return false;
+  }
+};
+
+const markRouteTestPromptSeen = () => {
+  try {
+    window.sessionStorage.setItem(routeTestPromptStorageKey, "shown");
+  } catch (_error) {
+    // The prompt still works when session storage is unavailable.
+  }
+};
+
 const setupPilotNotice = () => {
   if (isPilotNoticeDismissed) return;
   if (document.querySelector("[data-pilot-notice]")) return;
@@ -464,6 +509,7 @@ const setupPilotNotice = () => {
     modal.remove();
     if (previouslyFocused?.isConnected) previouslyFocused.focus();
     previouslyFocused = null;
+    setupRouteTestPrompt();
   };
 
   const handleKeydown = (event) => {
@@ -500,6 +546,133 @@ const setupPilotNotice = () => {
   document.body.classList.add("is-pilot-notice-open");
   document.addEventListener("keydown", handleKeydown);
   languageButton.focus();
+};
+
+const setupRouteTestPrompt = () => {
+  const currentPath = window.location.pathname.replace(/\/+$/, "/") || "/";
+  if (currentPath === "/rota-testi/" || hasSeenRouteTestPrompt() || document.querySelector("[data-route-test-prompt]")) return;
+
+  let activeLanguage = ["tr", "de", "en"].includes(pageLanguage) ? pageLanguage : "de";
+  let previouslyFocused = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+  const modal = document.createElement("div");
+  const overlay = document.createElement("div");
+  const dialog = document.createElement("section");
+  const header = document.createElement("div");
+  const title = document.createElement("h2");
+  const languages = document.createElement("div");
+  const description = document.createElement("p");
+  const actions = document.createElement("div");
+  const startLink = document.createElement("a");
+  const skipButton = document.createElement("button");
+  const titleId = "sak-route-test-prompt-title";
+  const descriptionId = "sak-route-test-prompt-description";
+  const languageButtons = [];
+
+  modal.className = "pilot-notice route-test-prompt";
+  modal.setAttribute("data-route-test-prompt", "");
+  overlay.className = "pilot-notice__overlay";
+  overlay.setAttribute("aria-hidden", "true");
+  dialog.className = "pilot-notice__dialog route-test-prompt__dialog";
+  dialog.setAttribute("role", "dialog");
+  dialog.setAttribute("aria-modal", "true");
+  dialog.setAttribute("aria-labelledby", titleId);
+  dialog.setAttribute("aria-describedby", descriptionId);
+  dialog.tabIndex = -1;
+  header.className = "pilot-notice__header";
+  title.id = titleId;
+  languages.className = "route-test-prompt__languages";
+  languages.setAttribute("aria-label", "Dil seçimi");
+  description.className = "route-test-prompt__description";
+  description.id = descriptionId;
+  actions.className = "route-test-prompt__actions";
+  startLink.className = "button button-primary";
+  startLink.href = "/rota-testi/";
+  startLink.setAttribute("data-route-test-prompt-start", "");
+  skipButton.className = "button button-secondary";
+  skipButton.type = "button";
+  skipButton.setAttribute("data-route-test-prompt-skip", "");
+
+  ["tr", "de", "en"].forEach((language) => {
+    const button = document.createElement("button");
+    button.className = "pilot-notice__language route-test-prompt__language";
+    button.type = "button";
+    button.textContent = language.toUpperCase();
+    button.dataset.language = language;
+    button.addEventListener("click", () => {
+      activeLanguage = language;
+      render();
+      button.focus();
+    });
+    languageButtons.push(button);
+    languages.append(button);
+  });
+
+  header.append(title, languages);
+  actions.append(startLink, skipButton);
+  dialog.append(header, description, actions);
+  modal.append(overlay, dialog);
+
+  const render = () => {
+    const copy = routeTestPromptCopy[activeLanguage];
+    title.textContent = copy.title;
+    description.textContent = copy.description;
+    startLink.textContent = copy.start;
+    skipButton.textContent = copy.skip;
+    languages.setAttribute("aria-label", copy.languageLabel);
+    dialog.lang = activeLanguage;
+    languageButtons.forEach((button) => {
+      const isCurrent = button.dataset.language === activeLanguage;
+      button.setAttribute("aria-pressed", String(isCurrent));
+      button.setAttribute("aria-label", `${routeTestPromptCopy[button.dataset.language].currentLanguage} ${copy.languageLabel.toLowerCase()}`);
+    });
+  };
+
+  const focusableElements = () => [...languageButtons, startLink, skipButton].filter((element) => !element.disabled);
+
+  const close = (eventName = "route_test_prompt_skip") => {
+    markRouteTestPromptSeen();
+    document.removeEventListener("keydown", handleKeydown);
+    document.documentElement.classList.remove("is-pilot-notice-open");
+    document.body.classList.remove("is-pilot-notice-open");
+    modal.remove();
+    if (previouslyFocused?.isConnected) previouslyFocused.focus();
+    previouslyFocused = null;
+    trackEvent(eventName);
+  };
+
+  const handleKeydown = (event) => {
+    if (event.key === "Escape") {
+      event.preventDefault();
+      close();
+      return;
+    }
+    if (event.key !== "Tab") return;
+    const elements = focusableElements();
+    const first = elements[0];
+    const last = elements[elements.length - 1];
+    if (!first || !last) return;
+    if (event.shiftKey && document.activeElement === first) {
+      event.preventDefault();
+      last.focus();
+    } else if (!event.shiftKey && document.activeElement === last) {
+      event.preventDefault();
+      first.focus();
+    }
+  };
+
+  startLink.addEventListener("click", () => {
+    close("route_test_prompt_start");
+  });
+  skipButton.addEventListener("click", () => close());
+
+  render();
+  markRouteTestPromptSeen();
+  document.body.append(modal);
+  document.documentElement.classList.add("is-pilot-notice-open");
+  document.body.classList.add("is-pilot-notice-open");
+  document.addEventListener("keydown", handleKeydown);
+  trackEvent("route_test_prompt_view");
+  startLink.focus();
 };
 
 const setupConsentManager = () => {
@@ -748,6 +921,7 @@ const mobileNavigationCopy = {
       ["Dresden", "/dresden/"],
       ["Deutschländer Forum", "https://deutschlaender.com.tr/forum"],
       ["Almanya’da Eğitim", "/almanya-egitim-danismanligi/"],
+      ["Rota Testi", "/rota-testi/"],
       ["Başarılarımız", "/#basarilar"],
       ["Hakkımızda", "/hakkimizda/"],
       ["Sık Sorulan Sorular", "/sss/"],
@@ -768,6 +942,7 @@ const mobileNavigationCopy = {
       ["Dresden", "/de/dresden/"],
       ["Deutschländer Forum", "https://deutschlaender.com.tr/forum"],
       ["Bildungsberatung", "/de/bildungsberatung/"],
+      ["Routen-Test", "/rota-testi/"],
       ["Erfolge", "/de/#erfolge"],
       ["Über uns", "/de/ueber-uns/"],
       ["FAQ", "/de/faq/"],
@@ -788,12 +963,304 @@ const mobileNavigationCopy = {
       ["Dresden", "/en/dresden/"],
       ["Deutschländer Forum", "https://deutschlaender.com.tr/forum"],
       ["Education Guidance", "/en/education-consulting/"],
+      ["Route test", "/rota-testi/"],
       ["Success Stories", "/en/#success-stories"],
       ["About", "/en/about/"],
       ["Frequently Asked Questions", "/en/faq/"],
       ["Contact", "/en/#contact"],
     ],
   },
+};
+
+const setupRouteTestNavigation = () => {
+  const currentPath = window.location.pathname.replace(/\/+$/, "/") || "/";
+  const labels = { tr: "Rota Testi", de: "Routen-Test", en: "Route test" };
+  document.querySelectorAll(".site-header [data-nav]").forEach((navigation) => {
+    if (navigation.querySelector("[data-route-test-link], a[href='/rota-testi/']")) return;
+    const link = document.createElement("a");
+    link.href = "/rota-testi/";
+    link.textContent = labels[pageLanguage] || labels.tr;
+    link.setAttribute("data-route-test-link", "");
+    if (currentPath === "/rota-testi/") link.setAttribute("aria-current", "page");
+    const blogLink = Array.from(navigation.querySelectorAll("a")).find((item) => item.getAttribute("href")?.includes("/blog/"));
+    if (blogLink) blogLink.before(link);
+    else navigation.append(link);
+  });
+};
+
+const routeTestQuestions = [
+  {
+    id: "target",
+    prompt: "Almanya’da hangi hedef sana daha yakın?",
+    options: [
+      { value: "lisans", label: "Lisans eğitimi almak istiyorum.", scores: { universite: 6 } },
+      { value: "master", label: "Yüksek lisans yapmak istiyorum.", scores: { master: 7 } },
+      { value: "ausbildung", label: "Uygulamalı bir meslek eğitimi ve iş deneyimi istiyorum.", scores: { ausbildung: 7 } },
+      { value: "dil", label: "Önce Almancamı geliştirip sonra eğitim yoluma karar vermek istiyorum.", scores: { dil: 7 } },
+      { value: "kararsiz", label: "Henüz karar veremedim; seçenekleri karşılaştırmak istiyorum.", scores: { karsilastirma: 6 } },
+    ],
+  },
+  {
+    id: "education",
+    prompt: "Şu anki eğitim durumun hangisine daha yakın?",
+    options: [
+      { value: "lise_ogrenci", label: "Lise öğrencisiyim.", scores: { universite: 1 } },
+      { value: "lise_mezunu", label: "Liseden mezun oldum.", scores: { universite: 1 } },
+      { value: "universite_ogrenci", label: "Üniversitede okuyorum.", scores: { universite: 1, master: 1 } },
+      { value: "universite_mezunu", label: "Üniversiteden mezun oldum.", scores: { master: 2 } },
+      { value: "mesleki_egitim", label: "Mesleki veya teknik bir eğitim aldım.", scores: { ausbildung: 3 } },
+    ],
+  },
+  {
+    id: "german",
+    prompt: "Almanca seviyen ne durumda?",
+    options: [
+      { value: "almanca_yok", label: "Henüz Almanca bilmiyorum.", scores: { dil: 3 } },
+      { value: "almanca_baslangic", label: "Başlangıç seviyesindeyim: A1–A2.", scores: { dil: 2 } },
+      { value: "almanca_b1", label: "Orta seviyedeyim: B1.", scores: {} },
+      { value: "almanca_b2", label: "İyi seviyedeyim: B2.", scores: { universite: 1, ausbildung: 1 } },
+      { value: "almanca_c1", label: "İleri seviyedeyim: C1 veya üzeri.", scores: { universite: 1, master: 1 } },
+      { value: "almanca_belirsiz", label: "Seviyemi bilmiyorum.", scores: { dil: 1 } },
+    ],
+  },
+  {
+    id: "start",
+    prompt: "Eğitime ne zaman başlamayı düşünüyorsun?",
+    options: [
+      { value: "baslangic_6ay", label: "Mümkünse önümüzdeki 6 ay içinde.", scores: { universite: 1, master: 1, ausbildung: 1 } },
+      { value: "baslangic_12ay", label: "6–12 ay içinde.", scores: { universite: 1, master: 1, ausbildung: 1 } },
+      { value: "baslangic_uzun", label: "Bir yıldan daha uzun bir hazırlık sürecim olabilir.", scores: { dil: 2 } },
+      { value: "baslangic_belirsiz", label: "Henüz tarih belirlemedim.", scores: {} },
+    ],
+  },
+  {
+    id: "budget",
+    prompt: "Eğitim ve yaşam bütçen konusunda kendini nasıl değerlendiriyorsun?",
+    options: [
+      { value: "butce_sinirli", label: "Bütçem sınırlı; maliyeti düşük seçenekleri araştırmam gerekiyor.", scores: {} },
+      { value: "butce_orta", label: "Orta düzeyde bir bütçe planlayabilirim.", scores: {} },
+      { value: "butce_genis", label: "Daha geniş seçenekleri değerlendirebilecek bir bütçem var.", scores: {} },
+      { value: "butce_belirsiz", label: "Henüz gerçekçi bütçemi hesaplamadım.", scores: {} },
+    ],
+  },
+  {
+    id: "style",
+    prompt: "Nasıl bir eğitim deneyimi sana daha uygun?",
+    options: [
+      { value: "akademik", label: "Akademik, teorik ve araştırma odaklı bir eğitim.", scores: { universite: 3, master: 2 } },
+      { value: "uygulamali", label: "Uygulamalı, mesleğe ve sektöre yakın bir eğitim.", scores: { ausbildung: 3 } },
+      { value: "calisma_deneyimi", label: "Eğitim sırasında çalışma ve iş deneyimi kazanmak.", scores: { ausbildung: 3 } },
+      { value: "hazirlik", label: "Önce Almanca ve hazırlık sürecine odaklanmak.", scores: { dil: 4 } },
+      { value: "karsilastirma", label: "Emin değilim; farklarını görmek istiyorum.", scores: { karsilastirma: 2 } },
+    ],
+  },
+  {
+    id: "interest",
+    prompt: "Hangi alan veya alanlar ilgini çekiyor?",
+    options: [
+      { value: "muhendislik", label: "Mühendislik, bilgisayar veya teknik alanlar.", scores: { universite: 1, master: 1 } },
+      { value: "isletme_sosyal", label: "İşletme, ekonomi veya sosyal bilimler.", scores: { universite: 1, master: 1 } },
+      { value: "saglik_egitim", label: "Sağlık, eğitim veya insan odaklı alanlar.", scores: { universite: 1, master: 1 } },
+      { value: "tasarim_medya", label: "Tasarım, medya veya yaratıcı alanlar.", scores: { universite: 1, master: 1 } },
+      { value: "teknik_meslek", label: "Teknik meslekler ve uygulamalı işler.", scores: { ausbildung: 2 } },
+      { value: "bolum_belirsiz", label: "Henüz bölüm seçmedim.", scores: { karsilastirma: 1 } },
+    ],
+  },
+  {
+    id: "support",
+    prompt: "Şu anda en çok hangi konuda desteğe ihtiyacın var?",
+    options: [
+      { value: "okul_secimi", label: "Bana uygun ülke/şehir/okul seçeneklerini anlamak.", scores: { universite: 1 } },
+      { value: "dil_plani", label: "Almanca seviyemi ve hazırlık yolunu planlamak.", scores: { dil: 2 } },
+      { value: "basvuru", label: "Üniversite veya Ausbildung başvuru adımlarını öğrenmek.", scores: { universite: 1, master: 1, ausbildung: 1 } },
+      { value: "belgeler_takvim", label: "Belgelerimi ve başvuru takvimimi düzenlemek.", scores: { universite: 1, master: 1, ausbildung: 1 } },
+      { value: "vize_yerlesim", label: "Vize, bütçe ve Almanya’ya ilk yerleşim sürecini anlamak.", scores: { ausbildung: 1, dil: 1 } },
+      { value: "baslangic_destegi", label: "Nereden başlayacağımı bilmiyorum.", scores: { karsilastirma: 2 } },
+    ],
+  },
+];
+
+const routeTestResults = {
+  universite: {
+    title: "Sana en yakın rota: Almanya’da üniversite",
+    copy: "Akademik hedeflerin ve mevcut eğitim geçmişin, Almanya’daki lisans veya ilgili üniversite seçeneklerini araştırmayı mantıklı bir başlangıç noktası yapıyor.",
+    next: "Bölüm seçimi, diploma uygunluğu, eğitim dili, başvuru takvimi ve bütçeyi birlikte netleştir.",
+    link: "/almanya-universite-basvurusu/",
+  },
+  master: {
+    title: "Sana en yakın rota: Almanya’da yüksek lisans",
+    copy: "Lisans geçmişin ve uzmanlaşma hedefin, Almanya’daki yüksek lisans programlarını incelemeyi öne çıkarıyor.",
+    next: "Lisans bölümün, transkriptin, dil seviyen ve hedeflediğin alan üzerinden program seçeneklerini daralt.",
+    link: "/almanya-yuksek-lisans-sartlari/",
+  },
+  ausbildung: {
+    title: "Sana en yakın rota: Ausbildung",
+    copy: "Uygulamalı eğitim, meslek edinme ve iş deneyimi kazanma hedefin Ausbildung seçeneklerini araştırmayı mantıklı hale getiriyor.",
+    next: "İlgi alanını, eğitim geçmişini, Almanca seviyeni ve başvuru takvimini seçtiğin meslekle birlikte değerlendir.",
+    link: "/almanya-ausbildung-danismanligi/",
+  },
+  dil: {
+    title: "Sana en yakın rota: Almanca ve hazırlık planı",
+    copy: "Şu an en doğru ilk adım, doğrudan okul başvurusundan önce Almanca seviyeni ve hazırlık ihtiyacını netleştirmek olabilir.",
+    next: "Mevcut seviyeni ölçüp hedeflediğin eğitim rotasına göre gerçekçi bir dil ve hazırlık takvimi çıkar.",
+    link: "/almanca-ozel-ders/",
+  },
+  karsilastirma: {
+    title: "Sana en yakın rota: Önce seçenekleri karşılaştırmak",
+    copy: "Şu anda tek bir eğitim yoluna bağlanmak yerine üniversite, yüksek lisans, Ausbildung ve hazırlık seçeneklerini karşılaştırman daha doğru görünüyor.",
+    next: "Eğitim geçmişin, dil seviyen, bütçen, başlama tarihin ve uzun vadeli hedeflerin üzerinden seçenekleri birlikte sırala.",
+    link: "/almanya-egitim-danismanligi/",
+  },
+};
+
+const setupRouteTest = () => {
+  const root = document.querySelector("[data-route-test]");
+  if (!root) return;
+
+  const form = root.querySelector("[data-route-test-form]");
+  const questionElement = root.querySelector("[data-route-test-question]");
+  const statusElement = root.querySelector("[data-route-test-status]");
+  const backButton = root.querySelector("[data-route-test-back]");
+  const nextButton = root.querySelector("[data-route-test-continue]");
+  const progress = root.querySelector(".route-test-progress");
+  const progressLabel = root.querySelector("[data-route-test-progress-label]");
+  const progressPercent = root.querySelector("[data-route-test-progress-percent]");
+  const progressBar = root.querySelector("[data-route-test-progress-bar]");
+  const result = root.querySelector("[data-route-test-result]");
+  const resultTitle = root.querySelector("[data-route-test-result-title]");
+  const resultCopy = root.querySelector("[data-route-test-result-copy]");
+  const resultSummary = root.querySelector("[data-route-test-summary]");
+  const resultNext = root.querySelector("[data-route-test-next]");
+  const resultLink = root.querySelector("[data-route-test-route-link]");
+  const whatsappLink = root.querySelector("[data-route-test-whatsapp]");
+  const restartButton = root.querySelector("[data-route-test-restart]");
+  let currentIndex = 0;
+  const answers = {};
+
+  const getSelectedOption = (question) => question.options.find((option) => option.value === answers[question.id]);
+
+  const renderQuestion = () => {
+    const question = routeTestQuestions[currentIndex];
+    const fieldset = document.createElement("fieldset");
+    const legend = document.createElement("legend");
+    const optionList = document.createElement("div");
+
+    legend.textContent = question.prompt;
+    optionList.className = "route-test-option-list";
+    question.options.forEach((option) => {
+      const optionId = `route-test-${question.id}-${option.value}`;
+      const label = document.createElement("label");
+      const input = document.createElement("input");
+      const card = document.createElement("span");
+      label.className = "route-test-option";
+      label.htmlFor = optionId;
+      input.id = optionId;
+      input.type = "radio";
+      input.name = "route-test-answer";
+      input.value = option.value;
+      input.checked = option.value === answers[question.id];
+      card.className = "route-test-option-card";
+      card.textContent = option.label;
+      label.append(input, card);
+      optionList.append(label);
+    });
+    fieldset.append(legend, optionList);
+    questionElement.replaceChildren(fieldset);
+    statusElement.textContent = "";
+    progressLabel.textContent = `${currentIndex + 1} / ${routeTestQuestions.length}`;
+    const percent = Math.round(((currentIndex + 1) / routeTestQuestions.length) * 100);
+    progressPercent.textContent = `%${percent}`;
+    progressBar.style.width = `${percent}%`;
+    backButton.disabled = currentIndex === 0;
+    nextButton.textContent = currentIndex === routeTestQuestions.length - 1 ? "Sonucu gör" : "Devam et";
+  };
+
+  const calculateResult = () => {
+    const scores = { universite: 0, master: 0, ausbildung: 0, dil: 0, karsilastirma: 0 };
+    routeTestQuestions.forEach((question) => {
+      Object.entries(getSelectedOption(question)?.scores || {}).forEach(([route, points]) => {
+        scores[route] += points;
+      });
+    });
+    return ["master", "ausbildung", "dil", "universite", "karsilastirma"].reduce(
+      (best, route) => (scores[route] > scores[best] ? route : best),
+      "karsilastirma",
+    );
+  };
+
+  const buildWhatsappMessage = (resultKey) => {
+    const summary = ["target", "education", "german", "start", "budget", "interest"]
+      .map((id) => {
+        const question = routeTestQuestions.find((item) => item.id === id);
+        return getSelectedOption(question)?.label || "";
+      })
+      .filter(Boolean);
+    return [
+      "Merhaba Anday, sakalmanya.com.tr rota testini tamamladım.",
+      `Bana en yakın rota: ${routeTestResults[resultKey].title.replace("Sana en yakın rota: ", "")}`,
+      ...summary,
+    ].join("\n");
+  };
+
+  const renderResult = () => {
+    const resultKey = calculateResult();
+    const resultCopyData = routeTestResults[resultKey];
+    const summaryIds = ["target", "education", "german", "start", "budget", "interest"];
+    resultTitle.textContent = resultCopyData.title;
+    resultCopy.textContent = resultCopyData.copy;
+    resultNext.textContent = resultCopyData.next;
+    resultLink.href = resultCopyData.link;
+    resultSummary.replaceChildren(
+      ...summaryIds.map((id) => {
+        const question = routeTestQuestions.find((item) => item.id === id);
+        const item = document.createElement("li");
+        item.textContent = getSelectedOption(question)?.label || "Belirtilmedi";
+        return item;
+      }),
+    );
+    whatsappLink.href = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(buildWhatsappMessage(resultKey))}`;
+    form.hidden = true;
+    progress.hidden = true;
+    result.hidden = false;
+    trackEvent("route_test_complete", { route_result: resultKey, route_test_answers: Object.keys(answers).length });
+    bindGoogleAdsConversion(whatsappLink);
+  };
+
+  nextButton.addEventListener("click", () => {
+    const question = routeTestQuestions[currentIndex];
+    const selected = root.querySelector("input[name='route-test-answer']:checked");
+    if (!selected) {
+      statusElement.textContent = "Devam etmek için seçeneklerden birini seç.";
+      return;
+    }
+    answers[question.id] = selected.value;
+    if (currentIndex === routeTestQuestions.length - 1) {
+      renderResult();
+      return;
+    }
+    currentIndex += 1;
+    renderQuestion();
+  });
+
+  backButton.addEventListener("click", () => {
+    if (currentIndex === 0) return;
+    currentIndex -= 1;
+    renderQuestion();
+  });
+
+  restartButton.addEventListener("click", () => {
+    currentIndex = 0;
+    routeTestQuestions.forEach((question) => delete answers[question.id]);
+    form.hidden = false;
+    progress.hidden = false;
+    result.hidden = true;
+    renderQuestion();
+    root.scrollIntoView({ behavior: "smooth", block: "start" });
+    trackEvent("route_test_restart");
+  });
+
+  trackEvent("route_test_start");
+  renderQuestion();
 };
 
 const setupMobileNavigation = () => {
@@ -969,6 +1436,7 @@ const setupFooterBottomRows = () => {
 setupConsentManager();
 setupPilotNotice();
 setupAboutNavigation();
+setupRouteTestNavigation();
 setupMobileNavigation();
 setupFooterBottomRows();
 setupDresdenNavigation();
@@ -977,6 +1445,7 @@ setupDeutschlaenderLinks();
 updateWhatsappLinks();
 bindGoogleAdsConversions();
 setupAnalyticsTracking();
+setupRouteTest();
 
 const floatingWhatsapp = document.createElement("a");
 floatingWhatsapp.className = "floating-whatsapp";

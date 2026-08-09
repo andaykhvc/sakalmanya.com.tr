@@ -2,9 +2,112 @@
 
 const DATASET = __DATASET__;
 const UNIVERSITIES = DATASET.universities;
-const FILTER_OPTIONS = DATASET.filterOptions;
 const SITE_URL = "https://sakalmanya.com.tr";
-const TRUST_NOTICE = "Başvuru tarihleri ve kabul şartları programa, döneme ve öğrencinin durumuna göre değişebilir. En güncel bilgi için üniversitenin resmi sayfası kontrol edilmelidir.";
+
+/* Localisation tables, inlined from scripts/value-translations.json at build time. */
+const VALUE_LABELS = __VALUE_LABELS__;
+const DEADLINE_QUALIFIERS = __DEADLINE_QUALIFIERS__;
+const TRUST_NOTICE = __TRUST_NOTICE__;
+
+/* Slugs that have a hand-written static detail page, scanned from the repo at build time. */
+const LOCALE_DETAIL_PAGES = __LOCALE_DETAIL_PAGES__;
+
+const LANGUAGES = ["tr", "de", "en"];
+const DEFAULT_LANGUAGE = "tr";
+const DETAIL_BASE_PATHS = { tr: "/universiteler", de: "/de/universitaeten", en: "/en/universities" };
+const LISTING_PATHS = { tr: "/universite-tanitimlari/", de: "/de/universitaeten/", en: "/en/universities/" };
+const DATE_LOCALES = { tr: "tr-TR", de: "de-DE", en: "en-GB" };
+
+/* Dropdown labels are re-derived from VALUE_LABELS instead of trusting the labels baked
+   into the dataset, so a filter option and a card can never disagree on the same value. */
+const FILTER_OPTIONS = Object.fromEntries(
+  Object.entries(DATASET.filterOptions).map(([group, entries]) => [
+    group,
+    entries.map((entry) => ({ value: entry.value, label: VALUE_LABELS[entry.value] || entry.label })),
+  ])
+);
+
+function resolveLanguage(value) {
+  const lang = String(value || "").trim().toLowerCase().slice(0, 2);
+  return LANGUAGES.includes(lang) ? lang : DEFAULT_LANGUAGE;
+}
+
+/* Dataset text fields are either a plain (Turkish) string or a {tr,de,en} object. */
+function pickText(value, lang) {
+  if (value && typeof value === "object" && !Array.isArray(value)) {
+    return value[lang] || value[DEFAULT_LANGUAGE] || "";
+  }
+  return value;
+}
+
+/* Localise a value: an explicit translation from the dataset wins, otherwise fall back
+   to the shared enum table so Turkish-only rows still render in German and English. */
+function localiseValue(value, lang) {
+  const raw = pickText(value, lang);
+  if (typeof raw !== "string" || !raw) return raw;
+  return VALUE_LABELS[raw]?.[lang] || raw;
+}
+
+function formatDate(value, lang) {
+  if (!value) return localiseValue("Henüz doğrulanmadı", lang);
+  const date = new Date(`${value}T00:00:00Z`);
+  if (Number.isNaN(date.getTime())) return value;
+  return new Intl.DateTimeFormat(DATE_LOCALES[lang] || DATE_LOCALES.tr, {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+    timeZone: "UTC",
+  }).format(date);
+}
+
+/* Some deadline rows are still raw notation such as
+   "restricted: 2026-05-31; unrestricted: 2026-07-15". Rewrite those into readable text
+   without touching the dates themselves. */
+function expandDeadlineNotation(display, lang) {
+  const parts = display.split(";").map((part) => part.trim()).filter(Boolean);
+  const expanded = parts.map((part) => {
+    const match = /^([a-zA-Z_ -]+):\s*(\d{4}-\d{2}-\d{2})$/.exec(part);
+    if (!match) return null;
+    const qualifier = DEADLINE_QUALIFIERS[match[1].trim().toLowerCase()];
+    if (!qualifier) return null;
+    return `${qualifier[lang] || qualifier[DEFAULT_LANGUAGE]}: ${formatDate(match[2], lang)}`;
+  });
+  return expanded.every(Boolean) ? expanded.join(" · ") : null;
+}
+
+/* "15 Temmuz 2026" and similar — a bare day/month/year with nothing else in it. */
+const PLAIN_DATE_DISPLAY = /^\d{1,2}\.?\s+\p{L}+\.?\s+\d{4}$/u;
+
+function localiseDeadlineDisplay(deadline, lang) {
+  const explicit = pickText(deadline?.display, lang);
+  if (typeof explicit !== "string" || !explicit) return localiseValue("Program bazlı kontrol edilmeli", lang);
+  /* A translated string from the dataset is used as written. */
+  if (deadline.display && typeof deadline.display === "object") return explicit;
+  const expanded = expandDeadlineNotation(explicit, lang);
+  if (expanded) return expanded;
+  /* Re-format from the ISO date only when the written display is nothing but a date, so a
+     qualifier someone added in the sheet ("... (tahmini)") is never silently dropped. */
+  if (deadline.date && PLAIN_DATE_DISPLAY.test(explicit)) return formatDate(deadline.date, lang);
+  return localiseValue(explicit, lang);
+}
+
+/* Most slugs only have a Turkish detail page, which this function renders. A locale path
+   is used exclusively when a hand-written page for that slug really exists. */
+function localeDetailPath(slug, lang) {
+  return lang !== DEFAULT_LANGUAGE && LOCALE_DETAIL_PAGES[lang]?.includes(slug)
+    ? `${DETAIL_BASE_PATHS[lang]}/${slug}/`
+    : "";
+}
+
+function detailUrl(slug, lang) {
+  return localeDetailPath(slug, lang) || `${DETAIL_BASE_PATHS[DEFAULT_LANGUAGE]}/${slug}/`;
+}
+
+/* Language switcher target: the same university in that language when it exists,
+   otherwise that language's university listing. */
+function languageSwitchUrl(slug, lang) {
+  return localeDetailPath(slug, lang) || LISTING_PATHS[lang] || LISTING_PATHS[DEFAULT_LANGUAGE];
+}
 
 const requestBuckets = new Map();
 const WINDOW_MS = 60 * 1000;
@@ -61,27 +164,27 @@ function sortByPopularity(a, b) {
   return rankingScore(a) - rankingScore(b) || a.name.localeCompare(b.name, "tr");
 }
 
-function publicCard(item) {
+function publicCard(item, lang) {
   return {
     name: item.name,
     slug: item.slug,
     city: item.city,
-    state: item.state,
-    type: item.type,
-    qsWorldRanking2026: item.qsWorldRanking2026,
-    schoolIntro: item.schoolIntro,
-    cityIntro: item.cityIntro,
-    bachelorDeadline: item.deadlines.bachelor.display,
-    masterDeadline: item.deadlines.master.display,
-    germanPrepStatus: item.germanCourse.label,
-    uniAssistStatus: item.filters.uniAssist,
+    state: localiseValue(item.state, lang),
+    type: localiseValue(item.type, lang),
+    qsWorldRanking2026: localiseValue(item.qsWorldRanking2026, lang),
+    schoolIntro: pickText(item.schoolIntro, lang),
+    cityIntro: pickText(item.cityIntro, lang),
+    bachelorDeadline: localiseDeadlineDisplay(item.deadlines.bachelor, lang),
+    masterDeadline: localiseDeadlineDisplay(item.deadlines.master, lang),
+    germanPrepStatus: localiseValue(item.germanCourse.label, lang),
+    uniAssistStatus: localiseValue(item.filters.uniAssist, lang),
     lastChecked: item.lastChecked,
     sourceUrl: item.sourceUrl || item.officialWebsite,
-    detailUrl: `/universiteler/${item.slug}/`,
+    detailUrl: detailUrl(item.slug, lang),
   };
 }
 
-function relatedUniversities(item) {
+function relatedUniversities(item, lang) {
   return UNIVERSITIES
     .filter((candidate) => candidate.slug !== item.slug && (candidate.city === item.city || candidate.state === item.state))
     .sort((a, b) => Number(b.city === item.city) - Number(a.city === item.city) || a.name.localeCompare(b.name, "tr"))
@@ -89,53 +192,90 @@ function relatedUniversities(item) {
     .map((candidate) => ({
       name: candidate.name,
       city: candidate.city,
-      state: candidate.state,
-      detailUrl: `/universiteler/${candidate.slug}/`,
+      state: localiseValue(candidate.state, lang),
+      detailUrl: detailUrl(candidate.slug, lang),
     }));
 }
 
-function publicDetail(item) {
+const PROSE_FIELDS = [
+  "schoolIntro", "cityIntro", "popularityReason", "universityLongIntro", "whyChoose",
+  "cityStudentLife", "cityTransport", "cityCostOfLiving", "cityHistory", "cityHistoricalNote",
+  "cityEconomy", "cityIndustries", "studentJobsNote", "turkishStudentsNote",
+];
+
+/* Resolve every localisable field of a dataset record for one language, keeping the
+   record shape intact so renderers can read it exactly like the raw dataset item. */
+function localisedItem(item, lang) {
+  const resolved = { ...item };
+  PROSE_FIELDS.forEach((field) => {
+    resolved[field] = pickText(item[field], lang);
+  });
+  resolved.state = localiseValue(item.state, lang);
+  resolved.type = localiseValue(item.type, lang);
+  resolved.qsWorldRanking2026 = localiseValue(item.qsWorldRanking2026, lang);
+  resolved.filters = { ...item.filters, uniAssist: localiseValue(item.filters.uniAssist, lang) };
+  resolved.deadlines = {
+    bachelor: { ...item.deadlines.bachelor, display: localiseDeadlineDisplay(item.deadlines.bachelor, lang) },
+    master: { ...item.deadlines.master, display: localiseDeadlineDisplay(item.deadlines.master, lang) },
+  };
+  resolved.germanCourse = {
+    ...item.germanCourse,
+    label: localiseValue(item.germanCourse.label, lang),
+    criteriaMatch: pickText(item.germanCourse.criteriaMatch, lang),
+  };
+  return resolved;
+}
+
+/* Course-status checks must run against the canonical Turkish value, not a translation. */
+function hasVerifiedGermanCourse(item) {
+  return pickText(item.germanCourse.label, DEFAULT_LANGUAGE) === "Hazırlık/DSH kursu var";
+}
+
+function publicDetail(item, lang) {
+  const view = localisedItem(item, lang);
   return {
-    name: item.name,
-    slug: item.slug,
-    city: item.city,
-    state: item.state,
-    type: item.type,
-    officialWebsite: item.officialWebsite,
-    qsWorldRanking2026: item.qsWorldRanking2026,
-    qsSourceUrl: item.qsSourceUrl,
-    schoolIntro: item.schoolIntro,
-    cityIntro: item.cityIntro,
-    popularityReason: item.popularityReason,
-    universityLongIntro: item.universityLongIntro,
-    whyChoose: item.whyChoose,
-    cityStudentLife: item.cityStudentLife,
-    cityTransport: item.cityTransport,
-    cityCostOfLiving: item.cityCostOfLiving,
-    cityHistory: item.cityHistory,
-    cityHistoricalNote: item.cityHistoricalNote,
-    cityEconomy: item.cityEconomy,
-    cityIndustries: item.cityIndustries,
-    studentJobsNote: item.studentJobsNote,
-    turkishStudentsNote: item.turkishStudentsNote,
-    applicationPortal: item.applicationPortal,
-    uniAssistStatus: item.filters.uniAssist,
-    lastChecked: item.lastChecked,
-    sourceUrl: item.sourceUrl,
-    logoPath: item.logoPath,
-    campusImagePath: item.campusImagePath,
-    campusStatus: item.campusStatus,
-    campusAttribution: item.campusAttribution,
-    campusLicenseUrl: item.campusLicenseUrl,
-    campusSourceUrl: item.campusSourceUrl,
-    logoStatus: item.logoStatus,
-    logoAttribution: item.logoAttribution,
-    logoLicenseUrl: item.logoLicenseUrl,
-    logoSourceUrl: item.logoSourceUrl,
-    deadlines: item.deadlines,
-    germanCourse: item.germanCourse,
-    related: relatedUniversities(item),
-    trustNotice: TRUST_NOTICE,
+    name: view.name,
+    slug: view.slug,
+    city: view.city,
+    state: view.state,
+    type: view.type,
+    officialWebsite: view.officialWebsite,
+    qsWorldRanking2026: view.qsWorldRanking2026,
+    qsSourceUrl: view.qsSourceUrl,
+    schoolIntro: view.schoolIntro,
+    cityIntro: view.cityIntro,
+    popularityReason: view.popularityReason,
+    universityLongIntro: view.universityLongIntro,
+    whyChoose: view.whyChoose,
+    cityStudentLife: view.cityStudentLife,
+    cityTransport: view.cityTransport,
+    cityCostOfLiving: view.cityCostOfLiving,
+    cityHistory: view.cityHistory,
+    cityHistoricalNote: view.cityHistoricalNote,
+    cityEconomy: view.cityEconomy,
+    cityIndustries: view.cityIndustries,
+    studentJobsNote: view.studentJobsNote,
+    turkishStudentsNote: view.turkishStudentsNote,
+    applicationPortal: view.applicationPortal,
+    uniAssistStatus: view.filters.uniAssist,
+    lastChecked: view.lastChecked,
+    sourceUrl: view.sourceUrl,
+    logoPath: view.logoPath,
+    campusImagePath: view.campusImagePath,
+    campusStatus: view.campusStatus,
+    campusAttribution: view.campusAttribution,
+    campusLicenseUrl: view.campusLicenseUrl,
+    campusSourceUrl: view.campusSourceUrl,
+    logoStatus: view.logoStatus,
+    logoAttribution: view.logoAttribution,
+    logoLicenseUrl: view.logoLicenseUrl,
+    logoSourceUrl: view.logoSourceUrl,
+    deadlines: view.deadlines,
+    germanCourse: view.germanCourse,
+    related: relatedUniversities(item, lang),
+    trustNotice: TRUST_NOTICE[lang] || TRUST_NOTICE[DEFAULT_LANGUAGE],
+    detailUrl: detailUrl(item.slug, lang),
+    lang,
   };
 }
 
@@ -166,13 +306,6 @@ function safeAssetPath(value, slug) {
 
 function jsonForHtml(value) {
   return JSON.stringify(value).replaceAll("<", "\\u003c");
-}
-
-function formatDateTr(value) {
-  if (!value) return "Henüz doğrulanmadı";
-  const date = new Date(`${value}T00:00:00Z`);
-  if (Number.isNaN(date.getTime())) return value;
-  return new Intl.DateTimeFormat("tr-TR", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" }).format(date);
 }
 
 function factRow(label, value) {
@@ -222,7 +355,7 @@ function deadlineCard(label, deadline) {
 
 function buildFaq(item) {
   const seoName = seoUniversityName(item);
-  const courseAnswer = item.germanCourse.label === "Hazırlık/DSH kursu var"
+  const courseAnswer = hasVerifiedGermanCourse(item)
     ? `${seoName} için dataset'te doğrulanmış Almanca hazırlık/DSH yolu bulunuyor: ${item.germanCourse.name || item.germanCourse.type}. Katılım ve kabul şartları resmi kaynaktan kontrol edilmelidir.`
     : `${seoName} için Türkiye'deki hazırlık sınıfı mantığına yakın, DSH/Intensivkurs formatında bir Almanca hazırlık kursu resmi kaynakla net doğrulanamadı. Güncel durum resmi kaynaktan kontrol edilmelidir.`;
 
@@ -258,8 +391,11 @@ function buildFaq(item) {
   ];
 }
 
-function renderUniversityPage(item) {
-  const canonical = `${SITE_URL}/universiteler/${item.slug}/`;
+function renderUniversityPage(record) {
+  /* This route is the Turkish detail page; resolve the record into Turkish once so the
+     markup below can read it exactly like a plain, single-language dataset item. */
+  const item = localisedItem(record, DEFAULT_LANGUAGE);
+  const canonical = `${SITE_URL}${DETAIL_BASE_PATHS[DEFAULT_LANGUAGE]}/${item.slug}/`;
   const seoName = seoUniversityName(item);
   const title = `${seoName} Son Başvuru Tarihleri | Lisans, Master ve Almanca Hazırlık`;
   const description = `${seoName} son başvuru tarihleri, lisans ve master başvuru bilgileri, Uni-Assist durumu, Almanca hazırlık/DSH kursu ve ${item.city} öğrenci yaşamı.`;
@@ -275,7 +411,7 @@ function renderUniversityPage(item) {
     item.logoAttribution && externalSourceItem(item.logoLicenseUrl || item.logoSourceUrl, item.logoAttribution),
   ].filter(Boolean);
   const uniqueSources = [...new Set(sources)];
-  const related = relatedUniversities(item);
+  const related = relatedUniversities(record, DEFAULT_LANGUAGE);
   const logoPath = safeAssetPath(item.logoPath, item.slug);
   const campusPath = safeAssetPath(item.campusImagePath, item.slug) || safeAssetPath(item.cityImagePath, item.slug);
   const visualCard = (path, label, fallback, kind, sourceUrl, attribution) => path
@@ -299,7 +435,8 @@ function renderUniversityPage(item) {
     address: {
       "@type": "PostalAddress",
       addressLocality: item.city,
-      addressRegion: item.state,
+      /* Structured data keeps the canonical German Bundesland name, not the display label. */
+      addressRegion: record.state,
       addressCountry: "DE",
     },
     ...(safeExternalUrl(item.officialWebsite) ? { sameAs: [safeExternalUrl(item.officialWebsite)] } : {}),
@@ -323,7 +460,7 @@ function renderUniversityPage(item) {
     item.germanCourse.targetDegreeLevel && factRow("Hedef eğitim seviyesi", item.germanCourse.targetDegreeLevel),
     item.germanCourse.residenceRelevance && factRow("Oturum §16 açısından not", item.germanCourse.residenceRelevance),
   ].filter(Boolean).join("");
-  const verifiedCourse = item.germanCourse.label === "Hazırlık/DSH kursu var";
+  const verifiedCourse = hasVerifiedGermanCourse(item);
   const courseFallback = "Bu üniversitede Türkiye’deki hazırlık sınıfı mantığına yakın, DSH/Intensivkurs formatında bir hazırlık kursu resmi kaynakla net doğrulanamadı.";
   const courseIntro = verifiedCourse
     ? item.germanCourse.criteriaMatch || "Resmi kaynakta hazırlık/DSH yolu doğrulandı; kabul ve katılım şartları ayrıca kontrol edilmelidir."
@@ -369,7 +506,7 @@ function renderUniversityPage(item) {
     <header class="site-header" data-header>
       <a class="brand" href="/" aria-label="ŞAK Almanya Ana sayfa"><img class="brand-mark" src="/assets/logoask.svg" alt="ŞAK Almanya logosu" width="50" height="50" /><span><strong>Almanya</strong></span></a>
       <nav class="main-nav" aria-label="Türkçe menü" data-nav><a href="/#hakkimda">Hakkımda</a><a href="/#hizmetler">Hizmetler</a><a href="/#basarilar">Başarılar</a><a href="/#surec">Süreç</a><a href="/universite-tanitimlari/" aria-current="page">Üniversiteler</a><a href="/blog/">Blog</a><a href="/sss/">SSS</a></nav>
-      <div class="language-switcher" aria-label="Dil seçimi"><a href="${escapeHtml(canonical)}" lang="tr" aria-current="true">TR</a><span>|</span><a href="/de/universitaeten/" lang="de">DE</a><span>|</span><a href="/en/universities/" lang="en">EN</a></div>
+      <div class="language-switcher" aria-label="Dil seçimi"><a href="${escapeHtml(canonical)}" lang="tr" aria-current="true">TR</a><span>|</span><a href="${escapeHtml(languageSwitchUrl(item.slug, "de"))}" lang="de">DE</a><span>|</span><a href="${escapeHtml(languageSwitchUrl(item.slug, "en"))}" lang="en">EN</a></div>
     </header>
     <main>
       <section class="page-hero university-dataset-hero">
@@ -378,28 +515,28 @@ function renderUniversityPage(item) {
           <p class="section-label">${escapeHtml(item.city)} / ${escapeHtml(item.state)}</p>
           <h1>${escapeHtml(seoName)} Son Başvuru Tarihleri ve Başvuru Rehberi</h1>
           <p>${escapeHtml(item.schoolIntro)} ${escapeHtml(seoName)} son başvuru tarihi, lisans ve master başvuru yolu, Uni-Assist durumu ve Almanca hazırlık bilgileri aşağıda kaynaklı şekilde özetlenmiştir.</p>
-          <div class="university-hero-facts"><span>${escapeHtml(item.type)}</span><span>QS 2026: ${escapeHtml(item.qsWorldRanking2026)}</span><span>Son kontrol: ${escapeHtml(formatDateTr(item.lastChecked))}</span></div>
+          <div class="university-hero-facts"><span>${escapeHtml(item.type)}</span><span>QS 2026: ${escapeHtml(item.qsWorldRanking2026)}</span><span>Son kontrol: ${escapeHtml(formatDate(item.lastChecked, DEFAULT_LANGUAGE))}</span></div>
           <div class="hero-actions">${externalButton(item.officialWebsite, "Resmi üniversite sitesi", "button button-primary")}<a class="button button-secondary" href="#basvuru-bilgileri">Başvuru bilgileri</a></div>
         </div>
       </section>
       <section class="section page-content">
         <div class="container article-layout university-detail university-dataset-detail">
-          <p class="notice-box">${escapeHtml(TRUST_NOTICE)}</p>
+          <p class="notice-box">${escapeHtml(TRUST_NOTICE[DEFAULT_LANGUAGE])}</p>
           <section class="university-visual-grid" aria-label="Üniversite görselleri">${visualCard(logoPath, `${item.name} logosu`, item.name, "logo", item.logoSourceUrl, item.logoAttribution)}${visualCard(campusPath, `${item.name} kampüs veya ${item.city} şehir görseli`, item.city, "campus", item.campusSourceUrl, item.campusAttribution)}</section>
           <h2>Hızlı Bilgi</h2>
-          <div class="table-wrap"><table class="info-table"><tbody>${factRow("Üniversite", item.name)}${factRow("Şehir", item.city)}${factRow("Eyalet", item.state)}${factRow("Tür", item.type)}${factRow("QS 2026", item.qsWorldRanking2026)}${factRow("Uni-Assist", item.filters.uniAssist)}${factRow("Son kontrol", formatDateTr(item.lastChecked))}</tbody></table></div>
+          <div class="table-wrap"><table class="info-table"><tbody>${factRow("Üniversite", item.name)}${factRow("Şehir", item.city)}${factRow("Eyalet", item.state)}${factRow("Tür", item.type)}${factRow("QS 2026", item.qsWorldRanking2026)}${factRow("Uni-Assist", item.filters.uniAssist)}${factRow("Son kontrol", formatDate(item.lastChecked, DEFAULT_LANGUAGE))}</tbody></table></div>
           <h2>Üniversite Hakkında</h2><p>${escapeHtml(item.schoolIntro)}</p>${item.universityLongIntro ? `<p>${escapeHtml(item.universityLongIntro)}</p>` : ""}${item.whyChoose ? `<p>${escapeHtml(item.whyChoose)}</p>` : ""}${item.popularityReason ? `<p>${escapeHtml(item.popularityReason)}</p>` : ""}
           <h2>Şehir Hakkında</h2><p>${escapeHtml(item.cityIntro)}</p>${item.cityStudentLife ? `<p>${escapeHtml(item.cityStudentLife)}</p>` : ""}${item.cityTransport ? `<p>${escapeHtml(item.cityTransport)}</p>` : ""}${item.cityCostOfLiving ? `<p>${escapeHtml(item.cityCostOfLiving)}</p>` : ""}
           ${(item.cityHistory || item.cityHistoricalNote) ? `<h2>Şehrin Kısa Tarihi</h2>${item.cityHistory ? `<p>${escapeHtml(item.cityHistory)}</p>` : ""}${item.cityHistoricalNote ? `<p>${escapeHtml(item.cityHistoricalNote)}</p>` : ""}` : ""}
           ${(item.cityEconomy || item.cityIndustries || item.studentJobsNote) ? `<h2>Ekonomi ve Kariyer Çevresi</h2>${item.cityEconomy ? `<p>${escapeHtml(item.cityEconomy)}</p>` : ""}${item.cityIndustries ? `<p>${escapeHtml(item.cityIndustries)}</p>` : ""}${item.studentJobsNote ? `<p>${escapeHtml(item.studentJobsNote)}</p>` : ""}` : ""}
-          <section id="basvuru-bilgileri" class="university-anchor-section"><h2>${escapeHtml(seoName)} Son Başvuru Tarihleri</h2><p>${escapeHtml(seoName)} son başvuru tarihi lisans ve master seviyesinde farklı olabilir. Aşağıdaki bilgiler Türkiye’den başvuran adaylar için resmi kaynaklardan kontrol edilmiş özet niteliğindedir.</p><p><strong>Genel başvuru yolu:</strong> ${escapeHtml(item.applicationPortal || item.filters.uniAssist)}</p><h2>${escapeHtml(seoName)} Lisans Son Başvuru Tarihi</h2>${deadlineCard("Lisans", item.deadlines.bachelor)}<h2>${escapeHtml(seoName)} Master Son Başvuru Tarihi</h2>${deadlineCard("Master", item.deadlines.master)}<h2>${escapeHtml(seoName)} Uni-Assist Başvurusu</h2><p>${escapeHtml(seoName)} için Uni-Assist durumu: <strong>${escapeHtml(item.filters.uniAssist)}</strong>. Bazı üniversitelerde başvuru yolu programa, dereceye veya önceki eğitim belgesine göre değişebilir.</p><p class="notice-box">${escapeHtml(TRUST_NOTICE)}</p></section>
+          <section id="basvuru-bilgileri" class="university-anchor-section"><h2>${escapeHtml(seoName)} Son Başvuru Tarihleri</h2><p>${escapeHtml(seoName)} son başvuru tarihi lisans ve master seviyesinde farklı olabilir. Aşağıdaki bilgiler Türkiye’den başvuran adaylar için resmi kaynaklardan kontrol edilmiş özet niteliğindedir.</p><p><strong>Genel başvuru yolu:</strong> ${escapeHtml(item.applicationPortal || item.filters.uniAssist)}</p><h2>${escapeHtml(seoName)} Lisans Son Başvuru Tarihi</h2>${deadlineCard("Lisans", item.deadlines.bachelor)}<h2>${escapeHtml(seoName)} Master Son Başvuru Tarihi</h2>${deadlineCard("Master", item.deadlines.master)}<h2>${escapeHtml(seoName)} Uni-Assist Başvurusu</h2><p>${escapeHtml(seoName)} için Uni-Assist durumu: <strong>${escapeHtml(item.filters.uniAssist)}</strong>. Bazı üniversitelerde başvuru yolu programa, dereceye veya önceki eğitim belgesine göre değişebilir.</p><p class="notice-box">${escapeHtml(TRUST_NOTICE[DEFAULT_LANGUAGE])}</p></section>
           <h2>${escapeHtml(seoName)} Almanca Hazırlık / DSH Kursu</h2><p><strong>Durum:</strong> ${escapeHtml(item.germanCourse.label)}</p><p>${escapeHtml(courseIntro)}</p>${courseDetails ? `<div class="table-wrap"><table class="info-table"><tbody>${courseDetails}</tbody></table></div>` : ""}${externalButton(item.germanCourse.sourceUrl, "Almanca hazırlık kaynağı", "text-link")}
           <aside class="deutschlaender-callout" aria-labelledby="deutschlaender-university-title"><p class="section-label">Ücretsiz Almanca ve topluluk</p><h2 id="deutschlaender-university-title">${escapeHtml(seoName)} hakkında sorularını topluluğa taşı.</h2><p>DSH, TestDaF, Almanca hazırlık ve üniversite başvurusu sorularını Deutschländer forumunda paylaş; ücretsiz sınav ve ders içeriklerini incele.</p><div class="deutschlaender-callout-actions"><a class="button button-primary" href="https://deutschlaender.com.tr/forum/kategori/universite-ve-basvuru" data-deutschlaender-link data-deutschlaender-path="/forum/kategori/universite-ve-basvuru" data-deutschlaender-content="university_detail_forum">Üniversite forumuna git ↗</a><a class="button button-secondary" href="https://deutschlaender.com.tr/pruefungen" data-deutschlaender-link data-deutschlaender-path="/pruefungen" data-deutschlaender-content="university_detail_exams">DSH ve TestDaF rehberleri ↗</a></div></aside>
           <h2>QS 2026 Sıralaması</h2><p><strong>${escapeHtml(item.qsWorldRanking2026)}</strong>. Sıralamalar yıldan yıla değişebilir; karar verirken program içeriği, şehir, bütçe ve kabul şartları birlikte değerlendirilmelidir.</p>${externalButton(item.qsSourceUrl, "QS kaynağını aç", "text-link")}
           ${item.turkishStudentsNote ? `<h2>Türk Öğrenciler İçin Notlar</h2><p>${escapeHtml(item.turkishStudentsNote)}</p>` : ""}
           ${relatedSection}
           <h2>Sık Sorulan Sorular</h2><div class="faq-list">${faq.map((entry) => `<details><summary>${escapeHtml(entry.question)}</summary><p>${escapeHtml(entry.answer)}</p></details>`).join("")}</div>
-          <h2>Kaynaklar</h2>${uniqueSources.length ? `<ul class="university-source-list">${uniqueSources.join("")}</ul>` : ""}<p><strong>Son kontrol tarihi:</strong> ${escapeHtml(formatDateTr(item.lastChecked))}</p>
+          <h2>Kaynaklar</h2>${uniqueSources.length ? `<ul class="university-source-list">${uniqueSources.join("")}</ul>` : ""}<p><strong>Son kontrol tarihi:</strong> ${escapeHtml(formatDate(item.lastChecked, DEFAULT_LANGUAGE))}</p>
           <a class="text-link university-back-link" href="/universite-tanitimlari/">← Tüm üniversitelere dön</a>
         </div>
       </section>
@@ -439,6 +576,7 @@ module.exports = function handler(req, res) {
   const url = new URL(req.url || "/api/universities", SITE_URL);
   const slug = safeSlug(url.searchParams.get("slug"));
   const view = normalise(url.searchParams.get("view"));
+  const lang = resolveLanguage(url.searchParams.get("lang"));
   const selectedUniversity = slug ? UNIVERSITIES.find((item) => item.slug === slug) : null;
 
   if (view === "page") {
@@ -460,7 +598,7 @@ module.exports = function handler(req, res) {
       sendJson(res, 404, { error: "University not found" });
       return;
     }
-    sendJson(res, 200, { item: publicDetail(selectedUniversity) });
+    sendJson(res, 200, { item: publicDetail(selectedUniversity, lang) });
     return;
   }
 
@@ -476,7 +614,7 @@ module.exports = function handler(req, res) {
   };
   const matched = UNIVERSITIES.filter((item) => matchesFilters(item, filters)).sort(sortByPopularity);
   const start = (page - 1) * limit;
-  const items = matched.slice(start, start + limit).map(publicCard);
+  const items = matched.slice(start, start + limit).map((item) => publicCard(item, lang));
 
   sendJson(res, 200, {
     items,
@@ -488,5 +626,6 @@ module.exports = function handler(req, res) {
       hasMore: start + limit < matched.length,
     },
     filters: FILTER_OPTIONS,
+    lang,
   });
 };

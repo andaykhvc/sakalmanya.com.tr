@@ -1116,7 +1116,7 @@ if (universityFilters && universityGrid) {
   };
 
   const currentUniversityParams = () => {
-    const params = new URLSearchParams({ page: String(universityPage), limit: "12" });
+    const params = new URLSearchParams({ page: String(universityPage), limit: "12", lang: pageLanguage });
     universityFilters.querySelectorAll("[data-filter]").forEach((field) => {
       if (field.value) params.set(field.dataset.filter, field.value);
     });

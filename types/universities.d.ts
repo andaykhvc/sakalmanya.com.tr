@@ -1,3 +1,12 @@
+export type Language = "tr" | "de" | "en";
+
+/**
+ * A dataset text field. The build emits a {tr,de,en} object once a `_de`/`_en` column is
+ * filled in the xlsx, and leaves the plain Turkish string in place until then. The API
+ * resolves both shapes before responding, so every DTO field below is already a string.
+ */
+export type LocalizedText = string | Record<Language, string>;
+
 export interface UniversityCardDTO {
   name: string;
   slug: string;
@@ -16,6 +25,7 @@ export interface UniversityCardDTO {
   detailUrl: string;
 }
 
+/** Raw dataset record as compiled into api/universities.js. */
 export interface University {
   id: string;
   name: string;
@@ -25,8 +35,8 @@ export interface University {
   type: string;
   officialWebsite: string;
   qsWorldRanking2026: string;
-  schoolIntro: string;
-  cityIntro: string;
+  schoolIntro: LocalizedText;
+  cityIntro: LocalizedText;
   lastChecked: string;
   filters: {
     state: string;
@@ -40,7 +50,7 @@ export interface University {
 }
 
 export interface Deadline {
-  display: string;
+  display: LocalizedText;
   date: string | null;
   portal: string | null;
   portalCategory: string | null;
@@ -59,10 +69,14 @@ export interface IntensiveGermanCourse {
   targetDegreeLevel: string | null;
   requiredLevel: string | null;
   residenceRelevance: string | null;
-  criteriaMatch: string | null;
+  criteriaMatch: LocalizedText | null;
   sourceUrl: string | null;
   lastChecked: string | null;
 }
+
+/** DTO variants: the API has already resolved every localisable field to a string. */
+export type ResolvedDeadline = Omit<Deadline, "display"> & { display: string };
+export type ResolvedGermanCourse = Omit<IntensiveGermanCourse, "criteriaMatch"> & { criteriaMatch: string | null };
 
 export interface UniversityDetailDTO {
   name: string;
@@ -88,14 +102,31 @@ export interface UniversityDetailDTO {
   applicationPortal: string;
   uniAssistStatus: string;
   lastChecked: string;
-  deadlines: { bachelor: Deadline; master: Deadline };
-  germanCourse: IntensiveGermanCourse;
+  deadlines: { bachelor: ResolvedDeadline; master: ResolvedDeadline };
+  germanCourse: ResolvedGermanCourse;
+  related: Array<{ name: string; city: string; state: string; detailUrl: string }>;
+  trustNotice: string;
+  detailUrl: string;
+  lang: Language;
+}
+
+/** `value` is always the raw dataset value and is what the API expects back as a filter. */
+export interface FilterOption {
+  value: string;
+  label: Record<Language, string>;
 }
 
 export interface FilterOptions {
-  state: Array<{ value: string; label: Record<"tr" | "de" | "en", string> }>;
-  type: Array<{ value: string; label: Record<"tr" | "de" | "en", string> }>;
-  germanCourse: Array<{ value: string; label: Record<"tr" | "de" | "en", string> }>;
-  level: Array<{ value: string; label: Record<"tr" | "de" | "en", string> }>;
-  uniAssist: Array<{ value: string; label: Record<"tr" | "de" | "en", string> }>;
+  state: FilterOption[];
+  type: FilterOption[];
+  germanCourse: FilterOption[];
+  level: FilterOption[];
+  uniAssist: FilterOption[];
+}
+
+export interface UniversityListResponse {
+  items: UniversityCardDTO[];
+  pagination: { page: number; limit: number; total: number; totalPages: number; hasMore: boolean };
+  filters: FilterOptions;
+  lang: Language;
 }

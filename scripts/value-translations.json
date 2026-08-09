@@ -1,0 +1,57 @@
+{
+  "_comment": "Single source of truth for enum-like dataset values that appear verbatim in the UI. build-university-api.py reads this to build filterOptions labels and inlines it into api/universities.js as VALUE_LABELS, which the request handler uses to localise card/detail fields. Keys are the raw Turkish/German dataset values.",
+
+  "values": {
+    "Baden-Württemberg": { "tr": "Baden-Württemberg", "de": "Baden-Württemberg", "en": "Baden-Württemberg" },
+    "Bayern": { "tr": "Bavyera", "de": "Bayern", "en": "Bavaria" },
+    "Berlin": { "tr": "Berlin", "de": "Berlin", "en": "Berlin" },
+    "Brandenburg": { "tr": "Brandenburg", "de": "Brandenburg", "en": "Brandenburg" },
+    "Bremen": { "tr": "Bremen", "de": "Bremen", "en": "Bremen" },
+    "Hamburg": { "tr": "Hamburg", "de": "Hamburg", "en": "Hamburg" },
+    "Hessen": { "tr": "Hessen", "de": "Hessen", "en": "Hesse" },
+    "Mecklenburg-Vorpommern": { "tr": "Mecklenburg-Vorpommern", "de": "Mecklenburg-Vorpommern", "en": "Mecklenburg-Western Pomerania" },
+    "Niedersachsen": { "tr": "Aşağı Saksonya", "de": "Niedersachsen", "en": "Lower Saxony" },
+    "Nordrhein-Westfalen": { "tr": "Kuzey Ren-Vestfalya", "de": "Nordrhein-Westfalen", "en": "North Rhine-Westphalia" },
+    "Rheinland-Pfalz": { "tr": "Rheinland-Pfalz", "de": "Rheinland-Pfalz", "en": "Rhineland-Palatinate" },
+    "Saarland": { "tr": "Saarland", "de": "Saarland", "en": "Saarland" },
+    "Sachsen": { "tr": "Saksonya", "de": "Sachsen", "en": "Saxony" },
+    "Sachsen-Anhalt": { "tr": "Sachsen-Anhalt", "de": "Sachsen-Anhalt", "en": "Saxony-Anhalt" },
+    "Schleswig-Holstein": { "tr": "Schleswig-Holstein", "de": "Schleswig-Holstein", "en": "Schleswig-Holstein" },
+    "Thüringen": { "tr": "Thüringen", "de": "Thüringen", "en": "Thuringia" },
+
+    "Universität": { "tr": "Universität", "de": "Universität", "en": "University" },
+    "Technische Universität": { "tr": "Technische Universität", "de": "Technische Universität", "en": "Technical University" },
+    "Hochschule": { "tr": "Hochschule", "de": "Hochschule", "en": "University of Applied Sciences" },
+    "Hochschule für angewandte Wissenschaften": { "tr": "Hochschule für angewandte Wissenschaften", "de": "Hochschule für angewandte Wissenschaften", "en": "University of Applied Sciences" },
+    "Technische Universität / Exzellenzuniversität": { "tr": "Technische Universität / Exzellenzuniversität", "de": "Technische Universität / Exzellenzuniversität", "en": "Technical University / University of Excellence" },
+    "Technische Universität / Forschungsuniversität": { "tr": "Technische Universität / Forschungsuniversität", "de": "Technische Universität / Forschungsuniversität", "en": "Technical University / Research University" },
+    "Universität / Technische Universität profili": { "tr": "Universität / Technische Universität profili", "de": "Universität mit technischem Profil", "en": "University with a technical profile" },
+    "Diğer": { "tr": "Diğer", "de": "Sonstige", "en": "Other" },
+
+    "Lisans": { "tr": "Lisans", "de": "Bachelor", "en": "Bachelor" },
+    "Master": { "tr": "Master", "de": "Master", "en": "Master" },
+    "Lisans ve Master": { "tr": "Lisans ve Master", "de": "Bachelor und Master", "en": "Bachelor and Master" },
+
+    "Hazırlık/DSH kursu var": { "tr": "Hazırlık/DSH kursu var", "de": "Vorbereitungs-/DSH-Kurs vorhanden", "en": "Prep/DSH course available" },
+    "Hazırlık/DSH kursu yok": { "tr": "Hazırlık/DSH kursu yok", "de": "Kein bestätigter Vorbereitungs-/DSH-Kurs", "en": "No confirmed prep/DSH course" },
+
+    "Uni-Assist var": { "tr": "Uni-Assist var", "de": "Über uni-assist", "en": "Via uni-assist" },
+    "Direkt başvuru": { "tr": "Direkt başvuru", "de": "Direktbewerbung", "en": "Direct application" },
+    "Program bazlı / değişken": { "tr": "Program bazlı / değişken", "de": "Programmabhängig / variabel", "en": "Depends on the programme" },
+    "Program bazlı kontrol edilmeli": { "tr": "Program bazlı kontrol edilmeli", "de": "Pro Studiengang prüfen", "en": "Check per programme" },
+    "Henüz doğrulanmadı": { "tr": "Henüz doğrulanmadı", "de": "Noch nicht verifiziert", "en": "Not verified yet" },
+    "QS Top 500 dışında": { "tr": "QS Top 500 dışında", "de": "Nicht in den QS Top 500", "en": "Outside the QS top 500" }
+  },
+
+  "deadlineQualifiers": {
+    "restricted": { "tr": "kontenjan sınırlı", "de": "zulassungsbeschränkt", "en": "restricted admission" },
+    "unrestricted": { "tr": "kontenjan sınırsız", "de": "zulassungsfrei", "en": "open admission" },
+    "open": { "tr": "kontenjan sınırsız", "de": "zulassungsfrei", "en": "open admission" }
+  },
+
+  "trustNotice": {
+    "tr": "Başvuru tarihleri ve kabul şartları programa, döneme ve öğrencinin durumuna göre değişebilir. En güncel bilgi için üniversitenin resmi sayfası kontrol edilmelidir.",
+    "de": "Bewerbungsfristen und Zulassungsvoraussetzungen können je nach Studiengang, Semester und persönlicher Situation abweichen. Maßgeblich ist immer die offizielle Seite der Hochschule.",
+    "en": "Application deadlines and admission requirements can differ by programme, intake and individual situation. Always check the university's official page for the current information."
+  }
+}

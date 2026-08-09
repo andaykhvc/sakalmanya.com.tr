@@ -400,6 +400,51 @@ const pilotNoticeCopy = {
   },
 };
 
+const routeTestPromptCopy = {
+  tr: {
+    title: "Rota testini çözmek ister misin?",
+    description: "Mevcut durumuna göre Almanya’da sana en uygun eğitim rotasını yaklaşık 2 dakikada keşfedebilirsin.",
+    start: "Evet, testi başlat",
+    skip: "Şimdilik geç",
+    languageLabel: "Dil seçimi",
+    currentLanguage: "Türkçe",
+  },
+  de: {
+    title: "Möchtest du den Routen-Test machen?",
+    description: "Finde in etwa zwei Minuten heraus, welcher Bildungsweg in Deutschland am besten zu deiner aktuellen Situation passt.",
+    start: "Ja, Test starten",
+    skip: "Vorerst überspringen",
+    languageLabel: "Sprachauswahl",
+    currentLanguage: "Deutsch",
+  },
+  en: {
+    title: "Would you like to take the route test?",
+    description: "In about two minutes, you can discover which education route in Germany best fits your current situation.",
+    start: "Yes, start the test",
+    skip: "Maybe later",
+    languageLabel: "Language selection",
+    currentLanguage: "English",
+  },
+};
+
+const routeTestPromptStorageKey = "sak-route-test-prompt-v1";
+
+const hasSeenRouteTestPrompt = () => {
+  try {
+    return window.sessionStorage.getItem(routeTestPromptStorageKey) === "shown";
+  } catch (_error) {
+    return false;
+  }
+};
+
+const markRouteTestPromptSeen = () => {
+  try {
+    window.sessionStorage.setItem(routeTestPromptStorageKey, "shown");
+  } catch (_error) {
+    // The prompt still works when session storage is unavailable.
+  }
+};
+
 const setupPilotNotice = () => {
   if (isPilotNoticeDismissed) return;
   if (document.querySelector("[data-pilot-notice]")) return;
@@ -464,6 +509,7 @@ const setupPilotNotice = () => {
     modal.remove();
     if (previouslyFocused?.isConnected) previouslyFocused.focus();
     previouslyFocused = null;
+    setupRouteTestPrompt();
   };
 
   const handleKeydown = (event) => {
@@ -500,6 +546,133 @@ const setupPilotNotice = () => {
   document.body.classList.add("is-pilot-notice-open");
   document.addEventListener("keydown", handleKeydown);
   languageButton.focus();
+};
+
+const setupRouteTestPrompt = () => {
+  const currentPath = window.location.pathname.replace(/\/+$/, "/") || "/";
+  if (currentPath === "/rota-testi/" || hasSeenRouteTestPrompt() || document.querySelector("[data-route-test-prompt]")) return;
+
+  let activeLanguage = ["tr", "de", "en"].includes(pageLanguage) ? pageLanguage : "de";
+  let previouslyFocused = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+  const modal = document.createElement("div");
+  const overlay = document.createElement("div");
+  const dialog = document.createElement("section");
+  const header = document.createElement("div");
+  const title = document.createElement("h2");
+  const languages = document.createElement("div");
+  const description = document.createElement("p");
+  const actions = document.createElement("div");
+  const startLink = document.createElement("a");
+  const skipButton = document.createElement("button");
+  const titleId = "sak-route-test-prompt-title";
+  const descriptionId = "sak-route-test-prompt-description";
+  const languageButtons = [];
+
+  modal.className = "pilot-notice route-test-prompt";
+  modal.setAttribute("data-route-test-prompt", "");
+  overlay.className = "pilot-notice__overlay";
+  overlay.setAttribute("aria-hidden", "true");
+  dialog.className = "pilot-notice__dialog route-test-prompt__dialog";
+  dialog.setAttribute("role", "dialog");
+  dialog.setAttribute("aria-modal", "true");
+  dialog.setAttribute("aria-labelledby", titleId);
+  dialog.setAttribute("aria-describedby", descriptionId);
+  dialog.tabIndex = -1;
+  header.className = "pilot-notice__header";
+  title.id = titleId;
+  languages.className = "route-test-prompt__languages";
+  languages.setAttribute("aria-label", "Dil seçimi");
+  description.className = "route-test-prompt__description";
+  description.id = descriptionId;
+  actions.className = "route-test-prompt__actions";
+  startLink.className = "button button-primary";
+  startLink.href = "/rota-testi/";
+  startLink.setAttribute("data-route-test-prompt-start", "");
+  skipButton.className = "button button-secondary";
+  skipButton.type = "button";
+  skipButton.setAttribute("data-route-test-prompt-skip", "");
+
+  ["tr", "de", "en"].forEach((language) => {
+    const button = document.createElement("button");
+    button.className = "pilot-notice__language route-test-prompt__language";
+    button.type = "button";
+    button.textContent = language.toUpperCase();
+    button.dataset.language = language;
+    button.addEventListener("click", () => {
+      activeLanguage = language;
+      render();
+      button.focus();
+    });
+    languageButtons.push(button);
+    languages.append(button);
+  });
+
+  header.append(title, languages);
+  actions.append(startLink, skipButton);
+  dialog.append(header, description, actions);
+  modal.append(overlay, dialog);
+
+  const render = () => {
+    const copy = routeTestPromptCopy[activeLanguage];
+    title.textContent = copy.title;
+    description.textContent = copy.description;
+    startLink.textContent = copy.start;
+    skipButton.textContent = copy.skip;
+    languages.setAttribute("aria-label", copy.languageLabel);
+    dialog.lang = activeLanguage;
+    languageButtons.forEach((button) => {
+      const isCurrent = button.dataset.language === activeLanguage;
+      button.setAttribute("aria-pressed", String(isCurrent));
+      button.setAttribute("aria-label", `${routeTestPromptCopy[button.dataset.language].currentLanguage} ${copy.languageLabel.toLowerCase()}`);
+    });
+  };
+
+  const focusableElements = () => [...languageButtons, startLink, skipButton].filter((element) => !element.disabled);
+
+  const close = (eventName = "route_test_prompt_skip") => {
+    markRouteTestPromptSeen();
+    document.removeEventListener("keydown", handleKeydown);
+    document.documentElement.classList.remove("is-pilot-notice-open");
+    document.body.classList.remove("is-pilot-notice-open");
+    modal.remove();
+    if (previouslyFocused?.isConnected) previouslyFocused.focus();
+    previouslyFocused = null;
+    trackEvent(eventName);
+  };
+
+  const handleKeydown = (event) => {
+    if (event.key === "Escape") {
+      event.preventDefault();
+      close();
+      return;
+    }
+    if (event.key !== "Tab") return;
+    const elements = focusableElements();
+    const first = elements[0];
+    const last = elements[elements.length - 1];
+    if (!first || !last) return;
+    if (event.shiftKey && document.activeElement === first) {
+      event.preventDefault();
+      last.focus();
+    } else if (!event.shiftKey && document.activeElement === last) {
+      event.preventDefault();
+      first.focus();
+    }
+  };
+
+  startLink.addEventListener("click", () => {
+    close("route_test_prompt_start");
+  });
+  skipButton.addEventListener("click", () => close());
+
+  render();
+  markRouteTestPromptSeen();
+  document.body.append(modal);
+  document.documentElement.classList.add("is-pilot-notice-open");
+  document.body.classList.add("is-pilot-notice-open");
+  document.addEventListener("keydown", handleKeydown);
+  trackEvent("route_test_prompt_view");
+  startLink.focus();
 };
 
 const setupConsentManager = () => {

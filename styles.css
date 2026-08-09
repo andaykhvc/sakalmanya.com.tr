@@ -3192,6 +3192,18 @@ body.is-consent-open {
   margin-top: 0;
 }
 
+.route-test-prompt__actions .button-secondary {
+  border-color: var(--ink);
+  background: transparent;
+  color: var(--ink);
+}
+
+.route-test-prompt__actions .button-secondary:hover {
+  border-color: var(--ink);
+  background: var(--ink);
+  color: var(--white);
+}
+
 .route-test-prompt__language:focus-visible,
 .route-test-prompt__actions .button:focus-visible {
   outline: 3px solid var(--gold);

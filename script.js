@@ -191,16 +191,22 @@ const setupDresdenNavigation = () => {
 const setupMasterNavigation = () => {
   const masterPaths = {
     tr: "/almanya-yuksek-lisans-sartlari/",
-    de: "/de/almanya-yuksek-lisans-sartlari/",
-    en: "/en/almanya-yuksek-lisans-sartlari/",
+    de: "/de/master-voraussetzungen/",
+    en: "/en/masters-requirements/",
+  };
+  const masterLabels = {
+    tr: "Yüksek Lisans",
+    de: "Master",
+    en: "Master’s",
   };
   const masterPath = masterPaths[pageLanguage] || masterPaths.tr;
+  const masterLabel = masterLabels[pageLanguage] || masterLabels.tr;
 
   document.querySelectorAll(".site-header [data-nav]").forEach((navigation) => {
     if (navigation.querySelector("[data-master-header-link]")) return;
     const link = document.createElement("a");
     link.href = masterPath;
-    link.textContent = "Yüksek Lisans";
+    link.textContent = masterLabel;
     link.setAttribute("data-master-header-link", "");
     if (window.location.pathname === masterPath) link.setAttribute("aria-current", "page");
 
@@ -761,6 +767,7 @@ const mobileNavigationCopy = {
       ["Universitäten", "/de/universitaeten/"],
       ["Dresden", "/de/dresden/"],
       ["Deutschländer Forum", "https://deutschlaender.com.tr/forum"],
+      ["Bildungsberatung", "/de/bildungsberatung/"],
       ["Erfolge", "/de/#erfolge"],
       ["Über uns", "/de/ueber-uns/"],
       ["FAQ", "/de/faq/"],
@@ -780,6 +787,7 @@ const mobileNavigationCopy = {
       ["Universities", "/en/universities/"],
       ["Dresden", "/en/dresden/"],
       ["Deutschländer Forum", "https://deutschlaender.com.tr/forum"],
+      ["Education Guidance", "/en/education-consulting/"],
       ["Success Stories", "/en/#success-stories"],
       ["About", "/en/about/"],
       ["Frequently Asked Questions", "/en/faq/"],

@@ -168,6 +168,7 @@ function publicCard(item, lang) {
   return {
     name: item.name,
     slug: item.slug,
+    logoPath: item.logoPath || null,
     city: item.city,
     state: localiseValue(item.state, lang),
     type: localiseValue(item.type, lang),

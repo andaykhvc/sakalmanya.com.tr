@@ -1558,6 +1558,18 @@ details p {
   user-select: none;
 }
 
+.university-card-logo-fallback {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-end;
+  padding: 4px 0 0 12px;
+  color: var(--black);
+  font-family: var(--serif);
+  font-size: clamp(3rem, 8vw, 5.5rem);
+  font-weight: 700;
+  line-height: 0.9;
+}
+
 .university-card.has-logo::after {
   position: absolute;
   z-index: 0;

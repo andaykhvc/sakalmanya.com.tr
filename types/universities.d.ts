@@ -10,6 +10,7 @@ export type LocalizedText = string | Record<Language, string>;
 export interface UniversityCardDTO {
   name: string;
   slug: string;
+  logoPath: string | null;
   city: string;
   state: string;
   type: string;

@@ -1614,6 +1614,21 @@ if (universityFilters && universityGrid) {
     const card = document.createElement("article");
     card.className = "university-card";
 
+    const createLogoFallback = () => {
+      const fallback = document.createElement("div");
+      const initials = String(item.name || "")
+        .split(/\s+/)
+        .filter(Boolean)
+        .slice(0, 2)
+        .map((part) => part[0])
+        .join("")
+        .toUpperCase();
+      fallback.className = "university-card-logo university-card-logo-fallback";
+      fallback.textContent = initials || "UNI";
+      fallback.setAttribute("aria-hidden", "true");
+      return fallback;
+    };
+
     if (item.logoPath) {
       const logo = document.createElement("img");
       logo.className = "university-card-logo";
@@ -1623,11 +1638,13 @@ if (universityFilters && universityGrid) {
       logo.loading = "lazy";
       logo.decoding = "async";
       logo.addEventListener("error", () => {
-        logo.remove();
-        card.classList.remove("has-logo");
+        logo.replaceWith(createLogoFallback());
       }, { once: true });
       card.classList.add("has-logo");
       card.append(logo);
+    } else {
+      card.classList.add("has-logo");
+      card.append(createLogoFallback());
     }
 
     const location = document.createElement("p");

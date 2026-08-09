@@ -1282,6 +1282,69 @@ details p {
   font-size: 1.06rem;
 }
 
+.article-layout h3 {
+  margin: 26px 0 10px;
+}
+
+.article-layout ul {
+  margin: 0 0 18px;
+  padding-left: 22px;
+  color: var(--ink-soft);
+}
+
+.article-layout ul li {
+  margin-bottom: 6px;
+  line-height: 1.55;
+}
+
+.legal-meta {
+  color: rgba(255, 255, 255, 0.74);
+  font-size: 0.92rem;
+}
+
+.legal-toc {
+  margin: 0 0 42px;
+  padding: 22px 26px;
+  border: 1px solid var(--line);
+  background: var(--white);
+  box-shadow: 0 12px 28px rgba(17, 17, 17, 0.05);
+}
+
+.legal-toc strong {
+  display: block;
+  margin-bottom: 10px;
+  font-family: var(--serif);
+  font-size: 1.05rem;
+}
+
+.legal-toc ol {
+  columns: 2;
+  column-gap: 24px;
+  margin: 0;
+  padding-left: 20px;
+}
+
+.legal-toc li {
+  break-inside: avoid;
+  margin-bottom: 6px;
+}
+
+.legal-toc a {
+  color: var(--ink-soft);
+}
+
+.legal-toc a:hover {
+  color: var(--red-dark);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+@media (max-width: 640px) {
+  .legal-toc ol {
+    columns: 1;
+  }
+}
+
 .notice-box,
 .cta-band {
   margin: 42px 0;

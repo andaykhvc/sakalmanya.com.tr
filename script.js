@@ -1813,3 +1813,111 @@ document.addEventListener("keydown", (event) => {
 if (yearElement) {
   yearElement.textContent = new Date().getFullYear();
 }
+
+// Shared presentation layer: no copy, routes, or application data are changed.
+const setupDesignMotion = () => {
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+  const desktopMotion = window.matchMedia("(min-width: 1024px) and (hover: hover)");
+  const hero = document.querySelector(".hero");
+  const heroMedia = hero?.querySelector(".hero-media");
+  const header = document.querySelector("[data-header]");
+  const revealSelector = [
+    ".section-heading", ".intro-grid > *", ".about-section .two-column > *",
+    ".proof-grid > article", ".services-grid > article", ".achievement-grid > article",
+    ".process-section .two-column > div", ".timeline > li", ".seo-link-grid > a",
+    ".faq-list > details", ".contact-panel > *", ".blog-list > article",
+    ".university-grid > article", ".university-info-grid > *", ".dresden-figure",
+    ".about-process-grid > article", ".about-principles > article",
+  ].join(", ");
+  let revealObserver;
+  let frame = 0;
+
+  const reveal = (element) => {
+    element.classList.remove("is-pending");
+    element.classList.add("is-revealed");
+    revealObserver?.unobserve(element);
+  };
+
+  const registerReveals = () => {
+    document.querySelectorAll(revealSelector).forEach((element) => {
+      if (element.hasAttribute("data-design-reveal")) return;
+      // Keep initially visible content and anchor destinations immediately readable.
+      if (reducedMotion.matches || !revealObserver || element.getBoundingClientRect().top < window.innerHeight) return;
+      element.setAttribute("data-design-reveal", "");
+      const index = Array.from(element.parentElement.children).indexOf(element);
+      element.style.setProperty("--reveal-delay", `${Math.min(index % 3, 2) * 80}ms`);
+      element.classList.add("is-pending");
+      revealObserver.observe(element);
+    });
+  };
+
+  if ("IntersectionObserver" in window) {
+    revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) reveal(entry.target);
+      });
+    }, { threshold: 0, rootMargin: "0px 0px -32px 0px" });
+    registerReveals();
+  }
+
+  // The university directory appends cards after its API request and on filtering.
+  const universityGrid = document.querySelector(".university-grid");
+  if (universityGrid && revealObserver) {
+    new MutationObserver((records) => {
+      records.forEach((record) => record.removedNodes.forEach((node) => {
+        if (node instanceof Element) revealObserver.unobserve(node);
+      }));
+      registerReveals();
+    }).observe(universityGrid, { childList: true });
+  }
+
+  document.addEventListener("focusin", (event) => {
+    const pending = event.target.closest?.("[data-design-reveal].is-pending");
+    if (pending) reveal(pending);
+  });
+
+  // Run the hero entrance after the existing notices have been dismissed.
+  const startHero = () => {
+    if (document.body.classList.contains("is-pilot-notice-open")) return false;
+    if (!reducedMotion.matches && hero && hero.getBoundingClientRect().bottom > 0) {
+      hero.classList.add("is-motion-ready");
+    }
+    return true;
+  };
+  if (hero && !startHero()) {
+    const noticeObserver = new MutationObserver(() => {
+      if (startHero()) noticeObserver.disconnect();
+    });
+    noticeObserver.observe(document.body, { attributes: true, attributeFilter: ["class"] });
+  }
+
+  const updateScroll = () => {
+    frame = 0;
+    header?.classList.toggle("is-scrolled", window.scrollY > 16);
+    if (!heroMedia) return;
+    if (reducedMotion.matches || !desktopMotion.matches) {
+      heroMedia.style.removeProperty("--hero-parallax-y");
+      return;
+    }
+    const rect = hero.getBoundingClientRect();
+    const progress = Math.min(1, Math.max(0, -rect.top / rect.height));
+    heroMedia.style.setProperty("--hero-parallax-y", `${progress * 18}px`);
+  };
+  const scheduleScroll = () => {
+    if (!frame) frame = requestAnimationFrame(updateScroll);
+  };
+  window.addEventListener("scroll", scheduleScroll, { passive: true });
+  window.addEventListener("resize", scheduleScroll);
+  reducedMotion.addEventListener("change", () => {
+    if (reducedMotion.matches) {
+      document.querySelectorAll("[data-design-reveal]").forEach(reveal);
+      hero?.classList.remove("is-motion-ready");
+    } else {
+      registerReveals();
+    }
+    scheduleScroll();
+  });
+  updateScroll();
+};
+
+setupDesignMotion();

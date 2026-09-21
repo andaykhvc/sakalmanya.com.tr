@@ -215,6 +215,7 @@
         <a href="/universite-tanitimlari/">Üniversiteler</a>
         <a href="/blog/">Blog</a>
         <a href="/sss/">SSS</a>
+        <a href="/#iletisim" data-contact-nav>İletişim</a>
       </nav>
       <div class="language-switcher" aria-label="Dil seçimi"><a href="/" hreflang="tr" lang="tr" aria-current="true">TR</a><span>|</span><a href="/de/" hreflang="de" lang="de">DE</a><span>|</span><a href="/en/" hreflang="en" lang="en">EN</a></div>
     </header>
@@ -639,16 +640,29 @@
               Almanca seviyeni ve önündeki seçenekleri birlikte netleştirebiliriz.
             </p>
           </div>
-          <div class="contact-actions">
-            <a
-              class="button button-primary"
-              href="mailto:iletisim@andaykahveci.com?subject=Almanya%20Danismanlik%20On%20Gorusme"
-            >
-              E-posta gönder
-            </a>
-            <p class="contact-note">
-              İlk mesajda hedefini, mevcut Almanca seviyeni ve düşündüğün eğitim yolunu yazman yeterli.
-            </p>
+          <div class="contact-form-panel">
+            <h3 id="contact-form-title">Formu doldur, Almanya planını birlikte netleştirelim.</h3>
+            <p class="contact-form-note">Yıldızlı alanlar zorunludur. Yanıtımızı e-posta adresine göndereceğiz.</p>
+            <form class="contact-form" data-contact-form action="https://formsubmit.co/iletisim@andaykahveci.com" method="POST" aria-labelledby="contact-form-title">
+              <input type="hidden" name="_subject" value="ŞAK Almanya — Yeni iletişim talebi" />
+              <input type="hidden" name="_template" value="table" />
+              <div class="contact-honeypot" aria-hidden="true"><label for="contact-website">Website</label><input id="contact-website" name="_honey" type="text" tabindex="-1" autocomplete="off" /></div>
+              <fieldset class="contact-form-fields">
+                <div class="contact-form-grid">
+                  <div class="contact-field"><label for="contact-name">Ad soyad <span aria-hidden="true">*</span></label><input id="contact-name" name="name" autocomplete="name" minlength="2" maxlength="100" required /></div>
+                  <div class="contact-field"><label for="contact-email">E-posta <span aria-hidden="true">*</span></label><input id="contact-email" name="email" type="email" autocomplete="email" maxlength="254" required /></div>
+                  <div class="contact-field"><label for="contact-education">Eğitim seviyen <span aria-hidden="true">*</span></label><select id="contact-education" name="educationLevel" required><option value="">Seçiniz</option><option>Lise</option><option>Lisans</option><option>Master</option></select></div>
+                  <div class="contact-field"><label for="contact-level">Almanca seviyen (isteğe bağlı)</label><select id="contact-level" name="germanLevel"><option value="">Seçiniz</option><option>Henüz başlamadım</option><option>A1</option><option>A2</option><option>B1</option><option>B2</option><option>C1 / C2</option></select></div>
+                  <div class="contact-field contact-field-wide"><label for="contact-topic">İlgilendiğin danışmanlık <span aria-hidden="true">*</span></label><select id="contact-topic" name="topic" required><option value="">Seçiniz</option><option>Lisans</option><option>Master</option><option>Almanca dersi</option></select></div>
+                  <div class="contact-field contact-field-wide"><label for="contact-message">Mesajın <span aria-hidden="true">*</span></label><textarea id="contact-message" name="message" rows="5" minlength="10" maxlength="5000" placeholder="Hedefini, mevcut durumunu ve merak ettiklerini kısaca paylaş." required></textarea></div>
+                </div>
+                <div class="contact-consent"><input id="contact-consent" name="consent" type="checkbox" value="accepted" required /><label for="contact-consent"><a href="/gizlilik/">Gizlilik Politikası’nı</a> okudum. Bilgilerimin talebime yanıt vermek amacıyla işlenmesini kabul ediyorum.</label></div>
+                <button class="button button-primary contact-submit" type="submit">Mesajı gönder<span aria-hidden="true">↗</span></button>
+              </fieldset>
+              <p class="contact-form-status" data-contact-status role="status" aria-live="polite" aria-atomic="true"></p>
+              <button class="button contact-form-reset" type="button" data-contact-reset hidden>Yeni mesaj yaz</button>
+            </form>
+            <p class="contact-form-alternative">Doğrudan e-posta da gönderebilirsin: <a href="mailto:iletisim@andaykahveci.com">iletisim@andaykahveci.com</a></p>
           </div>
         </div>
       </section>
@@ -676,6 +690,7 @@
     </footer>
 
     <script src="script.js"></script>
+    <script src="/contact.js"></script>
 
   </body>
 

@@ -1352,6 +1352,24 @@ const setupFooterBottomRows = () => {
   });
 };
 
+const setupContactNavigation = () => {
+  const contacts = {
+    tr: ["İletişim", "/#iletisim"],
+    de: ["Kontakt", "/de/#kontakt"],
+    en: ["Contact", "/en/#contact"],
+  };
+  const [label, href] = contacts[pageLanguage] || contacts.tr;
+  document.querySelectorAll(".site-header [data-nav]").forEach((navigation) => {
+    if (navigation.querySelector("[data-contact-nav]")) return;
+    const link = document.createElement("a");
+    link.href = href;
+    link.textContent = label;
+    link.setAttribute("data-contact-nav", "");
+    navigation.append(link);
+  });
+};
+
+setupContactNavigation();
 setupConsentManager();
 setupPilotNotice();
 setupAboutNavigation();

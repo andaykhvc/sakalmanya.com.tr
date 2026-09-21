@@ -61,6 +61,7 @@
         <a href="/en/universities/">Universities</a>
         <a href="/en/blog/">Blog</a>
         <a href="/en/faq/">FAQ</a>
+        <a href="/en/#contact" data-contact-nav>Contact</a>
       </nav>
       <div class="language-switcher" aria-label="Language selection"><a href="/" hreflang="tr" lang="tr">TR</a><span>|</span><a href="/de/" hreflang="de" lang="de">DE</a><span>|</span><a href="/en/" hreflang="en" lang="en" aria-current="true">EN</a></div>
     </header>
@@ -187,7 +188,33 @@
           </div>
         </div>
       </section>
-      <section id="contact" class="contact-section"><div class="container contact-panel"><div><p class="section-label">Contact</p><h2>Let’s find the best option for your situation together.</h2><p>No empty promises — just language, documents, deadlines and a practical plan.</p></div><div class="contact-actions"><a class="button button-primary" href="mailto:iletisim@andaykahveci.com?subject=Almanya%20Hakkinda%20Bilgi">Send an email</a></div></div></section>
+      <section id="contact" class="contact-section"><div class="container contact-panel"><div><p class="section-label">Contact</p><h2>Let’s find the best option for your situation together.</h2><p>No empty promises — just language, documents, deadlines and a practical plan.</p></div>
+          <div class="contact-form-panel">
+            <h3 id="contact-form-title">Tell us about your plans for Germany.</h3>
+            <p class="contact-form-note">Fields marked with an asterisk are required. We will reply by email.</p>
+            <form class="contact-form" data-contact-form action="https://formsubmit.co/iletisim@andaykahveci.com" method="POST" aria-labelledby="contact-form-title">
+              <input type="hidden" name="_subject" value="ŞAK Almanya — New contact request" />
+              <input type="hidden" name="_template" value="table" />
+              <div class="contact-honeypot" aria-hidden="true"><label for="contact-website">Website</label><input id="contact-website" name="_honey" type="text" tabindex="-1" autocomplete="off" /></div>
+              <fieldset class="contact-form-fields">
+                <div class="contact-form-grid">
+                  <div class="contact-field"><label for="contact-name">Full name <span aria-hidden="true">*</span></label><input id="contact-name" name="name" autocomplete="name" minlength="2" maxlength="100" required /></div>
+                  <div class="contact-field"><label for="contact-email">Email <span aria-hidden="true">*</span></label><input id="contact-email" name="email" type="email" autocomplete="email" maxlength="254" required /></div>
+                  <div class="contact-field"><label for="contact-education">Education level <span aria-hidden="true">*</span></label><select id="contact-education" name="educationLevel" required><option value="">Please select</option><option>High school</option><option>Bachelor’s degree</option><option>Master’s degree</option></select></div>
+                  <div class="contact-field"><label for="contact-level">German level (optional)</label><select id="contact-level" name="germanLevel"><option value="">Please select</option><option>Not started yet</option><option>A1</option><option>A2</option><option>B1</option><option>B2</option><option>C1 / C2</option></select></div>
+                  <div class="contact-field contact-field-wide"><label for="contact-topic">Service of interest <span aria-hidden="true">*</span></label><select id="contact-topic" name="topic" required><option value="">Please select</option><option>Bachelor’s degree</option><option>Master’s degree</option><option>German lessons</option></select></div>
+                  <div class="contact-field contact-field-wide"><label for="contact-message">Your message <span aria-hidden="true">*</span></label><textarea id="contact-message" name="message" rows="5" minlength="10" maxlength="5000" placeholder="Briefly share your goal, current situation and questions." required></textarea></div>
+                </div>
+                <div class="contact-consent"><input id="contact-consent" name="consent" type="checkbox" value="accepted" required /><label for="contact-consent">I have read the <a href="/en/privacy/">Privacy Policy</a> and agree to my information being processed to respond to my enquiry.</label></div>
+                <button class="button button-primary contact-submit" type="submit">Send message<span aria-hidden="true">↗</span></button>
+              </fieldset>
+              <p class="contact-form-status" data-contact-status role="status" aria-live="polite" aria-atomic="true"></p>
+              <button class="button contact-form-reset" type="button" data-contact-reset hidden>Write another message</button>
+            </form>
+            <p class="contact-form-alternative">You can also email us directly: <a href="mailto:iletisim@andaykahveci.com">iletisim@andaykahveci.com</a></p>
+          </div>
+        </div>
+      </section>
     </main>
     <footer class="site-footer">
       <div class="container footer-grid">
@@ -210,5 +237,6 @@
       </div>
     </footer>
     <script src="/script.js"></script>
+    <script src="/contact.js"></script>
   </body>
 </html>

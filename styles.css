@@ -187,41 +187,6 @@ button {
   transform: translateY(-2px);
 }
 
-.floating-whatsapp {
-  position: fixed;
-  right: 24px;
-  bottom: 24px;
-  z-index: 90;
-  display: inline-flex;
-  align-items: center;
-  gap: 9px;
-  min-height: 52px;
-  padding: 0 18px 0 14px;
-  border-radius: 12px;
-  background: #25d366;
-  color: var(--white);
-  box-shadow: 0 18px 38px rgba(37, 211, 102, 0.32);
-  font-weight: 800;
-  letter-spacing: 0.01em;
-  transition:
-    transform 180ms ease,
-    box-shadow 180ms ease,
-    background-color 180ms ease;
-}
-
-.floating-whatsapp:hover {
-  background: #1fbd5a;
-  box-shadow: 0 22px 46px rgba(37, 211, 102, 0.42);
-  transform: translateY(-2px) scale(1.02);
-}
-
-.floating-whatsapp svg {
-  width: 23px;
-  height: 23px;
-  flex: 0 0 auto;
-  fill: currentColor;
-}
-
 .hero {
   position: relative;
   display: grid;
@@ -2556,18 +2521,6 @@ details p {
     white-space: normal;
   }
 
-  .floating-whatsapp {
-    z-index: 90;
-    right: max(16px, env(safe-area-inset-right));
-    bottom: calc(16px + env(safe-area-inset-bottom));
-  }
-
-  .floating-whatsapp.is-footer-visible {
-    visibility: hidden;
-    opacity: 0;
-    pointer-events: none;
-    transform: translateY(10px);
-  }
 }
 
 @media (max-width: 359px) {
@@ -3424,24 +3377,6 @@ body.is-consent-open {
     justify-content: flex-start;
   }
 
-  .floating-whatsapp {
-    right: max(16px, env(safe-area-inset-right));
-    bottom: calc(16px + env(safe-area-inset-bottom));
-    width: 52px;
-    min-height: 52px;
-    border-radius: 12px;
-    justify-content: center;
-    padding: 0;
-  }
-
-  .floating-whatsapp span {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    overflow: hidden;
-    clip: rect(0 0 0 0);
-    white-space: nowrap;
-  }
 }/* LinkedIn badge - Hakkımda bölümü */
 .linkedin-overlay-card {
   display: grid;
@@ -4049,5 +3984,5 @@ h3 { text-wrap: balance; }
   *, *::before, *::after { scroll-behavior: auto !important; animation: none !important; transition: none !important; }
   [data-design-reveal].is-pending, [data-design-reveal].is-revealed { opacity: 1; translate: none; }
   .hero-media { translate: none; }
-  .button:hover, .linkedin-overlay-card:hover, .floating-whatsapp:hover { transform: none; }
+  .button:hover, .linkedin-overlay-card:hover { transform: none; }
 }

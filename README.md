@@ -6,7 +6,7 @@
 
 - `index.html`: Site içeriği ve SEO etiketleri
 - `styles.css`: Tasarım, mobil uyum ve renk sistemi
-- `script.js`: Yıl bilgisi ve WhatsApp linki
+- `script.js`: Yıl bilgisi, menü ve sayfa etkileşimleri
 - `api/universities.js`: Sayfalı üniversite kartları ve tekil detay sayfaları
 - `scripts/build-university-api.py`: `sakalmanya_uni_dataset.xlsx` dosyasını kontrollü API çıktısına dönüştüren derleme aracı
 - `assets/hero-germany-study.png`: Yerel hero görseli
@@ -18,5 +18,4 @@
 2. Derleme aracını çalıştır; Excel dosyasını repoya veya public klasöre ekleme.
 3. Değişiklikleri `main` dalına gönder; Vercel statik sayfaları ve API fonksiyonunu birlikte yayınlar.
 
-WhatsApp numarası `wa.me` formatında ülke koduyla ve artı işareti olmadan yazılır.
-Örnek: `491701234567`
+İletişim bağlantıları `iletisim@andaykahveci.com` e-posta adresine yönlendirilir.

@@ -1,6 +1,5 @@
 const yearElement = document.querySelector("[data-year]");
 
-const whatsappNumber = "905452013570";
 const pageLanguage = document.documentElement.lang || "tr";
 const analyticsStorageKey = "sak-attribution-v1";
 const consentStorageKey = "sak-consent-v1";
@@ -73,7 +72,6 @@ const getUniversitySlug = () => {
 
 const getElementLocation = (element) => {
   if (!element) return "unknown";
-  if (element.classList.contains("floating-whatsapp")) return "floating_button";
   if (element.closest(".mobile-nav-drawer")) return "mobile_drawer";
   if (element.closest(".hero, .page-hero, .university-hero")) return "hero";
   if (element.closest(".cta-band")) return "cta_band";
@@ -287,35 +285,6 @@ const setupAboutNavigation = () => {
       cta.before(paragraph);
     }
   }
-};
-
-const whatsappMessages = {
-  tr: "Merhaba Anday, sakalmanya.com.tr üzerinden yazıyorum. Almanya eğitimi veya Almanca öğrenme hedefim için ücretsiz pilot görüşmeye başvurmak istiyorum.",
-  de: "Hallo Anday, ich schreibe über sakalmanya.com.tr. Ich möchte ein kostenloses Pilotgespräch zu meinem Ziel Studium in Deutschland oder Deutschlernen anfragen.",
-  en: "Hello Anday, I am contacting you through sakalmanya.com.tr. I would like to apply for a free pilot conversation about studying in Germany or learning German.",
-};
-
-const buildWhatsappMessage = () => {
-  const base = whatsappMessages[pageLanguage] || whatsappMessages.tr;
-  const universityName = getPageType() === "university_detail"
-    ? document.body.dataset.universityName || document.querySelector("h1")?.textContent?.trim()
-    : "";
-  const pageNote = universityName
-    ? pageLanguage === "de"
-      ? ` Ich interessiere mich für ${universityName}.`
-      : pageLanguage === "en"
-        ? ` I am interested in ${universityName}.`
-        : ` ${universityName} hakkında bilgi almak istiyorum.`
-    : "";
-  const source = attribution.utm_source?.replace(/[^a-z0-9._-]/gi, "").slice(0, 40);
-  const sourceNote = source ? ` [Kaynak: ${source}]` : "";
-  return `${base}${pageNote}${sourceNote}`;
-};
-
-const updateWhatsappLinks = (root = document) => {
-  root.querySelectorAll("[data-whatsapp-link]").forEach((link) => {
-    link.href = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(buildWhatsappMessage())}`;
-  });
 };
 
 const consentCopy = {
@@ -798,7 +767,7 @@ const setupAnalyticsTracking = () => {
 
   document.addEventListener("click", (event) => {
     const link = event.target.closest("a[href]");
-    if (!link || link.hasAttribute("data-whatsapp-link")) return;
+    if (!link) return;
     const href = link.getAttribute("href") || "";
 
     if (href.startsWith("mailto:")) {
@@ -876,42 +845,12 @@ const setupAnalyticsTracking = () => {
   window.addEventListener("scroll", trackScrollDepth, { passive: true });
 };
 
-const bindGoogleAdsConversion = (link) => {
-  if (!link || link.dataset.googleAdsConversionBound === "true") return;
-  link.dataset.googleAdsConversionBound = "true";
-  link.addEventListener("click", (event) => {
-    if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
-    trackEvent("click_whatsapp", {
-      element: link,
-      link_domain: "wa.me",
-      university_slug: getUniversitySlug(),
-    });
-    if (typeof window.gtag_report_conversion !== "function") return;
-    if (link.target === "_blank") {
-      window.gtag_report_conversion(undefined, analyticsContext(link));
-      return;
-    }
-    event.preventDefault();
-    window.gtag_report_conversion(link.href, analyticsContext(link));
-  });
-};
-
-const bindGoogleAdsConversions = () => {
-  document.querySelectorAll("[data-whatsapp-link]").forEach(bindGoogleAdsConversion);
-};
-
-const floatingWhatsappMessages = {
-  tr: "Merhaba, Almanya süreci hakkında bilgi almak istiyorum.",
-  de: "Hallo, ich möchte Informationen zum Deutschland-Prozess erhalten.",
-  en: "Hello, I would like to get information about the Germany process.",
-};
-
 const mobileNavigationCopy = {
   tr: {
     menu: "Menüyü aç",
     close: "Menüyü kapat",
     navigation: "Mobil menü",
-    cta: "Ücretsiz pilot görüşmeye başvur",
+    cta: "E-posta gönder",
     language: "Dil seçimi",
     links: [
       ["Ana Sayfa", "/"],
@@ -932,7 +871,7 @@ const mobileNavigationCopy = {
     menu: "Menü öffnen",
     close: "Menü schließen",
     navigation: "Mobile Navigation",
-    cta: "Kostenloses Pilotgespräch anfragen",
+    cta: "E-Mail senden",
     language: "Sprachauswahl",
     links: [
       ["Startseite", "/de/"],
@@ -953,7 +892,7 @@ const mobileNavigationCopy = {
     menu: "Open menu",
     close: "Close menu",
     navigation: "Mobile navigation",
-    cta: "Apply for a free pilot consultation",
+    cta: "Send an email",
     language: "Language selection",
     links: [
       ["Home", "/en/"],
@@ -1132,7 +1071,7 @@ const setupRouteTest = () => {
   const resultSummary = root.querySelector("[data-route-test-summary]");
   const resultNext = root.querySelector("[data-route-test-next]");
   const resultLink = root.querySelector("[data-route-test-route-link]");
-  const whatsappLink = root.querySelector("[data-route-test-whatsapp]");
+  const emailLink = root.querySelector("[data-route-test-email]");
   const restartButton = root.querySelector("[data-route-test-restart]");
   let currentIndex = 0;
   const answers = {};
@@ -1188,20 +1127,6 @@ const setupRouteTest = () => {
     );
   };
 
-  const buildWhatsappMessage = (resultKey) => {
-    const summary = ["target", "education", "german", "start", "budget", "interest"]
-      .map((id) => {
-        const question = routeTestQuestions.find((item) => item.id === id);
-        return getSelectedOption(question)?.label || "";
-      })
-      .filter(Boolean);
-    return [
-      "Merhaba Anday, sakalmanya.com.tr rota testini tamamladım.",
-      `Bana en yakın rota: ${routeTestResults[resultKey].title.replace("Sana en yakın rota: ", "")}`,
-      ...summary,
-    ].join("\n");
-  };
-
   const renderResult = () => {
     const resultKey = calculateResult();
     const resultCopyData = routeTestResults[resultKey];
@@ -1218,12 +1143,11 @@ const setupRouteTest = () => {
         return item;
       }),
     );
-    whatsappLink.href = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(buildWhatsappMessage(resultKey))}`;
+    emailLink.href = "mailto:iletisim@andaykahveci.com?subject=Almanya%20Rota%20Testi";
     form.hidden = true;
     progress.hidden = true;
     result.hidden = false;
     trackEvent("route_test_complete", { route_result: resultKey, route_test_answers: Object.keys(answers).length });
-    bindGoogleAdsConversion(whatsappLink);
   };
 
   nextButton.addEventListener("click", () => {
@@ -1345,13 +1269,8 @@ const setupMobileNavigation = () => {
 
   drawerFooter.className = "mobile-drawer-footer";
   cta.className = "button button-primary mobile-drawer-cta";
-  cta.href = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(
-    floatingWhatsappMessages[pageLanguage] || floatingWhatsappMessages.tr
-  )}`;
-  cta.target = "_blank";
-  cta.rel = "noopener noreferrer";
+  cta.href = "mailto:iletisim@andaykahveci.com?subject=Almanya%20Hakkinda%20Bilgi";
   cta.textContent = copy.cta;
-  cta.setAttribute("data-whatsapp-link", "");
 
   drawerLanguages.className = "mobile-drawer-languages";
   drawerLanguages.setAttribute("aria-label", copy.language);
@@ -1442,38 +1361,8 @@ setupFooterBottomRows();
 setupDresdenNavigation();
 setupMasterNavigation();
 setupDeutschlaenderLinks();
-updateWhatsappLinks();
-bindGoogleAdsConversions();
 setupAnalyticsTracking();
 setupRouteTest();
-
-const floatingWhatsapp = document.createElement("a");
-floatingWhatsapp.className = "floating-whatsapp";
-floatingWhatsapp.href = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(
-  floatingWhatsappMessages[pageLanguage] || floatingWhatsappMessages.tr
-)}`;
-floatingWhatsapp.target = "_blank";
-floatingWhatsapp.rel = "noopener noreferrer";
-floatingWhatsapp.setAttribute("aria-label", "WhatsApp");
-floatingWhatsapp.setAttribute("data-whatsapp-link", "");
-floatingWhatsapp.innerHTML = `
-  <svg viewBox="0 0 32 32" aria-hidden="true" focusable="false">
-    <path d="M16.04 3.2A12.67 12.67 0 0 0 5.32 22.6L3.2 28.8l6.4-2.04A12.66 12.66 0 1 0 16.04 3.2Zm0 23.05c-2.1 0-4.06-.62-5.7-1.7l-.4-.26-3.77 1.2 1.23-3.64-.27-.42a10.26 10.26 0 1 1 8.91 4.82Zm5.82-7.68c-.32-.16-1.88-.93-2.17-1.03-.29-.11-.5-.16-.72.16-.21.32-.82 1.03-1.01 1.24-.19.21-.37.24-.69.08-.32-.16-1.34-.49-2.55-1.57-.94-.84-1.58-1.88-1.76-2.2-.19-.32-.02-.49.14-.65.14-.14.32-.37.48-.56.16-.19.21-.32.32-.53.11-.21.05-.4-.03-.56-.08-.16-.72-1.73-.98-2.36-.26-.62-.52-.53-.72-.54h-.61c-.21 0-.56.08-.85.4-.29.32-1.12 1.09-1.12 2.66s1.15 3.08 1.31 3.29c.16.21 2.27 3.46 5.5 4.85.77.33 1.37.53 1.84.68.77.24 1.47.21 2.02.13.62-.09 1.88-.77 2.15-1.52.27-.75.27-1.39.19-1.52-.08-.13-.29-.21-.61-.37Z"/>
-  </svg>
-  <span>WhatsApp</span>
-`;
-document.body.appendChild(floatingWhatsapp);
-updateWhatsappLinks();
-bindGoogleAdsConversion(floatingWhatsapp);
-
-const siteFooter = document.querySelector(".site-footer");
-if (siteFooter && "IntersectionObserver" in window) {
-  const footerObserver = new IntersectionObserver(
-    ([entry]) => floatingWhatsapp.classList.toggle("is-footer-visible", entry.isIntersecting),
-    { threshold: 0.02 }
-  );
-  footerObserver.observe(siteFooter);
-}
 
 document.querySelectorAll("[data-document-carousel]").forEach((carousel) => {
   const items = Array.from(carousel.querySelectorAll(".document-previews a"));

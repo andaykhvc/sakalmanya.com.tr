@@ -25,6 +25,6 @@
 
 Ana sayfaların İletişim bölümündeki form FormSubmit üzerinden `iletisim@andaykahveci.com` adresine gönderilir. JavaScript açıkken AJAX kullanılır; JavaScript kapalıyken standart POST ve sağlayıcının doğrulama ekranı devreye girer. Form ad-soyad, e-posta, eğitim seviyesi (lise/lisans/master), danışmanlık hizmeti (lisans/master/Almanca dersi), isteğe bağlı Almanca seviyesi, mesaj ve onay içerir; telefon alanı yoktur.
 
-Canlı kullanım öncesinde alıcı adresini FormSubmit ile doğrulamak gerekir. İlk gönderimin ardından bu adrese gelen aktivasyon bağlantısı hesap sahibi tarafından onaylanmalıdır. Daha sonra gerçek bir gönderimin gelen kutusuna ulaştığı doğrulanmalıdır. Yerel otomatik kontroller sağlayıcı yanıtlarını taklit eder; canlı teslimatı kanıtlamaz.
+Canlı kullanım öncesinde alıcı adresini FormSubmit ile doğrulamak gerekir. İlk gönderimden sonra bu adrese gelen `Activate Form` bağlantısı hesap sahibi tarafından onaylanmalıdır; bağlantı görünmüyorsa spam klasörü de kontrol edilmelidir. FormSubmit endpoint'i aktive edilmeden gelen başvurular e-posta olarak iletilmez. Daha sonra gerçek bir gönderimin gelen kutusuna ulaştığı doğrulanmalıdır. Yerel otomatik kontroller sağlayıcı yanıtlarını taklit eder; canlı teslimatı kanıtlamaz.
 
 Gönderim hatasında alanlar korunur ve doğrudan e-posta bağlantısı kullanılabilir. Form verileri Analytics veya tarayıcı depolamasına yazılmaz.

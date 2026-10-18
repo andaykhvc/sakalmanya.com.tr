@@ -1094,8 +1094,9 @@ a.person:hover strong {
   transition: background-color 160ms ease;
 }
 
-.service-index a:hover {
-  background: linear-gradient(90deg, transparent, var(--stamp-soft) 30%, transparent);
+.service-index a:active {
+  background: var(--stamp-soft);
+  transition-duration: 0ms;
 }
 
 .service-index h3 {
@@ -1106,8 +1107,19 @@ a.person:hover strong {
   transition: color 160ms ease;
 }
 
-.service-index a:hover h3 {
-  color: var(--stamp);
+@media (hover: hover) and (pointer: fine) {
+  .service-index a:hover {
+    background: linear-gradient(90deg, transparent, var(--stamp-soft) 30%, transparent);
+  }
+
+  .service-index a:hover h3 {
+    color: var(--stamp);
+  }
+
+  .service-index a:hover svg {
+    color: var(--stamp);
+    transform: translateX(4px);
+  }
 }
 
 .service-index p {
@@ -1121,11 +1133,6 @@ a.person:hover strong {
   height: 20px;
   color: var(--ink-3);
   transition: transform 220ms var(--ease-out), color 160ms ease;
-}
-
-.service-index a:hover svg {
-  color: var(--stamp);
-  transform: translateX(4px);
 }
 
 /* ------------------------------------------------------------------ */
@@ -1193,8 +1200,10 @@ a.person:hover strong {
   transition: transform 260ms var(--ease-out);
 }
 
-.doc-shelf__row a:hover img {
-  transform: translateY(-4px) rotate(-0.6deg);
+@media (hover: hover) and (pointer: fine) {
+  .doc-shelf__row a:hover img {
+    transform: translateY(-4px) rotate(-0.6deg);
+  }
 }
 
 .doc-shelf__row a:active img {
@@ -2176,8 +2185,10 @@ blockquote {
   transition: box-shadow 180ms ease, transform 220ms var(--ease-out);
 }
 
-.blog-card:hover {
-  box-shadow: 0 0 0 1px var(--line-strong), 0 12px 32px -16px rgba(20, 24, 40, 0.3);
+@media (hover: hover) and (pointer: fine) {
+  .blog-card:hover {
+    box-shadow: 0 0 0 1px var(--line-strong), 0 12px 32px -16px rgba(20, 24, 40, 0.3);
+  }
 }
 
 .blog-card:active {
@@ -2377,6 +2388,7 @@ blockquote {
 }
 
 .university-card {
+  transition: opacity 220ms var(--ease-out), transform 220ms var(--ease-out);
   display: grid;
   align-content: start;
   gap: 10px;
@@ -2384,6 +2396,14 @@ blockquote {
   border-radius: var(--r-md);
   background: var(--surface);
   box-shadow: 0 0 0 1px var(--line);
+}
+
+/* Cards fetched from the API settle in rather than popping into place. */
+@starting-style {
+  .university-card {
+    opacity: 0;
+    transform: translateY(6px);
+  }
 }
 
 .university-card-logo {
@@ -3559,6 +3579,12 @@ blockquote {
 
   .mobile-nav-drawer.is-open {
     opacity: 1;
+  }
+
+  @starting-style {
+    .university-card {
+      transform: none;
+    }
   }
 
   .button:active,

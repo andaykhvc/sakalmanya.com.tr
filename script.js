@@ -8,6 +8,37 @@ const deutschlaenderOrigin = "https://deutschlaender.com.tr";
 const deutschlaenderCampaign = "deutschlaender_ecosystem";
 let isPilotNoticeDismissed = false;
 
+const reducedMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+const easeOut = "cubic-bezier(0.22, 1, 0.36, 1)";
+
+// Surfaces leave along the path they arrived by, a little faster than they came in.
+const sheetExit = [{ opacity: 1, transform: "none" }, { opacity: 0, transform: "translateY(8px) scale(0.97)" }];
+const fadeExit = [{ opacity: 1 }, { opacity: 0 }];
+
+const playExit = (element, keyframes, duration = 180) => {
+  if (!element || typeof element.animate !== "function") return Promise.resolve();
+  element.style.pointerEvents = "none";
+  const animation = element.animate(reducedMotionQuery.matches ? fadeExit : keyframes, {
+    duration,
+    easing: "cubic-bezier(0.4, 0, 1, 1)",
+    fill: "forwards",
+  });
+  // Never let a stalled frame clock (hidden tab, throttled page) keep a closed surface on screen.
+  const timeout = new Promise((resolve) => window.setTimeout(resolve, duration + 120));
+  return Promise.race([animation.finished.catch(() => {}), timeout])
+    .then(() => () => {
+      animation.cancel();
+      element.style.pointerEvents = "";
+    });
+};
+
+// Hide after the exit, then drop the held final frame so the next open starts clean.
+const hideWithExit = (element, keyframes, duration) =>
+  playExit(element, keyframes, duration).then((reset) => {
+    element.hidden = true;
+    reset?.();
+  });
+
 const safelyReadStorage = (key) => {
   try {
     return JSON.parse(window.localStorage.getItem(key));
@@ -452,11 +483,12 @@ const setupPilotNotice = () => {
   const focusableElements = () => [languageButton, confirmButton].filter((element) => !element.disabled);
 
   const close = () => {
+    if (isPilotNoticeDismissed) return;
     isPilotNoticeDismissed = true;
     document.removeEventListener("keydown", handleKeydown);
     document.documentElement.classList.remove("is-pilot-notice-open");
     document.body.classList.remove("is-pilot-notice-open");
-    modal.remove();
+    Promise.all([playExit(dialog, sheetExit), playExit(overlay, fadeExit)]).then(() => modal.remove());
     if (previouslyFocused?.isConnected) previouslyFocused.focus();
     previouslyFocused = null;
     setupRouteTestPrompt();
@@ -579,12 +611,15 @@ const setupRouteTestPrompt = () => {
 
   const focusableElements = () => [...languageButtons, startLink, skipButton].filter((element) => !element.disabled);
 
+  let isClosing = false;
   const close = (eventName = "route_test_prompt_skip") => {
+    if (isClosing) return;
+    isClosing = true;
     markRouteTestPromptSeen();
     document.removeEventListener("keydown", handleKeydown);
     document.documentElement.classList.remove("is-pilot-notice-open");
     document.body.classList.remove("is-pilot-notice-open");
-    modal.remove();
+    Promise.all([playExit(dialog, sheetExit), playExit(overlay, fadeExit)]).then(() => modal.remove());
     if (previouslyFocused?.isConnected) previouslyFocused.focus();
     previouslyFocused = null;
     trackEvent(eventName);
@@ -688,7 +723,8 @@ const setupConsentManager = () => {
       safelyRemoveStorage(analyticsStorageKey);
     }
     window.sakUpdateGoogleConsent?.(consent);
-    banner.hidden = true;
+    // The banner sinks back out of the bottom edge it rose from.
+    if (!banner.hidden) hideWithExit(banner, [{ opacity: 1, transform: "none" }, { opacity: 0, transform: "translateY(24px)" }], 200);
     closeSettings();
     if (analytics) trackEvent("consent_update", { analytics_consent: analytics ? "granted" : "denied", marketing_consent: marketing ? "granted" : "denied" });
   };
@@ -705,8 +741,12 @@ const setupConsentManager = () => {
   };
 
   function closeSettings() {
-    settingsOverlay.hidden = true;
-    settings.hidden = true;
+    if (settings.hidden) return;
+    hideWithExit(settings, [
+      { opacity: 1, transform: "translate(-50%, -50%)" },
+      { opacity: 0, transform: "translate(-50%, calc(-50% + 8px)) scale(0.97)" },
+    ]);
+    hideWithExit(settingsOverlay, fadeExit);
     document.body.classList.remove("is-consent-open");
     previouslyFocused?.focus();
   }
@@ -1059,6 +1099,8 @@ const setupRouteTest = () => {
 
   const getSelectedOption = (question) => question.options.find((option) => option.value === answers[question.id]);
 
+  let renderedIndex = null;
+
   const renderQuestion = () => {
     const question = routeTestQuestions[currentIndex];
     const fieldset = document.createElement("fieldset");
@@ -1086,6 +1128,17 @@ const setupRouteTest = () => {
     });
     fieldset.append(legend, optionList);
     questionElement.replaceChildren(fieldset);
+    // The new question arrives from the side you are moving towards.
+    if (renderedIndex !== null && renderedIndex !== currentIndex && typeof fieldset.animate === "function") {
+      const direction = currentIndex > renderedIndex ? 1 : -1;
+      fieldset.animate(
+        reducedMotionQuery.matches
+          ? [{ opacity: 0 }, { opacity: 1 }]
+          : [{ opacity: 0, transform: `translateX(${direction * 16}px)` }, { opacity: 1, transform: "none" }],
+        { duration: 240, easing: easeOut },
+      );
+    }
+    renderedIndex = currentIndex;
     statusElement.textContent = "";
     progressLabel.textContent = `${currentIndex + 1} / ${routeTestQuestions.length}`;
     const percent = Math.round(((currentIndex + 1) / routeTestQuestions.length) * 100);
@@ -1128,6 +1181,25 @@ const setupRouteTest = () => {
     form.hidden = true;
     progress.hidden = true;
     result.hidden = false;
+    renderedIndex = null;
+    // A rare moment: let the result settle in, answers following one by one.
+    if (typeof result.animate === "function") {
+      const reduced = reducedMotionQuery.matches;
+      result.animate(
+        reduced ? [{ opacity: 0 }, { opacity: 1 }] : [{ opacity: 0, transform: "translateY(12px) scale(0.98)" }, { opacity: 1, transform: "none" }],
+        { duration: reduced ? 200 : 420, easing: easeOut },
+      );
+      if (!reduced) {
+        resultSummary.querySelectorAll("li").forEach((item, index) => {
+          item.animate([{ opacity: 0, transform: "translateY(6px)" }, { opacity: 1, transform: "none" }], {
+            duration: 260,
+            delay: 180 + index * 40,
+            easing: easeOut,
+            fill: "backwards",
+          });
+        });
+      }
+    }
     trackEvent("route_test_complete", { route_result: resultKey, route_test_answers: Object.keys(answers).length });
   };
 
@@ -1632,6 +1704,21 @@ let activeDocumentIndex = 0;
 
 const openDocumentModal = (documents, index) => {
   if (!documentModal || !documentFrame) return;
+  documentModalExit += 1;
+  documentModal.style.pointerEvents = "";
+  documentModal.querySelectorAll(".document-modal__dialog, .document-modal__backdrop").forEach((element) => {
+    // Reopened mid-exit: run the exit backwards from where it is instead of jumping.
+    element.getAnimations().forEach((animation) => {
+      if (typeof CSSAnimation !== "undefined" && animation instanceof CSSAnimation) return;
+      if (animation.playState === "running") {
+        animation.reverse();
+        animation.finished.then(() => animation.cancel()).catch(() => {});
+      } else {
+        animation.cancel();
+      }
+    });
+    element.style.pointerEvents = "";
+  });
   activeDocuments = documents;
   activeDocumentIndex = index;
   documentFrame.src = activeDocuments[activeDocumentIndex].href;
@@ -1643,12 +1730,26 @@ const openDocumentModal = (documents, index) => {
   if (modalNext) modalNext.disabled = !hasMultipleDocuments;
 };
 
+let documentModalExit = 0;
+
 const closeDocumentModal = () => {
-  if (!documentModal || !documentFrame) return;
-  documentModal.classList.remove("is-open");
+  if (!documentModal || !documentFrame || !documentModal.classList.contains("is-open")) return;
+  const exit = ++documentModalExit;
+  // Clicks pass through a closing viewer, so the page answers at once.
+  documentModal.style.pointerEvents = "none";
   documentModal.setAttribute("aria-hidden", "true");
   document.body.classList.remove("is-modal-open");
-  documentFrame.src = "";
+  Promise.all([
+    playExit(documentModal.querySelector(".document-modal__dialog"), sheetExit, 200),
+    playExit(documentModal.querySelector(".document-modal__backdrop"), fadeExit, 200),
+  ]).then((resets) => {
+    // A reopen during the exit wins; leave that one alone.
+    if (exit === documentModalExit) {
+      documentModal.classList.remove("is-open");
+      documentFrame.src = "";
+    }
+    resets.forEach((reset) => reset?.());
+  });
 };
 
 const showModalDocument = (offset) => {
@@ -1684,7 +1785,6 @@ if (yearElement) {
 
 
 // Presentation layer: header scroll edge and the home document deck.
-const reducedMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
 
 const setupHeaderScrollEdge = () => {
   const header = document.querySelector("[data-header]");
@@ -1809,6 +1909,12 @@ const setupDocumentDeck = () => {
     const width = deckWidth();
     states.forEach((state, card) => {
       if (state.dragging) return;
+      // Waiting for its turn in the opening fan-out.
+      if (state.holdUntil && time < state.holdUntil) {
+        busy = true;
+        return;
+      }
+      state.holdUntil = 0;
       // Integrate in small steps so stiff springs stay stable on slow frames.
       const steps = Math.ceil(dt / 0.004);
       let settled = true;
@@ -1994,6 +2100,70 @@ const setupDocumentDeck = () => {
   layout();
   jumpToTargets();
   stack.classList.add("is-live");
+
+  // Once per session, the deck opens from a neat pile into its fan so it reads as a stack you can leaf through.
+  const introKey = "sak-deck-intro-v1";
+  let introSeen = true;
+  try {
+    introSeen = window.sessionStorage.getItem(introKey) === "1";
+  } catch (_error) {
+    // Without storage the deck simply starts fanned out.
+  }
+  if (introSeen || reducedMotionQuery.matches || !("IntersectionObserver" in window)) return;
+
+  states.forEach((state, card) => {
+    state.x.value = 0;
+    state.y.value = 0;
+    state.r.value = 0;
+    state.s.value = 1;
+    render(card);
+  });
+
+  let visible = false;
+  let started = false;
+  const cancelIntro = () => {
+    started = true;
+    states.forEach((state) => { state.holdUntil = 0; });
+  };
+  const startIntro = () => {
+    if (started || !visible || document.body.classList.contains("is-pilot-notice-open")) return;
+    started = true;
+    try {
+      window.sessionStorage.setItem(introKey, "1");
+    } catch (_error) {
+      // Not remembering only means the fan-out may play again.
+    }
+    const now = performance.now();
+    order.forEach((card, depth) => {
+      const state = states.get(card);
+      ["x", "y", "r", "s"].forEach((key) => { state[key].config = { damping: 1, response: 0.5 }; });
+      state.holdUntil = now + 120 + depth * 70;
+    });
+    run();
+  };
+
+  new IntersectionObserver((entries, observer) => {
+    visible = entries.some((entry) => entry.isIntersecting);
+    if (visible) {
+      startIntro();
+      if (started) observer.disconnect();
+    }
+  }, { threshold: 0.45 }).observe(deck);
+
+  new MutationObserver((records, observer) => {
+    startIntro();
+    if (started) observer.disconnect();
+  }).observe(document.body, { attributes: true, attributeFilter: ["class"] });
+
+  // Touching the deck first means the person is already ahead of the hint.
+  const skipIntro = () => {
+    if (started) return;
+    cancelIntro();
+    layout();
+    jumpToTargets();
+  };
+  stack.addEventListener("pointerdown", skipIntro, { once: true, capture: true });
+  stack.addEventListener("keydown", skipIntro, { once: true, capture: true });
 };
 
 setupHeaderScrollEdge();

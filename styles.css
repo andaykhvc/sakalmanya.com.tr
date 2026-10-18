@@ -1,6 +1,6 @@
 /*
   ŞAK Almanya design system
-  Paper, ink and one stamp colour. Platform type, translucent chrome,
+  Paper and ink in Schwarz-Rot-Gold. Platform type, translucent chrome,
   springs for anything a person can touch.
 */
 
@@ -19,14 +19,23 @@
   --ink-3: #6b727c;
   --line: rgba(22, 24, 27, 0.1);
   --line-strong: rgba(22, 24, 27, 0.18);
-  --stamp: #2b45c8;
-  --stamp-hover: #2339a8;
-  --stamp-ink: #ffffff;
-  --stamp-soft: rgba(43, 69, 200, 0.09);
-  --stamp-soft-hover: rgba(43, 69, 200, 0.15);
-  --flag-black: #16181b;
-  --flag-red: #d30000;
-  --flag-gold: #ffcc00;
+  /* Schwarz-Rot-Gold. Red carries actions and links, gold carries
+     highlights and notes, black is the ink itself. */
+  --accent: #c80000;
+  --accent-hover: #a30000;
+  --accent-ink: #ffffff;
+  --accent-soft: rgba(200, 0, 0, 0.08);
+  --accent-soft-hover: rgba(200, 0, 0, 0.14);
+  --cta: #cc0000;
+  --cta-hover: #a80000;
+  --cta-ink: #ffffff;
+  --gold: #ffce00;
+  --gold-soft: rgba(255, 206, 0, 0.3);
+  --gold-soft-hover: rgba(255, 206, 0, 0.46);
+  --gold-ink: #16181b;
+  --flag-black: #000000;
+  --flag-red: #dd0000;
+  --flag-gold: #ffce00;
   --success: #1f7a4d;
   --danger: #b42318;
   --material: rgba(244, 245, 247, 0.72);
@@ -79,12 +88,18 @@
     --ink-3: #8b929c;
     --line: rgba(255, 255, 255, 0.1);
     --line-strong: rgba(255, 255, 255, 0.2);
-    --stamp: #8fa0ff;
-    --stamp-hover: #a9b6ff;
-    --stamp-ink: #0e0f12;
-    --stamp-soft: rgba(143, 160, 255, 0.13);
-    --stamp-soft-hover: rgba(143, 160, 255, 0.2);
-    --flag-black: #f2f3f5;
+    --accent: #ff6b5e;
+    --accent-hover: #ff8f85;
+    --accent-ink: #0e0f12;
+    --accent-soft: rgba(255, 107, 94, 0.14);
+    --accent-soft-hover: rgba(255, 107, 94, 0.22);
+    --cta: #e00b0b;
+    --cta-hover: #f52a2a;
+    --gold-soft: rgba(255, 206, 0, 0.16);
+    --gold-soft-hover: rgba(255, 206, 0, 0.26);
+    --gold-ink: #ffd84d;
+    /* Pure black vanishes on the dark canvas; keep the band readable as three colours. */
+    --flag-black: #2e3036;
     --success: #5cc493;
     --danger: #ff8a7a;
     --material: rgba(14, 15, 18, 0.7);
@@ -109,12 +124,17 @@
   --ink-3: #8b929c;
   --line: rgba(255, 255, 255, 0.1);
   --line-strong: rgba(255, 255, 255, 0.2);
-  --stamp: #8fa0ff;
-  --stamp-hover: #a9b6ff;
-  --stamp-ink: #0e0f12;
-  --stamp-soft: rgba(143, 160, 255, 0.13);
-  --stamp-soft-hover: rgba(143, 160, 255, 0.2);
-  --flag-black: #f2f3f5;
+  --accent: #ff6b5e;
+  --accent-hover: #ff8f85;
+  --accent-ink: #0e0f12;
+  --accent-soft: rgba(255, 107, 94, 0.14);
+  --accent-soft-hover: rgba(255, 107, 94, 0.22);
+  --cta: #e00b0b;
+  --cta-hover: #f52a2a;
+  --gold-soft: rgba(255, 206, 0, 0.16);
+  --gold-soft-hover: rgba(255, 206, 0, 0.26);
+  --gold-ink: #ffd84d;
+  --flag-black: #2e3036;
   --success: #5cc493;
   --danger: #ff8a7a;
   --material: rgba(14, 15, 18, 0.7);
@@ -238,13 +258,13 @@ ol {
 }
 
 a {
-  color: var(--stamp);
+  color: var(--accent);
   text-decoration-thickness: 1px;
   text-underline-offset: 0.18em;
 }
 
 a:hover {
-  color: var(--stamp-hover);
+  color: var(--accent-hover);
 }
 
 strong {
@@ -252,13 +272,14 @@ strong {
 }
 
 :focus-visible {
-  outline: 3px solid color-mix(in srgb, var(--stamp) 55%, transparent);
+  outline: 3px solid color-mix(in srgb, var(--accent) 55%, transparent);
   outline-offset: 3px;
   border-radius: 6px;
 }
 
 ::selection {
-  background: color-mix(in srgb, var(--stamp) 22%, transparent);
+  background: color-mix(in srgb, var(--gold) 50%, transparent);
+  color: var(--ink);
 }
 
 [hidden] {
@@ -289,9 +310,26 @@ strong {
   color: var(--ink-2);
 }
 
-/* The old tricolour bar is retired; the mark carries the flag now. */
+/* A thin Schwarz-Rot-Gold band opens every page and scrolls away with it. */
 .flag-strip {
-  display: none;
+  display: flex;
+  height: 4px;
+}
+
+.flag-strip span {
+  flex: 1;
+}
+
+.strip-black {
+  background: var(--flag-black);
+}
+
+.strip-red {
+  background: var(--flag-red);
+}
+
+.strip-gold {
+  background: var(--flag-gold);
 }
 
 /* Small, sentence-case context line. Never shouted. */
@@ -323,7 +361,7 @@ strong {
 }
 
 .text-link {
-  color: var(--stamp);
+  color: var(--accent);
   font-weight: 500;
   text-decoration: none;
 }
@@ -382,23 +420,23 @@ strong {
 }
 
 .button-primary {
-  background: var(--stamp);
-  color: var(--stamp-ink);
+  background: var(--cta);
+  color: var(--cta-ink);
 }
 
 .button-primary:hover {
-  background: var(--stamp-hover);
-  color: var(--stamp-ink);
+  background: var(--cta-hover);
+  color: var(--cta-ink);
 }
 
 .button-secondary {
-  background: var(--stamp-soft);
-  color: var(--stamp);
+  background: var(--gold-soft);
+  color: var(--gold-ink);
 }
 
 .button-secondary:hover {
-  background: var(--stamp-soft-hover);
-  color: var(--stamp);
+  background: var(--gold-soft-hover);
+  color: var(--gold-ink);
 }
 
 .hero-actions {
@@ -509,13 +547,13 @@ strong {
 
 .main-nav a[data-contact-nav] {
   margin-left: 6px;
-  background: var(--stamp);
-  color: var(--stamp-ink);
+  background: var(--cta);
+  color: var(--cta-ink);
 }
 
 .main-nav a[data-contact-nav]:hover {
-  background: var(--stamp-hover);
-  color: var(--stamp-ink);
+  background: var(--cta-hover);
+  color: var(--cta-ink);
 }
 
 /* Segmented language control */
@@ -701,7 +739,7 @@ strong {
 }
 
 .mobile-drawer-nav a[aria-current="page"] {
-  color: var(--stamp);
+  color: var(--accent);
 }
 
 .mobile-drawer-footer {
@@ -863,7 +901,7 @@ strong {
 }
 
 .doc-stack__deck:focus-visible .doc-card[data-depth="0"] {
-  outline: 3px solid color-mix(in srgb, var(--stamp) 55%, transparent);
+  outline: 3px solid color-mix(in srgb, var(--accent) 55%, transparent);
   outline-offset: 4px;
 }
 
@@ -981,8 +1019,8 @@ strong {
 }
 
 .journey__track li:last-child::before {
-  background: var(--stamp);
-  box-shadow: 0 0 0 4px var(--stamp-soft);
+  background: var(--gold);
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.2), 0 0 0 4px var(--gold-soft);
 }
 
 .journey__when {
@@ -1053,7 +1091,7 @@ strong {
 }
 
 a.person:hover strong {
-  color: var(--stamp);
+  color: var(--accent);
 }
 
 .rich-text {
@@ -1095,7 +1133,7 @@ a.person:hover strong {
 }
 
 .service-index a:active {
-  background: var(--stamp-soft);
+  background: var(--accent-soft);
   transition-duration: 0ms;
 }
 
@@ -1109,15 +1147,15 @@ a.person:hover strong {
 
 @media (hover: hover) and (pointer: fine) {
   .service-index a:hover {
-    background: linear-gradient(90deg, transparent, var(--stamp-soft) 30%, transparent);
+    background: linear-gradient(90deg, transparent, var(--accent-soft) 30%, transparent);
   }
 
   .service-index a:hover h3 {
-    color: var(--stamp);
+    color: var(--accent);
   }
 
   .service-index a:hover svg {
-    color: var(--stamp);
+    color: var(--accent);
     transform: translateX(4px);
   }
 }
@@ -1255,7 +1293,7 @@ a.person:hover strong {
 .steps li::before {
   content: counter(step);
   margin-bottom: 14px;
-  color: var(--stamp);
+  color: var(--accent);
   font-family: var(--font-display);
   font-size: 2.25rem;
   font-weight: 650;
@@ -1343,7 +1381,7 @@ a.person:hover strong {
 }
 
 .faq-list summary:hover {
-  color: var(--stamp);
+  color: var(--accent);
 }
 
 .faq-list details > :not(summary) {
@@ -1491,8 +1529,8 @@ a.person:hover strong {
   margin-block: 28px;
   padding: 16px 20px;
   border-radius: var(--r-sm);
-  background: var(--stamp-soft);
-  color: var(--ink-2);
+  background: var(--gold-soft);
+  color: var(--ink);
   font-size: 0.9375rem;
   line-height: 1.55;
 }
@@ -1511,7 +1549,7 @@ a.person:hover strong {
 }
 
 .answer-box--lead {
-  box-shadow: inset 3px 0 0 var(--stamp), 0 0 0 1px var(--line);
+  box-shadow: inset 3px 0 0 var(--accent), 0 0 0 1px var(--line);
 }
 
 .answer-box h2,
@@ -1657,9 +1695,9 @@ textarea {
 .contact-field select:focus,
 .contact-field textarea:focus,
 .university-filters select:focus {
-  border-color: var(--stamp);
+  border-color: var(--accent);
   outline: none;
-  box-shadow: 0 0 0 4px var(--stamp-soft);
+  box-shadow: 0 0 0 4px var(--accent-soft);
 }
 
 .contact-field input:user-invalid,
@@ -1692,7 +1730,7 @@ textarea {
   width: 20px;
   height: 20px;
   margin: 1px 0 0;
-  accent-color: var(--stamp);
+  accent-color: var(--accent);
 }
 
 .contact-submit {
@@ -1710,9 +1748,67 @@ textarea {
   display: none;
 }
 
-.contact-form-status[data-state="success"],
-.contact-form.is-success .contact-form-status {
-  color: var(--success);
+/* A rare, good moment: the confirmation settles in and a gold seal draws its check. */
+.contact-form-status[data-state="success"] {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-height: 76px;
+  margin-top: 0;
+  padding: 18px 20px 18px 76px;
+  border-radius: var(--r-md);
+  background: var(--surface);
+  box-shadow: 0 0 0 1px var(--line);
+  color: var(--ink);
+  font-weight: 500;
+  line-height: 1.45;
+  animation: status-settle 320ms var(--ease-out) both;
+}
+
+.contact-form-status[data-state="success"]::before,
+.contact-form-status[data-state="success"]::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 20px;
+  width: 40px;
+  height: 40px;
+  margin-top: -20px;
+}
+
+.contact-form-status[data-state="success"]::before {
+  border-radius: 50%;
+  background: var(--gold);
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.12);
+  animation: seal-in 420ms var(--ease-out) 60ms both;
+}
+
+.contact-form-status[data-state="success"]::after {
+  background: #16181b;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Cpath d='M12 20.5l5.5 5.5L28.5 14' fill='none' stroke='%23000' stroke-width='3.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / 40px 40px no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Cpath d='M12 20.5l5.5 5.5L28.5 14' fill='none' stroke='%23000' stroke-width='3.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / 40px 40px no-repeat;
+  clip-path: inset(0 0 0 0);
+  animation: check-draw 300ms var(--ease-out) 260ms both;
+}
+
+@keyframes status-settle {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}
+
+@keyframes seal-in {
+  from {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+}
+
+@keyframes check-draw {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
 }
 
 .contact-form-status[data-state="error"],
@@ -1882,7 +1978,7 @@ textarea {
 }
 
 .breadcrumb a:hover {
-  color: var(--stamp);
+  color: var(--accent);
 }
 
 .page-content {
@@ -1984,7 +2080,7 @@ textarea {
 
 .page-toc a:hover,
 .legal-toc a:hover {
-  color: var(--stamp);
+  color: var(--accent);
 }
 
 .inline-links {
@@ -2007,8 +2103,8 @@ textarea {
 }
 
 .inline-links a:hover {
-  color: var(--stamp);
-  box-shadow: 0 0 0 1px var(--stamp);
+  color: var(--accent);
+  box-shadow: 0 0 0 1px var(--accent);
 }
 
 .check-list {
@@ -2031,8 +2127,8 @@ textarea {
   left: 2px;
   width: 12px;
   height: 7px;
-  border-left: 2px solid var(--stamp);
-  border-bottom: 2px solid var(--stamp);
+  border-left: 2px solid var(--accent);
+  border-bottom: 2px solid var(--accent);
   transform: rotate(-45deg);
 }
 
@@ -2063,8 +2159,8 @@ textarea {
   width: 28px;
   height: 28px;
   border-radius: 50%;
-  background: var(--stamp-soft);
-  color: var(--stamp);
+  background: var(--accent-soft);
+  color: var(--accent);
   font-size: 0.8125rem;
   font-weight: 650;
   line-height: 1;
@@ -2137,7 +2233,7 @@ textarea {
 blockquote {
   margin: 2em 0;
   padding: 0 0 0 24px;
-  border-left: 2px solid var(--stamp);
+  border-left: 2px solid var(--accent);
   font-family: var(--font-reading);
   font-size: 1.25rem;
   line-height: 1.5;
@@ -2195,7 +2291,7 @@ blockquote {
 }
 
 .blog-card > span {
-  color: var(--stamp);
+  color: var(--accent);
   font-size: 0.8125rem;
   font-weight: 600;
 }
@@ -2291,7 +2387,7 @@ blockquote {
 }
 
 .about-process-grid span {
-  color: var(--stamp);
+  color: var(--accent);
   font-size: 0.8125rem;
   font-weight: 650;
   font-variant-numeric: tabular-nums;
@@ -2321,7 +2417,7 @@ blockquote {
 }
 
 .about-link-grid a:hover {
-  color: var(--stamp);
+  color: var(--accent);
 }
 
 .about-facts-section {
@@ -2419,8 +2515,8 @@ blockquote {
 .university-card-logo-fallback {
   display: grid;
   place-items: center;
-  background: var(--stamp-soft);
-  color: var(--stamp);
+  background: var(--accent-soft);
+  color: var(--accent);
   font-weight: 700;
   font-size: 1rem;
 }
@@ -2644,7 +2740,7 @@ blockquote {
   width: 100%;
   height: 100%;
   border-radius: inherit;
-  background: var(--stamp);
+  background: var(--accent);
   transform: scaleX(0);
   transform-origin: left center;
   transition: transform 280ms var(--ease-out);
@@ -2715,16 +2811,16 @@ blockquote {
 }
 
 .route-test-option input:checked + .route-test-option-card {
-  background: var(--stamp-soft);
-  box-shadow: inset 0 0 0 1.5px var(--stamp);
+  background: var(--accent-soft);
+  box-shadow: inset 0 0 0 1.5px var(--accent);
 }
 
 .route-test-option input:checked + .route-test-option-card::before {
-  box-shadow: inset 0 0 0 6px var(--stamp);
+  box-shadow: inset 0 0 0 6px var(--accent);
 }
 
 .route-test-option input:focus-visible + .route-test-option-card {
-  outline: 3px solid color-mix(in srgb, var(--stamp) 55%, transparent);
+  outline: 3px solid color-mix(in srgb, var(--accent) 55%, transparent);
   outline-offset: 2px;
 }
 
@@ -2858,7 +2954,7 @@ blockquote {
 .dresden-pullquote {
   margin-block: 48px !important;
   padding-left: 24px;
-  border-left: 2px solid var(--stamp);
+  border-left: 2px solid var(--accent);
 }
 
 .dresden-pullquote p {
@@ -3184,7 +3280,7 @@ blockquote {
   padding: 6px;
   border: 0;
   background: none;
-  color: var(--stamp);
+  color: var(--accent);
   font: inherit;
   font-size: 0.875rem;
   font-weight: 500;
@@ -3560,6 +3656,24 @@ blockquote {
   }
 
   @keyframes sheet-in {
+    from {
+      opacity: 0;
+    }
+  }
+
+  @keyframes status-settle {
+    from {
+      opacity: 0;
+    }
+  }
+
+  @keyframes seal-in {
+    from {
+      opacity: 0;
+    }
+  }
+
+  @keyframes check-draw {
     from {
       opacity: 0;
     }

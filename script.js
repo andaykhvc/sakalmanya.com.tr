@@ -20,7 +20,7 @@ const playExit = (element, keyframes, duration = 180) => {
   element.style.pointerEvents = "none";
   const animation = element.animate(reducedMotionQuery.matches ? fadeExit : keyframes, {
     duration,
-    easing: "cubic-bezier(0.4, 0, 1, 1)",
+    easing: easeOut,
     fill: "forwards",
   });
   // Never let a stalled frame clock (hidden tab, throttled page) keep a closed surface on screen.
@@ -1143,7 +1143,7 @@ const setupRouteTest = () => {
     progressLabel.textContent = `${currentIndex + 1} / ${routeTestQuestions.length}`;
     const percent = Math.round(((currentIndex + 1) / routeTestQuestions.length) * 100);
     progressPercent.textContent = `%${percent}`;
-    progressBar.style.width = `${percent}%`;
+    progressBar.style.transform = `scaleX(${percent / 100})`;
     backButton.disabled = currentIndex === 0;
     nextButton.textContent = currentIndex === routeTestQuestions.length - 1 ? "Sonucu gör" : "Devam et";
   };
@@ -1232,7 +1232,7 @@ const setupRouteTest = () => {
     progress.hidden = false;
     result.hidden = true;
     renderQuestion();
-    root.scrollIntoView({ behavior: "smooth", block: "start" });
+    root.scrollIntoView({ behavior: reducedMotionQuery.matches ? "auto" : "smooth", block: "start" });
     trackEvent("route_test_restart");
   });
 

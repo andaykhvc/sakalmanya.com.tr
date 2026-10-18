@@ -14,7 +14,8 @@
     <link rel="alternate" hreflang="de" href="https://sakalmanya.com.tr/de/" />
     <link rel="alternate" hreflang="en" href="https://sakalmanya.com.tr/en/" />
     <link rel="alternate" hreflang="x-default" href="https://sakalmanya.com.tr/" />
-    <meta name="theme-color" content="#111111" />
+    <meta name="theme-color" content="#f4f5f7" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0e0f12" media="(prefers-color-scheme: dark)" />
     <meta property="og:title" content="Almanya Eğitim Danışmanlığı ve Almanca Özel Ders | Anday Kahveci" />
     <meta
       property="og:description"
@@ -31,12 +32,6 @@
     />
     <meta name="twitter:image" content="https://sakalmanya.com.tr/assets/dresden/dresden-elbe-evening.webp" />
     <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Serif:wght@600;700&display=swap"
-      rel="stylesheet"
-    />
     <link rel="stylesheet" href="styles.css" />
     <script src="/analytics.js"></script>
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-P7JNVHYCS2"></script>
@@ -210,7 +205,7 @@
       <nav class="main-nav" aria-label="Türkçe menü" data-nav>
         <a href="/hakkimizda/">Hakkımızda</a>
         <a href="/#hizmetler">Hizmetler</a>
-        <a href="/#basarilar">Başarılar</a>
+        <a href="/#basarilar">Belgeler</a>
         <a href="/#surec">Süreç</a>
         <a href="/universite-tanitimlari/">Üniversiteler</a>
         <a href="/blog/">Blog</a>
@@ -221,225 +216,140 @@
     </header>
 
     <main id="top">
-      <section class="hero" aria-labelledby="hero-title">
-        <div class="hero-media" aria-hidden="true"></div>
-        <div class="hero-overlay"></div>
-        <a
-          class="hero-photo-credit"
-          href="https://commons.wikimedia.org/wiki/File:Dresden_skyline.jpg"
-          target="_blank"
-          rel="noopener noreferrer"
-        >Fotoğraf: Michele Vascellari · CC BY-SA 4.0 ↗</a>
-        <div class="hero-content">
-          <p class="eyebrow">Almanya Eğitimi ve Almanca İçin Pilot Bilgilendirme</p>
-          <h1 id="hero-title">ŞAK diye Almanya</h1>
-          <p class="hero-copy">
-            Sıfırdan Almanca öğrenmiş, vize ve okul başvuru süreçlerini bizzat deneyimlemiş biri olarak;
-            Almanca, üniversite başvurusu, Ausbildung araştırması ve Almanya'ya uyum sürecine dair deneyimlerimi
-            pilot aşamada genel bilgilendirme desteği olarak paylaşıyorum. Konuşma pratiği ve öğrenme yöntemleri
-            için de kendi deneyimimden hareketle yol gösterici kaynaklar hazırlıyorum.
-          </p>
-          <div class="hero-actions" aria-label="Ana aksiyonlar">
-            <a class="button button-primary" href="#iletisim">Ücretsiz pilot görüşmeye başvur</a>
-            <a class="button button-secondary" href="/rota-testi/">Almanya rota testini çöz</a>
-            <a class="button button-secondary" href="#hizmetler">Planlanan alanları incele</a>
-          </div>
-          <p class="trial-note">Almanya romantizmi değil; dil, evrak, takvim ve uygulanabilir plan.</p>
-          <dl class="hero-facts" aria-label="Güven bilgileri">
-            <div>
-              <dt>12 ayda B1 hedefi</dt>
-              <dd>Sertifika odaklı, planlı Almanca öğrenme hedefi</dd>
+      <section class="home-hero hero" aria-labelledby="hero-title">
+        <div class="container home-hero__grid">
+          <div class="home-hero__copy">
+            <h1 id="hero-title"><span>ŞAK diye</span> <span>Almanya.</span></h1>
+            <p class="home-hero__lede">
+              Almancayı sıfırdan öğrendim, başvuruları ve vizeyi kendim yürüttüm, TU Dresden’de okudum.
+              Şimdi aynı yolu planlayanlara deneyimimi aktarıyorum.
+            </p>
+            <div class="hero-actions" aria-label="Ana aksiyonlar">
+              <a class="button button-primary" href="#iletisim">Ücretsiz pilot görüşmeye başvur</a>
+              <a class="button button-secondary" href="/rota-testi/">Rota testini çöz</a>
             </div>
-          </dl>
+            <p class="home-hero__note">
+              Ticari olmayan pilot aşama; görüşmeler ücretsiz. Almanya romantizmi değil: dil, evrak, takvim ve uygulanabilir plan.
+            </p>
+          </div>
+
+          <figure class="doc-stack" data-doc-stack aria-label="Kabul ve dil belgeleri">
+            <div class="doc-stack__deck" data-doc-deck tabindex="0" aria-roledescription="belge destesi" aria-label="Belgeler. Sağ ve sol ok tuşlarıyla gezin, Enter ile açın.">
+              <a class="doc-card" href="assets/belgeler/kabuller/tu-dresden-zulassungsbescheid-redacted.pdf" data-doc-title="TU Dresden" data-doc-kind="Kabul belgesi"><img src="assets/belgeler/previews/tu-dresden-zulassungsbescheid-redacted.jpg" alt="TU Dresden kabul belgesi" width="640" height="905" fetchpriority="high" draggable="false" /></a>
+              <a class="doc-card" href="assets/belgeler/dil-belgeleri/dsh-2-tu-dresden-redacted.pdf" data-doc-title="TU Dresden" data-doc-kind="DSH-2 sonucu"><img src="assets/belgeler/previews/dsh-2-tu-dresden-redacted.jpg" alt="TU Dresden DSH-2 belgesi" width="640" height="905" draggable="false" /></a>
+              <a class="doc-card" href="assets/belgeler/kabuller/ulm-zulassung-redacted.pdf" data-doc-title="Universität Ulm" data-doc-kind="Kabul belgesi"><img src="assets/belgeler/previews/ulm-zulassung-redacted.jpg" alt="Ulm kabul belgesi" width="640" height="905" loading="lazy" draggable="false" /></a>
+              <a class="doc-card" href="assets/belgeler/dil-belgeleri/telc-b2-redacted.pdf" data-doc-title="telc" data-doc-kind="B2 sertifikası"><img src="assets/belgeler/previews/telc-b2-redacted.jpg" alt="telc B2 sertifikası" width="640" height="905" loading="lazy" draggable="false" /></a>
+              <a class="doc-card" href="assets/belgeler/kabuller/kiel-zulassung-redacted.pdf" data-doc-title="Universität Kiel" data-doc-kind="Kabul belgesi"><img src="assets/belgeler/previews/kiel-zulassung-redacted.jpg" alt="Kiel kabul belgesi" width="640" height="905" loading="lazy" draggable="false" /></a>
+              <a class="doc-card" href="assets/belgeler/kabuller/bayreuth-zulassung-redacted.pdf" data-doc-title="Universität Bayreuth" data-doc-kind="Kabul belgesi"><img src="assets/belgeler/previews/bayreuth-zulassung-redacted.jpg" alt="Bayreuth kabul belgesi" width="640" height="905" loading="lazy" draggable="false" /></a>
+            </div>
+            <figcaption class="doc-stack__bar">
+              <span class="doc-stack__label" aria-live="polite"><strong data-doc-title-out>TU Dresden</strong><span data-doc-meta-out>Kabul belgesi, 1 / 6</span></span>
+              <button class="icon-button" type="button" data-doc-prev aria-label="Önceki belge"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12.5 4.5 7 10l5.5 5.5" /></svg></button>
+              <button class="icon-button" type="button" data-doc-next aria-label="Sonraki belge"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7.5 4.5 13 10l-5.5 5.5" /></svg></button>
+            </figcaption>
+            <p class="doc-stack__hint">Kaydırarak geç, dokunarak aç. Kişisel bilgiler gizlendi.</p>
+          </figure>
         </div>
       </section>
 
-      <section class="intro-band" aria-label="Kısa tanıtım">
-        <div class="container intro-grid">
-          <p>
-            Türkiye'den Almanya'ya eğitim için gitmek isteyen öğrenciler ve süreci anlamak isteyen aileler için net, ölçülü ve genel bilgilendirme.
-          </p>
-          <a href="#basarilar">Kabuller ve sınav başarıları</a>
+      <section class="journey" aria-labelledby="journey-title">
+        <div class="container">
+          <h2 id="journey-title" class="visually-hidden">Almanca ve Almanya yolculuğum</h2>
+          <ol class="journey__track">
+            <li><span class="journey__when">Başlangıç</span><span class="journey__what">Sıfır</span><span class="journey__detail">Almancaya Türkiye’de, hiç bilmeden başladım.</span></li>
+            <li><span class="journey__when">7. ay</span><span class="journey__what">B2</span><span class="journey__detail">Yoğun ve disiplinli bir çalışma düzeniyle.</span></li>
+            <li><span class="journey__when">17. ay</span><span class="journey__what">C1</span><span class="journey__detail">Yolda bir telc B2 ve iki DSH sertifikası.</span></li>
+            <li><span class="journey__when">TU Dresden</span><span class="journey__what">4 dönem</span><span class="journey__detail">Elektrotechnik; üniversitede 8 ay, gastronomide 5 ay iş.</span></li>
+            <li><span class="journey__when">Bugün</span><span class="journey__what">ŞAK Almanya</span><span class="journey__detail">Bu deneyimi aynı yolu planlayanlarla paylaşıyorum.</span></li>
+          </ol>
         </div>
       </section>
 
-<section class="section about-section" id="hakkimda">
-  <div class="container two-column">
-    <div>
-      <p class="section-label">Hakkımda</p>
-
-      <a class="linkedin-overlay-card" href="https://de.linkedin.com/in/andaykahveci/en" target="_blank" rel="noopener noreferrer" aria-label="Anday Sahin Kahveci LinkedIn profilini aç">
-        <span class="linkedin-overlay-card__brand">Linked<span>in</span></span>
-        <span class="linkedin-overlay-card__body">
-          <img src="assets/linkedin-profile.jpg" alt="Anday Sahin Kahveci profil fotoğrafı" />
-          <span class="linkedin-overlay-card__copy">
-            <strong>Anday Sahin Kahveci</strong>
-            <small>Student</small>
-            <small>Wu5 | Technische Universität Dresden</small>
-            <em>View profile</em>
-          </span>
-        </span>
-      </a>
-
-      <figure class="belief-gif" aria-label="Ben sana inanıyorum GIF">
-        <video autoplay loop muted playsinline>
-          <source src="https://media.tenor.com/8kl9XhOx5c4AAAPo/avukat-r%C3%B6portaj-adam.mp4" type="video/mp4" />
-        </video>
-        <figcaption>
-          <span class="flag-badge flag-saxony">Saksonya</span>
-          <span class="flag-badge flag-turkey">Türkiye</span>
-          <span class="flag-badge flag-germany">Almanya</span>
-        </figcaption>
-      </figure>
-    </div>
-    <div class="rich-text">
+      <section class="section home-about" id="hakkimda" aria-labelledby="about-title">
+        <div class="container home-about__grid">
+          <div class="home-about__intro">
+            <h2 id="about-title">Bu yolu teoriden değil, yaşayarak biliyorum.</h2>
+            <a class="person" href="https://www.linkedin.com/in/andaykahveci/" target="_blank" rel="noopener noreferrer">
+              <img src="assets/linkedin-profile.jpg" alt="" width="56" height="56" loading="lazy" />
+              <span><strong>Ş. Anday Kahveci</strong><small>Kurucu, Dresden. LinkedIn profili ↗</small></span>
+            </a>
+          </div>
+          <div class="rich-text">
             <p>
-              Almanca yolculuğuma Türkiye’de sıfırdan başladım. Kısa sürede yoğun ve disiplinli bir çalışma süreciyle 
-              yaklaşık 7 ayda B2 seviyesine ulaştım. Toplam 17 aylık öğrenme sürecinde C1 seviyesine geldim;
-              bu yolculukta bir telc B2 ve iki DSH sertifikası aldım.
+              Almanca yolculuğuma Türkiye’de sıfırdan başladım. Yoğun ve disiplinli bir çalışmayla yaklaşık 7 ayda B2’ye,
+              toplam 17 ayda C1 seviyesine ulaştım; bu yolda bir telc B2 ve iki DSH sertifikası aldım.
             </p>
             <p>
-              Bu süreçte vize başvurusu, okul başvuruları, ev arama, belge hazırlığı ve Almanya'daki resmi işlemlerin
-              büyük ölçüde kendi başıma yürüttüm. TU Dresden’da Elektrotechnik ve Elektronik alanında dört dönem
-              eğitim alırken üniversite sistemini de içeriden deneyimledim.
+              Vize başvurusu, okul başvuruları, ev arama, belge hazırlığı ve Almanya’daki resmi işlemlerin büyük bölümünü
+              kendi başıma yürüttüm. TU Dresden’de Elektrotechnik ve Elektronik alanında dört dönem okurken üniversite
+              sistemini de içeriden gördüm.
             </p>
             <p>
-              Almanya'daki eğitim hayatım boyunca üniversitemde 8 aylık iş deneyimi kazandım. Bunun yanında gastro
-              sektöründe de 5 ay çalışarak Almanya'daki iş hayatını farklı yönleriyle deneyimleme fırsatım oldu.
-            </p>
-            <p>
-              Bugün bu tecrübelerimi Almanca öğrenmek, Almanya'da üniversite veya Ausbildung planlamak, vize ve
-              başvuru süreçlerini anlamak isteyen kişilerle paylaşıyorum.
+              Üniversitemde 8 ay çalıştım, gastronomi sektöründe de 5 ay iş deneyimim oldu. Almanya’daki iş hayatını
+              farklı yönleriyle tanıdım.
             </p>
             <p>
               Pilot aşamadaki bilgilendirme görüşmelerinde yalnızca teorik bilgi paylaşmıyorum; mümkün oldukça Alman
-              arkadaşlarımla konuşma pratiği deneyimlerinden de söz ediyorum. Görüşmeler, genel yönlendirme amacıyla
-              yüz yüze veya telefon üzerinden yapılabiliyor.
+              arkadaşlarımla konuşma pratiği deneyimlerinden de söz ediyorum. Görüşmeler genel yönlendirme amacıyla yüz yüze
+              veya telefonla yapılabiliyor.
             </p>
-            <p><a class="text-link" href="/hakkimizda/">ŞAK Almanya’nın ve kurucusunun hikâyesini ayrıntılı okuyun.</a></p>
+            <p><a class="text-link" href="/hakkimizda/">ŞAK Almanya’nın ve kurucusunun hikâyesini okuyun</a></p>
           </div>
         </div>
       </section>
 
-      <section class="section proof-section" aria-label="Neden Anday Kahveci">
+      <section class="section" id="hizmetler" aria-labelledby="services-title">
         <div class="container">
           <div class="section-heading">
-            <p class="section-label">Çalışma biçimi</p>
-            <h2>Net bilgi, düzenli dosya, sade takip.</h2>
+            <h2 id="services-title">Pilot aşamada geliştirilen destek alanları.</h2>
+            <p>Bu başlıklar şu anda yalnızca pilot çalışma ve genel bilgilendirme amacıyla geliştiriliyor. Her birinin ayrıntılı bir sayfası var.</p>
           </div>
-          <div class="proof-grid">
-            <article>
-              <span>01</span>
-              <h3>Neden ben?</h3>
-              <p>Bu süreci yalnızca araştırmadım, bizzat yaşadım. Bu yüzden genel bilgiler değil, sahada karşılığı olan öneriler sunuyorum.</p>
-            </article>
-            <article>
-              <span>02</span>
-              <h3>Belge düzeni</h3>
-              <p>CV, motivasyon mektubu ve başvuru evrakları kontrol listesiyle hazırlanır. Dosya estetiği burada ciddiye alınır.</p>
-            </article>
-            <article>
-              <span>03</span>
-              <h3>Dil planı</h3>
-              <p>Almanca hazırlıkta hedef seviye, sınav tarihi ve haftalık çalışma düzeni baştan belirlenir.</p>
-            </article>
-          </div>
+          <ul class="service-index">
+            <li><a href="/almanya-egitim-danismanligi/"><h3>Almanya eğitim danışmanlığı</h3><p>Hedef, dil seviyesi, belge durumu ve zamanı birlikte netleştirip uygulanabilir bir yol haritası çıkarmak.</p><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7.5 4.5 13 10l-5.5 5.5" /></svg></a></li>
+            <li><a href="/almanya-universite-basvurusu/"><h3>Üniversite ve Hochschule başvurusu</h3><p>Okul seçimi, başvuru takvimi, belge düzeni ve kurum şartları için kontrol listeleri.</p><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7.5 4.5 13 10l-5.5 5.5" /></svg></a></li>
+            <li><a href="/almanya-yuksek-lisans-sartlari/"><h3>Master başvurusu</h3><p>Bölüm uyumu, başvuru koşulları, CV, niyet mektubu ve belge kontrolü için genel bir çerçeve.</p><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7.5 4.5 13 10l-5.5 5.5" /></svg></a></li>
+            <li><a href="/almanya-ausbildung-danismanligi/"><h3>Ausbildung</h3><p>Uygun alan araştırması, başvuru belgeleri, CV, motivasyon mektubu ve işverenle iletişim.</p><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7.5 4.5 13 10l-5.5 5.5" /></svg></a></li>
+            <li><a href="/almanya-sartli-kabul/"><h3>Şartlı kabul</h3><p>Şartlı kabulün ne zaman mantıklı olduğu ve dil planına nasıl bağlandığı.</p><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7.5 4.5 13 10l-5.5 5.5" /></svg></a></li>
+            <li><a href="/studienkolleg/"><h3>Studienkolleg</h3><p>Studienkolleg’in kimler için gerekli olduğu ve hazırlık yolları.</p><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7.5 4.5 13 10l-5.5 5.5" /></svg></a></li>
+            <li><a href="/almanya-ogrenci-vizesi/"><h3>Öğrenci vizesi ve ilk haftalar</h3><p>Temel evraklar, finansal hazırlık, sigorta ve randevu; ardından Anmeldung ve konaklama gibi ilk adımlar.</p><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7.5 4.5 13 10l-5.5 5.5" /></svg></a></li>
+            <li><a href="/almanca-ozel-ders/"><h3>Almanca özel ders</h3><p>Hedef seviye, sınav tarihi ve haftalık çalışma düzeniyle planlı Almanca hazırlık.</p><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7.5 4.5 13 10l-5.5 5.5" /></svg></a></li>
+          </ul>
         </div>
       </section>
 
-      <section class="section services-section" id="hizmetler">
+      <section class="section documents" id="basarilar" aria-labelledby="documents-title">
         <div class="container">
-          <div class="section-heading compact">
-            <p class="section-label">Planlanan destek alanları</p>
-            <h2>Pilot aşamada geliştirilen destek alanları.</h2>
-            <p class="muted">Bu başlıklar şu anda yalnızca pilot çalışma ve genel bilgilendirme amacıyla geliştirilmektedir.</p>
+          <div class="section-heading">
+            <h2 id="documents-title">Belgeler konuşsun.</h2>
+            <p>Kabul mektupları ve dil sınavı sonuçları. Bir belgeye dokunarak tamamını açabilirsin.</p>
           </div>
-          <div class="services-grid">
-            <article class="service-card">
-              <h3>Üniversite ve Hochschule başvurusu</h3>
-              <p>
-                Bu planlanan başlık için okul seçimi, başvuru takvimi, belge düzeni ve kurum şartlarına dair kontrol listeleri hazırlanır.
-              </p>
-            </article>
-            <article class="service-card">
-              <h3>Ausbildung danışmanlığı</h3>
-              <p>
-                Bu planlanan başlık; uygun alan araştırması, başvuru belgeleri, CV, motivasyon mektubu ve işveren iletişimi için genel kaynakları kapsar.
-              </p>
-            </article>
-            <article class="service-card">
-              <h3>Master başvurusu</h3>
-              <p>
-                Bu planlanan başlıkta bölüm uyumu, başvuru koşulları, CV, niyet mektubu ve belge kontrolüne ilişkin genel bir çerçeve sunulur.
-              </p>
-            </article>
-            <article class="service-card">
-              <h3>Vize hazırlık rehberliği</h3>
-              <p>
-                Bu planlanan başlık, öğrenci vizesi için temel evrakları, finansal hazırlığı, sigortayı ve randevu sürecini anlaşılır kaynaklarda toplar.
-              </p>
-            </article>
-            <article class="service-card">
-              <h3>Almanca özel ders</h3>
-              <p>
-                Bu planlanan başlık, hedef odaklı Almanca hazırlık için düzenli çalışma, haftalık tekrar ve seviye takibi yöntemlerini içerir.
-              </p>
-            </article>
-            <article class="service-card">
-              <h3>Almanya'ya uyum rehberliği</h3>
-              <p>
-                Adres kaydı (Anmeldung), konaklama arayışı, okul başlangıcı ve ilk haftalarda karşılaşılabilecek temel konular.
-              </p>
-            </article>
+
+          <div class="doc-shelf" data-document-carousel>
+            <div class="doc-shelf__head"><h3>Kabuller</h3><span>8 belge</span></div>
+            <div class="doc-shelf__row document-previews" aria-label="Kabul belgeleri">
+              <a href="assets/belgeler/kabuller/tu-dresden-zulassungsbescheid-redacted.pdf"><img src="assets/belgeler/previews/tu-dresden-zulassungsbescheid-redacted.jpg" alt="" width="640" height="905" loading="lazy" /><span>TU Dresden<small>Kabul belgesi</small></span></a>
+              <a href="assets/belgeler/kabuller/ulm-zulassung-redacted.pdf"><img src="assets/belgeler/previews/ulm-zulassung-redacted.jpg" alt="" width="640" height="905" loading="lazy" /><span>Universität Ulm<small>Kabul belgesi</small></span></a>
+              <a href="assets/belgeler/kabuller/kiel-zulassung-redacted.pdf"><img src="assets/belgeler/previews/kiel-zulassung-redacted.jpg" alt="" width="640" height="905" loading="lazy" /><span>Universität Kiel<small>Kabul belgesi</small></span></a>
+              <a href="assets/belgeler/kabuller/bayreuth-zulassung-redacted.pdf"><img src="assets/belgeler/previews/bayreuth-zulassung-redacted.jpg" alt="" width="640" height="905" loading="lazy" /><span>Universität Bayreuth<small>Kabul belgesi</small></span></a>
+              <a href="assets/belgeler/kabuller/lmu-zeyno-immatrikulation-redacted.pdf"><img src="assets/belgeler/previews/lmu-zeyno-immatrikulation-redacted.jpg" alt="" width="640" height="905" loading="lazy" /><span>LMU München<small>Kayıt belgesi</small></span></a>
+              <a href="assets/belgeler/kabuller/tu-dresden-aufnahmetest-zulassung-redacted.pdf"><img src="assets/belgeler/previews/tu-dresden-aufnahmetest-zulassung-redacted.jpg" alt="" width="640" height="905" loading="lazy" /><span>TU Dresden<small>Giriş sınavı kabulü</small></span></a>
+              <a href="assets/belgeler/kabuller/bremen-bewerberbestaetigung-redacted.pdf"><img src="assets/belgeler/previews/bremen-bewerberbestaetigung-redacted.jpg" alt="" width="640" height="905" loading="lazy" /><span>Bremen<small>Başvuru onayı</small></span></a>
+              <a href="assets/belgeler/kabuller/potsdam-dsh-kurs-einladung-redacted.pdf"><img src="assets/belgeler/previews/potsdam-dsh-kurs-einladung-redacted.jpg" alt="" width="640" height="905" loading="lazy" /><span>Universität Potsdam<small>DSH kursu daveti</small></span></a>
+            </div>
           </div>
+
+          <div class="doc-shelf" data-document-carousel>
+            <div class="doc-shelf__head"><h3>Dil belgeleri</h3><span>4 belge</span></div>
+            <div class="doc-shelf__row document-previews" aria-label="Dil belgeleri">
+              <a href="assets/belgeler/dil-belgeleri/dsh-2-tu-dresden-redacted.pdf"><img src="assets/belgeler/previews/dsh-2-tu-dresden-redacted.jpg" alt="" width="640" height="905" loading="lazy" /><span>TU Dresden<small>DSH-2</small></span></a>
+              <a href="assets/belgeler/dil-belgeleri/dsh-2-mittweida-redacted.pdf"><img src="assets/belgeler/previews/dsh-2-mittweida-redacted.jpg" alt="" width="640" height="905" loading="lazy" /><span>Hochschule Mittweida<small>DSH-2</small></span></a>
+              <a href="assets/belgeler/dil-belgeleri/telc-b2-redacted.pdf"><img src="assets/belgeler/previews/telc-b2-redacted.jpg" alt="" width="640" height="905" loading="lazy" /><span>telc<small>B2 sertifikası</small></span></a>
+              <a href="assets/belgeler/dil-belgeleri/testdaf-levent-redacted.pdf"><img src="assets/belgeler/previews/testdaf-levent-redacted.jpg" alt="" width="640" height="905" loading="lazy" /><span>TestDaF<small>Sonuç belgesi</small></span></a>
+            </div>
+          </div>
+          <p class="documents__privacy">Belgelerdeki kişisel bilgiler gizlenmiştir. Her dosya farklıdır; bu belgeler bir kabul veya sonuç garantisi anlamına gelmez.</p>
         </div>
       </section>
-
-      <section class="section achievements-section" id="basarilar">
-        <div class="container">
-          <div class="section-heading compact">
-            <p class="section-label">Başarılarımız</p>
-            <h2>Belgeler konuşsun; dosya dağınık kalmasın.</h2>
-          </div>
-          <div class="achievement-grid">
-            <article class="achievement-card" data-document-carousel>
-              <div class="carousel-head">
-                <span>Kabullerimiz</span>
-                <div class="carousel-controls">
-                  <button type="button" data-carousel-prev aria-label="Önceki kabul belgesi">‹</button>
-                  <button type="button" data-carousel-next aria-label="Sonraki kabul belgesi">›</button>
-                </div>
-              </div>
-              <div class="document-links document-previews" aria-label="Kabul belgeleri">
-                <a class="is-active" href="assets/belgeler/kabuller/bayreuth-zulassung-redacted.pdf" aria-label="Bayreuth kabul belgesini aç"><img src="assets/belgeler/previews/bayreuth-zulassung-redacted.png" alt="Bayreuth kabul belgesi önizlemesi" /></a>
-                <a href="assets/belgeler/kabuller/kiel-zulassung-redacted.pdf" aria-label="Kiel kabul belgesini aç"><img src="assets/belgeler/previews/kiel-zulassung-redacted.png" alt="Kiel kabul belgesi önizlemesi" /></a>
-                <a href="assets/belgeler/kabuller/tu-dresden-zulassungsbescheid-redacted.pdf" aria-label="TU Dresden kabul belgesini aç"><img src="assets/belgeler/previews/tu-dresden-zulassungsbescheid-redacted.png" alt="TU Dresden kabul belgesi önizlemesi" /></a>
-                <a href="assets/belgeler/kabuller/ulm-zulassung-redacted.pdf" aria-label="Ulm kabul belgesini aç"><img src="assets/belgeler/previews/ulm-zulassung-redacted.png" alt="Ulm kabul belgesi önizlemesi" /></a>
-                <a href="assets/belgeler/kabuller/bremen-bewerberbestaetigung-redacted.pdf" aria-label="Bremen başvuru belgesini aç"><img src="assets/belgeler/previews/bremen-bewerberbestaetigung-redacted.png" alt="Bremen başvuru belgesi önizlemesi" /></a>
-                <a href="assets/belgeler/kabuller/tu-dresden-aufnahmetest-zulassung-redacted.pdf" aria-label="TU Dresden Aufnahmetest belgesini aç"><img src="assets/belgeler/previews/tu-dresden-aufnahmetest-zulassung-redacted.png" alt="TU Dresden Aufnahmetest belgesi önizlemesi" /></a>
-                <a href="assets/belgeler/kabuller/potsdam-dsh-kurs-einladung-redacted.pdf" aria-label="Potsdam DSH daveti belgesini aç"><img src="assets/belgeler/previews/potsdam-dsh-kurs-einladung-redacted.png" alt="Potsdam DSH daveti önizlemesi" /></a>
-                <a href="assets/belgeler/kabuller/lmu-zeyno-immatrikulation-redacted.pdf" aria-label="LMU kayıt belgesini aç"><img src="assets/belgeler/previews/lmu-zeyno-immatrikulation-redacted.png" alt="LMU kayıt belgesi önizlemesi" /></a>
-              </div>
-            </article>
-            <article class="achievement-card" data-document-carousel>
-              <div class="carousel-head">
-                <span>Dilde Başarılarımız</span>
-                <div class="carousel-controls">
-                  <button type="button" data-carousel-prev aria-label="Önceki dil belgesi">‹</button>
-                  <button type="button" data-carousel-next aria-label="Sonraki dil belgesi">›</button>
-                </div>
-              </div>
-              <div class="document-links document-previews" aria-label="Dil belgeleri">
-                <a class="is-active" href="assets/belgeler/dil-belgeleri/dsh-2-mittweida-redacted.pdf" aria-label="Mittweida DSH-2 belgesini aç"><img src="assets/belgeler/previews/dsh-2-mittweida-redacted.png" alt="Mittweida DSH-2 belgesi önizlemesi" /></a>
-                <a href="assets/belgeler/dil-belgeleri/dsh-2-tu-dresden-redacted.pdf" aria-label="TU Dresden DSH-2 belgesini aç"><img src="assets/belgeler/previews/dsh-2-tu-dresden-redacted.png" alt="TU Dresden DSH-2 belgesi önizlemesi" /></a>
-                <a href="assets/belgeler/dil-belgeleri/telc-b2-redacted.pdf" aria-label="Telc B2 belgesini aç"><img src="assets/belgeler/previews/telc-b2-redacted.png" alt="Telc B2 belgesi önizlemesi" /></a>
-                <a href="assets/belgeler/dil-belgeleri/testdaf-levent-redacted.pdf" aria-label="TestDaF belgesini aç"><img src="assets/belgeler/previews/testdaf-levent-redacted.png" alt="TestDaF belgesi önizlemesi" /></a>
-              </div>
-            </article>
-          </div>
-        </div>
-      </section>
-
 
       <div class="document-modal" data-document-modal aria-hidden="true">
         <div class="document-modal__backdrop" data-document-close></div>
@@ -453,167 +363,84 @@
         </div>
       </div>
 
-      <section class="section process-section" id="surec">
-        <div class="container two-column">
-          <div>
-            <p class="section-label">Süreç</p>
-            <h2>Başvuruyu takvim ve kontrol listesiyle yönetiyoruz.</h2>
-            <p class="muted">
-              Her aday için durum farklıdır. Bu yüzden önce hedefi, mevcut Almanca seviyesini, belge durumunu ve zamanı netleştiriyoruz.
-            </p>
+      <section class="section" id="surec" aria-labelledby="process-title">
+        <div class="container">
+          <div class="section-heading">
+            <h2 id="process-title">Başvuruyu takvim ve kontrol listesiyle yönetiyoruz.</h2>
+            <p>Her adayın durumu farklı. Bu yüzden önce hedefi, Almanca seviyesini, belge durumunu ve zamanı netleştiriyoruz.</p>
           </div>
-          <ol class="timeline">
-            <li>
-              <strong>Ön görüşme</strong>
-              <span>Hedefin, notların, Almanca seviyen ve zaman planın konuşulur.</span>
-            </li>
-            <li>
-              <strong>Yol haritası</strong>
-              <span>Üniversite, Hochschule, Ausbildung veya master için uygun başvuru rotası çıkarılır.</span>
-            </li>
-            <li>
-              <strong>Belge düzeni</strong>
-              <span>Başvuru belgeleri, CV, motivasyon mektubu ve çeviri/noter gibi adımlar listelenir.</span>
-            </li>
-            <li>
-              <strong>Başvuru ve takip</strong>
-              <span>Başvuru takvimi takip edilir; eksik belge ve sistem süreçleri kontrol edilir.</span>
-            </li>
-            <li>
-              <strong>Vize hazırlığı</strong>
-              <span>Kabul sonrası vize hazırlığı için temel başlıklar sade bir plana dönüştürülür.</span>
-            </li>
+          <ol class="steps">
+            <li><strong>Ön görüşme</strong><span>Hedefin, notların, Almanca seviyen ve zaman planın konuşulur.</span></li>
+            <li><strong>Yol haritası</strong><span>Üniversite, Hochschule, Ausbildung veya master için uygun başvuru rotası çıkarılır.</span></li>
+            <li><strong>Belge düzeni</strong><span>Başvuru belgeleri, CV, motivasyon mektubu ve çeviri/noter gibi adımlar listelenir.</span></li>
+            <li><strong>Başvuru ve takip</strong><span>Başvuru takvimi takip edilir; eksik belge ve sistem süreçleri kontrol edilir.</span></li>
+            <li><strong>Vize hazırlığı</strong><span>Kabul sonrası vize hazırlığının temel başlıkları sade bir plana dönüştürülür.</span></li>
           </ol>
         </div>
       </section>
 
-      <section class="section seo-links-section" aria-labelledby="seo-links-title">
-        <div class="container">
+      <section class="section home-faq" id="sss" aria-labelledby="faq-title">
+        <div class="container home-faq__grid">
           <div class="section-heading">
-            <p class="section-label">Hizmet sayfaları</p>
-            <h2 id="seo-links-title">Almanya eğitim danışmanlığı başlıklarını ayrı ayrı incele.</h2>
-            <p>
-              Almanya üniversite başvurusu, Hochschule, Ausbildung, şartlı kabul, Almanca özel ders,
-              vize süreci ve belge hazırlığı başlıklarını Dresden’deki gerçek öğrenci deneyimimle daha
-              düzenli bir yol haritasına bağlıyorum.
-            </p>
-          </div>
-          <div class="seo-link-grid">
-            <a href="/almanya-egitim-danismanligi/">Almanya Eğitim Danışmanlığı</a>
-            <a href="/almanya-universite-basvurusu/">Almanya Üniversite Başvurusu</a>
-            <a href="/almanya-ausbildung-danismanligi/">Almanya Ausbildung Danışmanlığı</a>
-            <a href="/almanca-ozel-ders/">Almanca Özel Ders</a>
-            <a href="/almanya-sartli-kabul/">Almanya Şartlı Kabul</a>
-            <a href="/studienkolleg/">Almanya Studienkolleg Rehberi</a>
-            <a href="/almanya-ogrenci-vizesi/">Almanya Öğrenci Vizesi</a>
-            <a href="/universite-tanitimlari/">Almanya Üniversiteleri</a>
-          </div>
-        </div>
-      </section>
-
-      <section class="section faq-section" id="sss">
-        <div class="container">
-          <div class="section-heading compact">
-            <p class="section-label">Sık sorulan sorular</p>
-            <h2>Öğrenci ve ailelerin en çok sorduğu konular.</h2>
-            <p><a class="text-link" href="/sss/">Tüm sorular için SSS sayfasına bakın.</a></p>
+            <h2 id="faq-title">Öğrenci ve ailelerin en çok sorduğu konular.</h2>
+            <p><a class="text-link" href="/sss/">Tüm sorular SSS sayfasında</a></p>
           </div>
           <div class="faq-list">
             <details>
               <summary>Kesin kabul veya kesin vize garantisi veriyor musun?</summary>
-              <p>
-                Hayır. Kabul ve vize kararını ilgili üniversite, Hochschule, Ausbildung kurumu, işveren, konsolosluk
-                veya resmi makam verir. Ben süreci daha düzenli, bilinçli ve şartlara uygun yürütmene yardımcı olurum.
-              </p>
+              <p>Hayır. Kabul ve vize kararını ilgili üniversite, Hochschule, Ausbildung kurumu, işveren, konsolosluk veya resmi makam verir. Ben süreci daha düzenli, bilinçli ve şartlara uygun yürütmene yardımcı olurum.</p>
             </details>
             <details>
               <summary>Danışmanlık sadece okul başvurusu mu?</summary>
-              <p>
-                Hayır. Okul seçimi, belge düzeni, başvuru takibi, vize hazırlık başlıkları ve Almanca hazırlık birlikte
-                planlanabilir.
-              </p>
+              <p>Hayır. Okul seçimi, belge düzeni, başvuru takibi, vize hazırlık başlıkları ve Almanca hazırlık birlikte planlanabilir.</p>
             </details>
             <details>
-              <summary>Hiç Almanca bilmeyen biri Almanya'yı hedefleyebilir mi?</summary>
-              <p>
-                Evet, ama hedefe göre gerçekçi bir dil planı gerekir. Üniversite, Hochschule, Ausbildung ve master seçeneklerinde
-                istenen seviye farklı olabilir.
-              </p>
+              <summary>Hiç Almanca bilmeyen biri Almanya’yı hedefleyebilir mi?</summary>
+              <p>Evet, ama hedefe göre gerçekçi bir dil planı gerekir. Üniversite, Hochschule, Ausbildung ve master seçeneklerinde istenen seviye farklı olabilir.</p>
             </details>
             <details>
               <summary>Veliler de görüşmeye katılabilir mi?</summary>
-              <p>
-                Evet. Özellikle lise öğrencilerinde aileyle birlikte plan yapmak süreci daha anlaşılır ve güvenli hale getirir.
-              </p>
+              <p>Evet. Özellikle lise öğrencilerinde aileyle birlikte plan yapmak süreci daha anlaşılır ve güvenli hale getirir.</p>
             </details>
             <details>
               <summary>Almanya için hangi Almanca seviyesi gerekir?</summary>
-              <p>
-                Hedefe göre değişir. Ausbildung için bazı alanlarda B1 konuşulurken, akademik programlarda B2 veya C1 gerekebilir.
-                Önce hedefi netleştirip sonra dil seviyesini planlamak en sağlıklı yoldur.
-              </p>
+              <p>Hedefe göre değişir. Ausbildung için bazı alanlarda B1 konuşulurken, akademik programlarda B2 veya C1 gerekebilir. Önce hedefi netleştirip sonra dil seviyesini planlamak en sağlıklı yoldur.</p>
             </details>
             <details>
               <summary>Ausbildung için temel şartlar nelerdir?</summary>
-              <p>
-                Genellikle okul mezuniyeti, Almanca seviyesi, uygun CV, motivasyon mektubu ve işverenle iletişim süreci önemlidir.
-                Mesleğe göre beklentiler değişebilir.
-              </p>
+              <p>Genellikle okul mezuniyeti, Almanca seviyesi, uygun CV, motivasyon mektubu ve işverenle iletişim süreci önemlidir. Mesleğe göre beklentiler değişebilir.</p>
             </details>
             <details>
-              <summary>Universitat ile Hochschule farkı nedir?</summary>
-              <p>
-                Universitat daha akademik ilerler; Hochschule çoğu zaman uygulama ve sektör bağlantısına daha yakındır.
-                Doğru seçim hedeflediğin bölüm, kariyer planı ve öğrenme tarzına göre değişir.
-              </p>
+              <summary>Universität ile Hochschule farkı nedir?</summary>
+              <p>Universität daha akademik ilerler; Hochschule çoğu zaman uygulama ve sektör bağlantısına daha yakındır. Doğru seçim hedeflediğin bölüm, kariyer planı ve öğrenme tarzına göre değişir.</p>
             </details>
             <details>
               <summary>Hangi belgeler gerekiyor?</summary>
-              <p>
-                Hedefe göre değişmekle birlikte diploma, transkript, pasaport, dil belgesi, CV, motivasyon mektubu,
-                başvuru formları ve bazı durumlarda finansal belgeler gerekebilir.
-              </p>
+              <p>Hedefe göre değişmekle birlikte diploma, transkript, pasaport, dil belgesi, CV, motivasyon mektubu, başvuru formları ve bazı durumlarda finansal belgeler gerekebilir.</p>
             </details>
             <details>
               <summary>Süreç ne kadar sürer?</summary>
-              <p>
-                Mevcut Almanca seviyene, belge durumuna, hedeflediğin programa ve başvuru tarihlerine bağlıdır.
-                Bazı hazırlıklar birkaç ayda toparlanabilir; bazı hedefler için bir yıl veya daha uzun plan gerekebilir.
-              </p>
+              <p>Mevcut Almanca seviyene, belge durumuna, hedeflediğin programa ve başvuru tarihlerine bağlıdır. Bazı hazırlıklar birkaç ayda toparlanabilir; bazı hedefler için bir yıl veya daha uzun plan gerekebilir.</p>
             </details>
             <details>
               <summary>Ücretsiz pilot görüşme var mı?</summary>
-              <p>
-                Evet. Pilot aşamada kısa bir görüşme ile mevcut durumunu, hedefini ve hangi genel bilgilendirme desteğine ihtiyaç duyduğunu anlayabiliriz.
-                Bu görüşme, süreci anlamak ve doğru başlangıç noktasını bulmak içindir.
-              </p>
+              <p>Evet. Pilot aşamada kısa bir görüşmeyle mevcut durumunu, hedefini ve hangi genel bilgilendirme desteğine ihtiyaç duyduğunu anlayabiliriz. Bu görüşme, süreci anlamak ve doğru başlangıç noktasını bulmak içindir.</p>
             </details>
             <details>
               <summary>Şu anda ücretli hizmet sunuluyor mu?</summary>
-              <p>
-                Hayır. ŞAK Almanya şu anda ticari olmayan bir pilot ve hazırlık aşamasındadır. Herhangi bir ücret alınmamakta ve ücretli hizmet sözleşmesi oluşturulmamaktadır.
-              </p>
+              <p>Hayır. ŞAK Almanya şu anda ticari olmayan bir pilot ve hazırlık aşamasındadır. Herhangi bir ücret alınmamakta ve ücretli hizmet sözleşmesi oluşturulmamaktadır.</p>
             </details>
             <details>
               <summary>Motivasyon mektubu ve CV desteği veriyor musun?</summary>
-              <p>
-                Evet. Amaç yapay bir profil yaratmak değil; gerçek geçmişini ve hedefini daha düzgün, açık ve başvuruya
-                uygun hale getirmektir.
-              </p>
+              <p>Evet. Amaç yapay bir profil yaratmak değil; gerçek geçmişini ve hedefini daha düzgün, açık ve başvuruya uygun hale getirmektir.</p>
             </details>
             <details>
-              <summary>Almanya'da bölüm seçimi için destek olur musun?</summary>
-              <p>
-                Evet. İlgi alanın, eğitim geçmişin, Almanca seviyen, kariyer hedefin ve Almanya'daki program seçenekleri
-                birlikte değerlendirilir.
-              </p>
+              <summary>Almanya’da bölüm seçimi için destek olur musun?</summary>
+              <p>Evet. İlgi alanın, eğitim geçmişin, Almanca seviyen, kariyer hedefin ve Almanya’daki program seçenekleri birlikte değerlendirilir.</p>
             </details>
             <details>
               <summary>Başvuru tarihlerini nasıl takip edeceğiz?</summary>
-              <p>
-                Hedef kurumlara ve programlara göre başvuru tarihlerini bir takvim halinde düzenleyebiliriz.
-                Böylece hangi belgenin ne zamana kadar hazırlanması gerektiği daha net görünür.
-              </p>
+              <p>Hedef kurumlara ve programlara göre başvuru tarihlerini bir takvim halinde düzenleyebiliriz. Böylece hangi belgenin ne zamana kadar hazırlanması gerektiği daha net görünür.</p>
             </details>
           </div>
         </div>
@@ -630,19 +457,19 @@
         </div>
       </section>
 
-      <section class="contact-section" id="iletisim">
+      <section class="contact-section" id="iletisim" aria-labelledby="contact-title">
         <div class="container contact-panel">
           <div>
-            <p class="section-label">İletişim</p>
-            <h2>Almanya planını konuşmaya başlayalım.</h2>
+            <h2 id="contact-title">Almanya planını konuşmaya başlayalım.</h2>
             <p>
               Nereden başlayacağını bilmiyorsan sorun değil. Ücretsiz pilot görüşmede hedefini, mevcut durumunu,
               Almanca seviyeni ve önündeki seçenekleri birlikte netleştirebiliriz.
             </p>
+            <p class="contact-form-alternative">Doğrudan e-posta da gönderebilirsin: <a href="mailto:iletisim@andaykahveci.com">iletisim@andaykahveci.com</a></p>
           </div>
           <div class="contact-form-panel">
-            <h3 id="contact-form-title">Formu doldur, Almanya planını birlikte netleştirelim.</h3>
-            <p class="contact-form-note">Yıldızlı alanlar zorunludur. Yanıtımızı e-posta adresine göndereceğiz.</p>
+            <h3 id="contact-form-title">Formu doldur, planını birlikte netleştirelim.</h3>
+            <p class="contact-form-note">Yıldızlı alanlar zorunlu. Yanıtımızı e-posta adresine göndereceğiz.</p>
             <form class="contact-form" data-contact-form action="https://formsubmit.co/iletisim@andaykahveci.com" method="POST" aria-labelledby="contact-form-title">
               <input type="hidden" name="_subject" value="ŞAK Almanya — Yeni iletişim talebi" />
               <input type="hidden" name="_template" value="table" />
@@ -657,12 +484,11 @@
                   <div class="contact-field contact-field-wide"><label for="contact-message">Mesajın <span aria-hidden="true">*</span></label><textarea id="contact-message" name="message" rows="5" minlength="10" maxlength="5000" placeholder="Hedefini, mevcut durumunu ve merak ettiklerini kısaca paylaş." required></textarea></div>
                 </div>
                 <div class="contact-consent"><input id="contact-consent" name="consent" type="checkbox" value="accepted" required /><label for="contact-consent"><a href="/gizlilik/">Gizlilik Politikası’nı</a> okudum. Bilgilerimin talebime yanıt vermek amacıyla işlenmesini kabul ediyorum.</label></div>
-                <button class="button button-primary contact-submit" type="submit">Mesajı gönder<span aria-hidden="true">↗</span></button>
+                <button class="button button-primary contact-submit" type="submit">Mesajı gönder</button>
               </fieldset>
               <p class="contact-form-status" data-contact-status role="status" aria-live="polite" aria-atomic="true"></p>
               <button class="button contact-form-reset" type="button" data-contact-reset hidden>Yeni mesaj yaz</button>
             </form>
-            <p class="contact-form-alternative">Doğrudan e-posta da gönderebilirsin: <a href="mailto:iletisim@andaykahveci.com">iletisim@andaykahveci.com</a></p>
           </div>
         </div>
       </section>
@@ -689,9 +515,7 @@
       </div>
     </footer>
 
-    <script src="script.js"></script>
+    <script src="/script.js"></script>
     <script src="/contact.js"></script>
-
   </body>
-
 </html>

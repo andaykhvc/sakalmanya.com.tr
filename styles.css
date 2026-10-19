@@ -490,16 +490,7 @@ strong {
   margin-block: -4px;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) .brand-mark {
-    filter: invert(1) hue-rotate(180deg);
-  }
-}
-
-:root[data-theme="dark"] .brand-mark {
-  filter: invert(1) hue-rotate(180deg);
-}
-
+/* The mark switches its own ink for dark mode, so the flag colours stay exact. */
 .brand strong {
   font-family: var(--font-display);
   font-size: 1.1875rem;

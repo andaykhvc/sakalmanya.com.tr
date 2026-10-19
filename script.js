@@ -8,6 +8,37 @@ const deutschlaenderOrigin = "https://deutschlaender.com.tr";
 const deutschlaenderCampaign = "deutschlaender_ecosystem";
 let isPilotNoticeDismissed = false;
 
+const reducedMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+const easeOut = "cubic-bezier(0.22, 1, 0.36, 1)";
+
+// Surfaces leave along the path they arrived by, a little faster than they came in.
+const sheetExit = [{ opacity: 1, transform: "none" }, { opacity: 0, transform: "translateY(8px) scale(0.97)" }];
+const fadeExit = [{ opacity: 1 }, { opacity: 0 }];
+
+const playExit = (element, keyframes, duration = 180) => {
+  if (!element || typeof element.animate !== "function") return Promise.resolve();
+  element.style.pointerEvents = "none";
+  const animation = element.animate(reducedMotionQuery.matches ? fadeExit : keyframes, {
+    duration,
+    easing: easeOut,
+    fill: "forwards",
+  });
+  // Never let a stalled frame clock (hidden tab, throttled page) keep a closed surface on screen.
+  const timeout = new Promise((resolve) => window.setTimeout(resolve, duration + 120));
+  return Promise.race([animation.finished.catch(() => {}), timeout])
+    .then(() => () => {
+      animation.cancel();
+      element.style.pointerEvents = "";
+    });
+};
+
+// Hide after the exit, then drop the held final frame so the next open starts clean.
+const hideWithExit = (element, keyframes, duration) =>
+  playExit(element, keyframes, duration).then((reset) => {
+    element.hidden = true;
+    reset?.();
+  });
+
 const safelyReadStorage = (key) => {
   try {
     return JSON.parse(window.localStorage.getItem(key));
@@ -117,26 +148,7 @@ const setupDeutschlaenderLinks = () => {
     link.rel = "noopener noreferrer";
   });
 
-  document.querySelectorAll(".site-header [data-nav]").forEach((navigation) => {
-    if (navigation.querySelector("[data-deutschlaender-header-link]")) return;
-    const link = document.createElement("a");
-    link.href = buildDeutschlaenderUrl("/forum", "header_nav_forum");
-    link.target = "_blank";
-    link.rel = "noopener noreferrer";
-    link.textContent = "Deutschländer Forum";
-    link.setAttribute("data-deutschlaender-link", "");
-    link.setAttribute("data-deutschlaender-header-link", "");
-    link.dataset.deutschlaenderPath = "/forum";
-    link.dataset.deutschlaenderContent = "header_nav_forum";
-
-    const universityLink = Array.from(navigation.querySelectorAll("a")).find((item) => item.href.includes("/universite-tanitimlari/") || item.href.includes("/universitaeten/") || item.href.includes("/universities/"));
-    const navigationAnchor = navigation.querySelector("[data-dresden-header-link]") || universityLink;
-    if (navigationAnchor) {
-      navigationAnchor.after(link);
-    } else {
-      navigation.append(link);
-    }
-  });
+  // The forum lives in the footer, the drawer and the in-page callouts; the header stays short.
 
   const footerLabels = {
     tr: "Almanca öğren & forum",
@@ -471,11 +483,12 @@ const setupPilotNotice = () => {
   const focusableElements = () => [languageButton, confirmButton].filter((element) => !element.disabled);
 
   const close = () => {
+    if (isPilotNoticeDismissed) return;
     isPilotNoticeDismissed = true;
     document.removeEventListener("keydown", handleKeydown);
     document.documentElement.classList.remove("is-pilot-notice-open");
     document.body.classList.remove("is-pilot-notice-open");
-    modal.remove();
+    Promise.all([playExit(dialog, sheetExit), playExit(overlay, fadeExit)]).then(() => modal.remove());
     if (previouslyFocused?.isConnected) previouslyFocused.focus();
     previouslyFocused = null;
     setupRouteTestPrompt();
@@ -598,12 +611,15 @@ const setupRouteTestPrompt = () => {
 
   const focusableElements = () => [...languageButtons, startLink, skipButton].filter((element) => !element.disabled);
 
+  let isClosing = false;
   const close = (eventName = "route_test_prompt_skip") => {
+    if (isClosing) return;
+    isClosing = true;
     markRouteTestPromptSeen();
     document.removeEventListener("keydown", handleKeydown);
     document.documentElement.classList.remove("is-pilot-notice-open");
     document.body.classList.remove("is-pilot-notice-open");
-    modal.remove();
+    Promise.all([playExit(dialog, sheetExit), playExit(overlay, fadeExit)]).then(() => modal.remove());
     if (previouslyFocused?.isConnected) previouslyFocused.focus();
     previouslyFocused = null;
     trackEvent(eventName);
@@ -707,7 +723,8 @@ const setupConsentManager = () => {
       safelyRemoveStorage(analyticsStorageKey);
     }
     window.sakUpdateGoogleConsent?.(consent);
-    banner.hidden = true;
+    // The banner sinks back out of the bottom edge it rose from.
+    if (!banner.hidden) hideWithExit(banner, [{ opacity: 1, transform: "none" }, { opacity: 0, transform: "translateY(24px)" }], 200);
     closeSettings();
     if (analytics) trackEvent("consent_update", { analytics_consent: analytics ? "granted" : "denied", marketing_consent: marketing ? "granted" : "denied" });
   };
@@ -724,8 +741,12 @@ const setupConsentManager = () => {
   };
 
   function closeSettings() {
-    settingsOverlay.hidden = true;
-    settings.hidden = true;
+    if (settings.hidden) return;
+    hideWithExit(settings, [
+      { opacity: 1, transform: "translate(-50%, -50%)" },
+      { opacity: 0, transform: "translate(-50%, calc(-50% + 8px)) scale(0.97)" },
+    ]);
+    hideWithExit(settingsOverlay, fadeExit);
     document.body.classList.remove("is-consent-open");
     previouslyFocused?.focus();
   }
@@ -861,7 +882,7 @@ const mobileNavigationCopy = {
       ["Deutschländer Forum", "https://deutschlaender.com.tr/forum"],
       ["Almanya’da Eğitim", "/almanya-egitim-danismanligi/"],
       ["Rota Testi", "/rota-testi/"],
-      ["Başarılarımız", "/#basarilar"],
+      ["Belgeler", "/#basarilar"],
       ["Hakkımızda", "/hakkimizda/"],
       ["Sık Sorulan Sorular", "/sss/"],
       ["İletişim", "/#iletisim"],
@@ -882,7 +903,7 @@ const mobileNavigationCopy = {
       ["Deutschländer Forum", "https://deutschlaender.com.tr/forum"],
       ["Bildungsberatung", "/de/bildungsberatung/"],
       ["Routen-Test", "/rota-testi/"],
-      ["Erfolge", "/de/#erfolge"],
+      ["Dokumente", "/de/#erfolge"],
       ["Über uns", "/de/ueber-uns/"],
       ["FAQ", "/de/faq/"],
       ["Kontakt", "/de/#kontakt"],
@@ -903,7 +924,7 @@ const mobileNavigationCopy = {
       ["Deutschländer Forum", "https://deutschlaender.com.tr/forum"],
       ["Education Guidance", "/en/education-consulting/"],
       ["Route test", "/rota-testi/"],
-      ["Success Stories", "/en/#success-stories"],
+      ["Documents", "/en/#success-stories"],
       ["About", "/en/about/"],
       ["Frequently Asked Questions", "/en/faq/"],
       ["Contact", "/en/#contact"],
@@ -1078,6 +1099,8 @@ const setupRouteTest = () => {
 
   const getSelectedOption = (question) => question.options.find((option) => option.value === answers[question.id]);
 
+  let renderedIndex = null;
+
   const renderQuestion = () => {
     const question = routeTestQuestions[currentIndex];
     const fieldset = document.createElement("fieldset");
@@ -1105,11 +1128,22 @@ const setupRouteTest = () => {
     });
     fieldset.append(legend, optionList);
     questionElement.replaceChildren(fieldset);
+    // The new question arrives from the side you are moving towards.
+    if (renderedIndex !== null && renderedIndex !== currentIndex && typeof fieldset.animate === "function") {
+      const direction = currentIndex > renderedIndex ? 1 : -1;
+      fieldset.animate(
+        reducedMotionQuery.matches
+          ? [{ opacity: 0 }, { opacity: 1 }]
+          : [{ opacity: 0, transform: `translateX(${direction * 16}px)` }, { opacity: 1, transform: "none" }],
+        { duration: 240, easing: easeOut },
+      );
+    }
+    renderedIndex = currentIndex;
     statusElement.textContent = "";
     progressLabel.textContent = `${currentIndex + 1} / ${routeTestQuestions.length}`;
     const percent = Math.round(((currentIndex + 1) / routeTestQuestions.length) * 100);
     progressPercent.textContent = `%${percent}`;
-    progressBar.style.width = `${percent}%`;
+    progressBar.style.transform = `scaleX(${percent / 100})`;
     backButton.disabled = currentIndex === 0;
     nextButton.textContent = currentIndex === routeTestQuestions.length - 1 ? "Sonucu gör" : "Devam et";
   };
@@ -1147,6 +1181,25 @@ const setupRouteTest = () => {
     form.hidden = true;
     progress.hidden = true;
     result.hidden = false;
+    renderedIndex = null;
+    // A rare moment: let the result settle in, answers following one by one.
+    if (typeof result.animate === "function") {
+      const reduced = reducedMotionQuery.matches;
+      result.animate(
+        reduced ? [{ opacity: 0 }, { opacity: 1 }] : [{ opacity: 0, transform: "translateY(12px) scale(0.98)" }, { opacity: 1, transform: "none" }],
+        { duration: reduced ? 200 : 420, easing: easeOut },
+      );
+      if (!reduced) {
+        resultSummary.querySelectorAll("li").forEach((item, index) => {
+          item.animate([{ opacity: 0, transform: "translateY(6px)" }, { opacity: 1, transform: "none" }], {
+            duration: 260,
+            delay: 180 + index * 40,
+            easing: easeOut,
+            fill: "backwards",
+          });
+        });
+      }
+    }
     trackEvent("route_test_complete", { route_result: resultKey, route_test_answers: Object.keys(answers).length });
   };
 
@@ -1179,7 +1232,7 @@ const setupRouteTest = () => {
     progress.hidden = false;
     result.hidden = true;
     renderQuestion();
-    root.scrollIntoView({ behavior: "smooth", block: "start" });
+    root.scrollIntoView({ behavior: reducedMotionQuery.matches ? "auto" : "smooth", block: "start" });
     trackEvent("route_test_restart");
   });
 
@@ -1331,7 +1384,7 @@ const setupMobileNavigation = () => {
     if (event.key === "Escape" && toggle.getAttribute("aria-expanded") === "true") setOpen(false);
   });
   window.addEventListener("resize", () => {
-    if (window.innerWidth > 768 && toggle.getAttribute("aria-expanded") === "true") setOpen(false);
+    if (window.innerWidth >= 1180 && toggle.getAttribute("aria-expanded") === "true") setOpen(false);
   });
 
   if (activeLanguage) {
@@ -1381,26 +1434,6 @@ setupMasterNavigation();
 setupDeutschlaenderLinks();
 setupAnalyticsTracking();
 setupRouteTest();
-
-document.querySelectorAll("[data-document-carousel]").forEach((carousel) => {
-  const items = Array.from(carousel.querySelectorAll(".document-previews a"));
-  const previous = carousel.querySelector("[data-carousel-prev]");
-  const next = carousel.querySelector("[data-carousel-next]");
-  const visibleCount = Math.min(3, items.length);
-  let current = 0;
-
-  const show = (index) => {
-    current = (index + items.length) % items.length;
-    items.forEach((item, itemIndex) => {
-      const offset = (itemIndex - current + items.length) % items.length;
-      item.classList.toggle("is-active", offset < visibleCount);
-    });
-  };
-
-  previous?.addEventListener("click", () => show(current - 1));
-  next?.addEventListener("click", () => show(current + 1));
-  show(0);
-});
 
 const universityFilters = document.querySelector("[data-university-filters]");
 const universityGrid = document.querySelector("[data-university-grid]");
@@ -1671,6 +1704,21 @@ let activeDocumentIndex = 0;
 
 const openDocumentModal = (documents, index) => {
   if (!documentModal || !documentFrame) return;
+  documentModalExit += 1;
+  documentModal.style.pointerEvents = "";
+  documentModal.querySelectorAll(".document-modal__dialog, .document-modal__backdrop").forEach((element) => {
+    // Reopened mid-exit: run the exit backwards from where it is instead of jumping.
+    element.getAnimations().forEach((animation) => {
+      if (typeof CSSAnimation !== "undefined" && animation instanceof CSSAnimation) return;
+      if (animation.playState === "running") {
+        animation.reverse();
+        animation.finished.then(() => animation.cancel()).catch(() => {});
+      } else {
+        animation.cancel();
+      }
+    });
+    element.style.pointerEvents = "";
+  });
   activeDocuments = documents;
   activeDocumentIndex = index;
   documentFrame.src = activeDocuments[activeDocumentIndex].href;
@@ -1682,12 +1730,26 @@ const openDocumentModal = (documents, index) => {
   if (modalNext) modalNext.disabled = !hasMultipleDocuments;
 };
 
+let documentModalExit = 0;
+
 const closeDocumentModal = () => {
-  if (!documentModal || !documentFrame) return;
-  documentModal.classList.remove("is-open");
+  if (!documentModal || !documentFrame || !documentModal.classList.contains("is-open")) return;
+  const exit = ++documentModalExit;
+  // Clicks pass through a closing viewer, so the page answers at once.
+  documentModal.style.pointerEvents = "none";
   documentModal.setAttribute("aria-hidden", "true");
   document.body.classList.remove("is-modal-open");
-  documentFrame.src = "";
+  Promise.all([
+    playExit(documentModal.querySelector(".document-modal__dialog"), sheetExit, 200),
+    playExit(documentModal.querySelector(".document-modal__backdrop"), fadeExit, 200),
+  ]).then((resets) => {
+    // A reopen during the exit wins; leave that one alone.
+    if (exit === documentModalExit) {
+      documentModal.classList.remove("is-open");
+      documentFrame.src = "";
+    }
+    resets.forEach((reset) => reset?.());
+  });
 };
 
 const showModalDocument = (offset) => {
@@ -1721,110 +1783,388 @@ if (yearElement) {
   yearElement.textContent = new Date().getFullYear();
 }
 
-// Shared presentation layer: no copy, routes, or application data are changed.
-const setupDesignMotion = () => {
-  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-  const desktopMotion = window.matchMedia("(min-width: 1024px) and (hover: hover)");
-  const hero = document.querySelector(".hero");
-  const heroMedia = hero?.querySelector(".hero-media");
+
+// Presentation layer: header scroll edge and the home document deck.
+
+const setupHeaderScrollEdge = () => {
   const header = document.querySelector("[data-header]");
-  const revealSelector = [
-    ".section-heading", ".intro-grid > *", ".about-section .two-column > *",
-    ".proof-grid > article", ".services-grid > article", ".achievement-grid > article",
-    ".process-section .two-column > div", ".timeline > li", ".seo-link-grid > a",
-    ".faq-list > details", ".contact-panel > *", ".blog-list > article",
-    ".university-grid > article", ".university-info-grid > *", ".dresden-figure",
-    ".about-process-grid > article", ".about-principles > article",
-  ].join(", ");
-  let revealObserver;
+  if (!header) return;
   let frame = 0;
-
-  const reveal = (element) => {
-    element.classList.remove("is-pending");
-    element.classList.add("is-revealed");
-    revealObserver?.unobserve(element);
-  };
-
-  const registerReveals = () => {
-    document.querySelectorAll(revealSelector).forEach((element) => {
-      if (element.hasAttribute("data-design-reveal")) return;
-      // Keep initially visible content and anchor destinations immediately readable.
-      if (reducedMotion.matches || !revealObserver || element.getBoundingClientRect().top < window.innerHeight) return;
-      element.setAttribute("data-design-reveal", "");
-      const index = Array.from(element.parentElement.children).indexOf(element);
-      element.style.setProperty("--reveal-delay", `${Math.min(index % 3, 2) * 80}ms`);
-      element.classList.add("is-pending");
-      revealObserver.observe(element);
-    });
-  };
-
-  if ("IntersectionObserver" in window) {
-    revealObserver = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) reveal(entry.target);
-      });
-    }, { threshold: 0, rootMargin: "0px 0px -32px 0px" });
-    registerReveals();
-  }
-
-  // The university directory appends cards after its API request and on filtering.
-  const universityGrid = document.querySelector(".university-grid");
-  if (universityGrid && revealObserver) {
-    new MutationObserver((records) => {
-      records.forEach((record) => record.removedNodes.forEach((node) => {
-        if (node instanceof Element) revealObserver.unobserve(node);
-      }));
-      registerReveals();
-    }).observe(universityGrid, { childList: true });
-  }
-
-  document.addEventListener("focusin", (event) => {
-    const pending = event.target.closest?.("[data-design-reveal].is-pending");
-    if (pending) reveal(pending);
-  });
-
-  // Run the hero entrance after the existing notices have been dismissed.
-  const startHero = () => {
-    if (document.body.classList.contains("is-pilot-notice-open")) return false;
-    if (!reducedMotion.matches && hero && hero.getBoundingClientRect().bottom > 0) {
-      hero.classList.add("is-motion-ready");
-    }
-    return true;
-  };
-  if (hero && !startHero()) {
-    const noticeObserver = new MutationObserver(() => {
-      if (startHero()) noticeObserver.disconnect();
-    });
-    noticeObserver.observe(document.body, { attributes: true, attributeFilter: ["class"] });
-  }
-
-  const updateScroll = () => {
+  const update = () => {
     frame = 0;
-    header?.classList.toggle("is-scrolled", window.scrollY > 16);
-    if (!heroMedia) return;
-    if (reducedMotion.matches || !desktopMotion.matches) {
-      heroMedia.style.removeProperty("--hero-parallax-y");
-      return;
-    }
-    const rect = hero.getBoundingClientRect();
-    const progress = Math.min(1, Math.max(0, -rect.top / rect.height));
-    heroMedia.style.setProperty("--hero-parallax-y", `${progress * 18}px`);
+    header.classList.toggle("is-scrolled", window.scrollY > 4);
   };
-  const scheduleScroll = () => {
-    if (!frame) frame = requestAnimationFrame(updateScroll);
-  };
-  window.addEventListener("scroll", scheduleScroll, { passive: true });
-  window.addEventListener("resize", scheduleScroll);
-  reducedMotion.addEventListener("change", () => {
-    if (reducedMotion.matches) {
-      document.querySelectorAll("[data-design-reveal]").forEach(reveal);
-      hero?.classList.remove("is-motion-ready");
-    } else {
-      registerReveals();
-    }
-    scheduleScroll();
-  });
-  updateScroll();
+  window.addEventListener("scroll", () => {
+    if (!frame) frame = requestAnimationFrame(update);
+  }, { passive: true });
+  update();
 };
 
-setupDesignMotion();
+// Springs described the way Apple does: damping ratio + response (seconds).
+const springStep = (prop, dt) => {
+  const { damping, response } = prop.config;
+  const stiffness = (2 * Math.PI / response) ** 2;
+  const friction = (4 * Math.PI * damping) / response;
+  const force = -stiffness * (prop.value - prop.target) - friction * prop.velocity;
+  prop.velocity += force * dt;
+  prop.value += prop.velocity * dt;
+  if (Math.abs(prop.value - prop.target) < 0.01 && Math.abs(prop.velocity) < 0.01) {
+    prop.value = prop.target;
+    prop.velocity = 0;
+    return true;
+  }
+  return false;
+};
+
+// Where a flick would come to rest (scroll-view deceleration).
+const projectMomentum = (velocity, decelerationRate = 0.998) =>
+  ((velocity / 1000) * decelerationRate) / (1 - decelerationRate);
+
+const setupDocumentDeck = () => {
+  const stack = document.querySelector("[data-doc-stack]");
+  const deck = stack?.querySelector("[data-doc-deck]");
+  if (!stack || !deck) return;
+
+  const cards = Array.from(deck.querySelectorAll(".doc-card"));
+  if (cards.length < 2) return;
+  const titleOut = stack.querySelector("[data-doc-title-out]");
+  const metaOut = stack.querySelector("[data-doc-meta-out]");
+  const previousButton = stack.querySelector("[data-doc-prev]");
+  const nextButton = stack.querySelector("[data-doc-next]");
+  const visibleDepth = 4;
+  const fan = [
+    { x: 0, y: 0, r: 0, s: 1 },
+    { x: 16, y: -12, r: 3.2, s: 0.965 },
+    { x: -18, y: -22, r: -4.2, s: 0.93 },
+    { x: 12, y: -30, r: 6, s: 0.9 },
+  ];
+  const settle = { damping: 1, response: 0.42 };
+  const thrown = { damping: 0.82, response: 0.45 };
+
+  const states = new Map();
+  let order = cards.slice();
+  let running = false;
+  let lastTime = 0;
+
+  const deckWidth = () => deck.getBoundingClientRect().width || 320;
+  const unit = () => deckWidth() / 360;
+
+  cards.forEach((card) => {
+    const make = (value = 0) => ({ value, velocity: 0, target: value, config: settle });
+    states.set(card, { x: make(), y: make(), r: make(), s: make(1), flingDirection: 0, flingLayer: 0 });
+    card.tabIndex = -1;
+    card.addEventListener("click", (event) => event.preventDefault());
+    card.addEventListener("dragstart", (event) => event.preventDefault());
+  });
+
+  const render = (card) => {
+    const state = states.get(card);
+    card.style.transform =
+      `translate3d(${state.x.value.toFixed(2)}px, ${state.y.value.toFixed(2)}px, 0) ` +
+      `rotate(${state.r.value.toFixed(3)}deg) scale(${state.s.value.toFixed(4)})`;
+  };
+
+  const layout = (config = settle) => {
+    const scale = unit();
+    order.forEach((card, depth) => {
+      const state = states.get(card);
+      const slot = fan[Math.min(depth, visibleDepth - 1)];
+      card.dataset.depth = String(depth);
+      card.setAttribute("aria-hidden", depth === 0 ? "false" : "true");
+      // A card in flight stays above the deck until it clears the edge.
+      if (state.flingDirection) {
+        card.style.zIndex = String(order.length + state.flingLayer);
+        card.style.opacity = "1";
+        return;
+      }
+      card.style.zIndex = String(order.length - depth);
+      card.style.opacity = depth < visibleDepth ? "1" : "0";
+      if (state.dragging) return;
+      state.x.target = slot.x * scale;
+      state.y.target = slot.y * scale;
+      state.r.target = slot.r;
+      state.s.target = slot.s;
+      ["x", "y", "r", "s"].forEach((key) => { state[key].config = config; });
+    });
+    const top = order[0];
+    const index = cards.indexOf(top);
+    if (titleOut) titleOut.textContent = top.dataset.docTitle || "";
+    if (metaOut) metaOut.textContent = `${top.dataset.docKind || ""}, ${index + 1} / ${cards.length}`;
+  };
+
+  const jumpToTargets = () => {
+    states.forEach((state, card) => {
+      ["x", "y", "r", "s"].forEach((key) => {
+        state[key].value = state[key].target;
+        state[key].velocity = 0;
+      });
+      render(card);
+    });
+  };
+
+  const tick = (time) => {
+    const dt = Math.min(0.032, (time - lastTime) / 1000 || 0.016);
+    lastTime = time;
+    let busy = false;
+    const width = deckWidth();
+    states.forEach((state, card) => {
+      if (state.dragging) return;
+      // Waiting for its turn in the opening fan-out.
+      if (state.holdUntil && time < state.holdUntil) {
+        busy = true;
+        return;
+      }
+      state.holdUntil = 0;
+      // Integrate in small steps so stiff springs stay stable on slow frames.
+      const steps = Math.ceil(dt / 0.004);
+      let settled = true;
+      for (let i = 0; i < steps; i += 1) {
+        settled = ["x", "y", "r", "s"].map((key) => springStep(state[key], dt / steps)).every(Boolean);
+      }
+      // A thrown card slides back under the deck once it clears the edge.
+      if (state.flingDirection && Math.abs(state.x.value) > width * 0.82) {
+        state.flingDirection = 0;
+        layout(thrown);
+        settled = false;
+      }
+      if (!settled) busy = true;
+      render(card);
+    });
+    if (busy) {
+      requestAnimationFrame(tick);
+    } else {
+      running = false;
+    }
+  };
+
+  const run = () => {
+    if (reducedMotionQuery.matches) {
+      states.forEach((state) => { state.flingDirection = 0; });
+      layout();
+      jumpToTargets();
+      return;
+    }
+    if (running) return;
+    running = true;
+    lastTime = performance.now();
+    requestAnimationFrame(tick);
+  };
+
+  let flingLayer = 0;
+
+  // The deck order changes the moment a card is thrown, so the caption
+  // answers at once and repeated presses keep advancing.
+  const throwTop = (direction, velocity = 0) => {
+    const top = order[0];
+    const state = states.get(top);
+    order = order.slice(1).concat(top);
+    if (reducedMotionQuery.matches) {
+      layout();
+      jumpToTargets();
+      return;
+    }
+    flingLayer += 1;
+    state.flingLayer = flingLayer;
+    state.flingDirection = direction;
+    state.x.target = direction * deckWidth() * 1.2;
+    state.x.velocity = velocity || direction * 1800;
+    state.x.config = { damping: 1, response: 0.32 };
+    state.r.target = direction * 14;
+    state.r.config = { damping: 1, response: 0.32 };
+    layout();
+    run();
+  };
+
+  const bringBack = () => {
+    const last = order[order.length - 1];
+    const state = states.get(last);
+    order = [last].concat(order.slice(0, -1));
+    if (state.flingDirection) {
+      // Caught mid-flight: reverse from where it is, keeping its velocity.
+      state.flingDirection = 0;
+    } else if (!reducedMotionQuery.matches) {
+      // Enter along the same path cards leave by: from the left.
+      state.x.value = -deckWidth() * 1.15;
+      state.x.velocity = 0;
+      state.r.value = -14;
+      state.y.value = 0;
+    }
+    layout();
+    if (reducedMotionQuery.matches) jumpToTargets();
+    run();
+  };
+
+  // Direct manipulation of the top card.
+  let pointer = null;
+
+  deck.addEventListener("pointerdown", (event) => {
+    if (event.button !== 0 && event.pointerType === "mouse") return;
+    const top = order[0];
+    if (!event.target.closest(".doc-card") || event.target.closest(".doc-card") !== top) return;
+    const state = states.get(top);
+    pointer = {
+      id: event.pointerId,
+      startX: event.clientX,
+      startY: event.clientY,
+      originX: state.x.value,
+      originY: state.y.value,
+      history: [{ x: event.clientX, t: event.timeStamp }],
+      dragging: false,
+    };
+  });
+
+  deck.addEventListener("pointermove", (event) => {
+    if (!pointer || event.pointerId !== pointer.id) return;
+    const dx = event.clientX - pointer.startX;
+    const dy = event.clientY - pointer.startY;
+    if (!pointer.dragging) {
+      if (Math.hypot(dx, dy) < 8) return;
+      // Vertical intent belongs to page scrolling.
+      if (Math.abs(dy) > Math.abs(dx) && event.pointerType !== "mouse") {
+        pointer = null;
+        return;
+      }
+      pointer.dragging = true;
+      deck.setPointerCapture(event.pointerId);
+      const state = states.get(order[0]);
+      state.dragging = true;
+      order[0].classList.add("is-dragging");
+    }
+    const top = order[0];
+    const state = states.get(top);
+    state.x.value = pointer.originX + dx;
+    state.y.value = pointer.originY + dy * 0.25;
+    state.r.value = (pointer.originX + dx) * 0.05;
+    state.s.value = 1;
+    pointer.history.push({ x: event.clientX, t: event.timeStamp });
+    if (pointer.history.length > 6) pointer.history.shift();
+    render(top);
+  });
+
+  const endPointer = (event) => {
+    if (!pointer || event.pointerId !== pointer.id) return;
+    const wasDragging = pointer.dragging;
+    const history = pointer.history;
+    pointer = null;
+    const top = order[0];
+    const state = states.get(top);
+    top.classList.remove("is-dragging");
+
+    if (!wasDragging) {
+      if (event.type === "pointerup") openDocumentModal(order, 0);
+      return;
+    }
+
+    state.dragging = false;
+    const first = history[0];
+    const last = history[history.length - 1];
+    const elapsed = Math.max(1, last.t - first.t);
+    const velocity = ((last.x - first.x) / elapsed) * 1000;
+    const projected = state.x.value + projectMomentum(velocity);
+
+    if (Math.abs(projected) > deckWidth() * 0.5) {
+      throwTop(Math.sign(projected), velocity);
+      return;
+    }
+    // Not far enough: hand the finger's velocity to the return spring.
+    state.x.velocity = velocity;
+    ["x", "y", "r", "s"].forEach((key) => { state[key].config = thrown; });
+    layout(thrown);
+    run();
+  };
+
+  deck.addEventListener("pointerup", endPointer);
+  deck.addEventListener("pointercancel", endPointer);
+
+  deck.addEventListener("keydown", (event) => {
+    if (event.key === "ArrowRight") {
+      event.preventDefault();
+      throwTop(-1);
+    } else if (event.key === "ArrowLeft") {
+      event.preventDefault();
+      bringBack();
+    } else if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      openDocumentModal(order, 0);
+    }
+  });
+
+  nextButton?.addEventListener("click", () => throwTop(-1));
+  previousButton?.addEventListener("click", bringBack);
+
+  window.addEventListener("resize", () => {
+    layout();
+    jumpToTargets();
+  });
+
+  layout();
+  jumpToTargets();
+  stack.classList.add("is-live");
+
+  // Once per session, the deck opens from a neat pile into its fan so it reads as a stack you can leaf through.
+  const introKey = "sak-deck-intro-v1";
+  let introSeen = true;
+  try {
+    introSeen = window.sessionStorage.getItem(introKey) === "1";
+  } catch (_error) {
+    // Without storage the deck simply starts fanned out.
+  }
+  if (introSeen || reducedMotionQuery.matches || !("IntersectionObserver" in window)) return;
+
+  states.forEach((state, card) => {
+    state.x.value = 0;
+    state.y.value = 0;
+    state.r.value = 0;
+    state.s.value = 1;
+    render(card);
+  });
+
+  let visible = false;
+  let started = false;
+  const cancelIntro = () => {
+    started = true;
+    states.forEach((state) => { state.holdUntil = 0; });
+  };
+  const startIntro = () => {
+    if (started || !visible || document.body.classList.contains("is-pilot-notice-open")) return;
+    started = true;
+    try {
+      window.sessionStorage.setItem(introKey, "1");
+    } catch (_error) {
+      // Not remembering only means the fan-out may play again.
+    }
+    const now = performance.now();
+    order.forEach((card, depth) => {
+      const state = states.get(card);
+      ["x", "y", "r", "s"].forEach((key) => { state[key].config = { damping: 1, response: 0.5 }; });
+      state.holdUntil = now + 120 + depth * 70;
+    });
+    run();
+  };
+
+  new IntersectionObserver((entries, observer) => {
+    visible = entries.some((entry) => entry.isIntersecting);
+    if (visible) {
+      startIntro();
+      if (started) observer.disconnect();
+    }
+  }, { threshold: 0.45 }).observe(deck);
+
+  new MutationObserver((records, observer) => {
+    startIntro();
+    if (started) observer.disconnect();
+  }).observe(document.body, { attributes: true, attributeFilter: ["class"] });
+
+  // Touching the deck first means the person is already ahead of the hint.
+  const skipIntro = () => {
+    if (started) return;
+    cancelIntro();
+    layout();
+    jumpToTargets();
+  };
+  stack.addEventListener("pointerdown", skipIntro, { once: true, capture: true });
+  stack.addEventListener("keydown", skipIntro, { once: true, capture: true });
+};
+
+setupHeaderScrollEdge();
+setupDocumentDeck();

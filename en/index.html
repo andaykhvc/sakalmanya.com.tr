@@ -11,7 +11,8 @@
     <link rel="alternate" hreflang="de" href="https://sakalmanya.com.tr/de/" />
     <link rel="alternate" hreflang="en" href="https://sakalmanya.com.tr/en/" />
     <link rel="alternate" hreflang="x-default" href="https://sakalmanya.com.tr/" />
-    <meta name="theme-color" content="#111111" />
+    <meta name="theme-color" content="#f4f5f7" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0e0f12" media="(prefers-color-scheme: dark)" />
     <meta property="og:title" content="Germany Education Guidance and German Lessons | ŞAK Almanya" />
     <meta property="og:description" content="German lessons, university applications, Ausbildung research and realistic guidance for students planning Germany." />
     <meta property="og:type" content="website" />
@@ -22,9 +23,6 @@
     <meta name="twitter:description" content="German lessons, university applications, Ausbildung research and realistic guidance for students planning Germany." />
     <meta name="twitter:image" content="https://sakalmanya.com.tr/assets/hero-germany-study.png" />
     <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Serif:wght@600;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="/styles.css" />
     <script src="/analytics.js"></script>
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-P7JNVHYCS2"></script>
@@ -47,7 +45,12 @@
 }</script>
   </head>
   <body>
-    <div class="flag-strip" aria-hidden="true"><span class="strip-black"></span><span class="strip-red"></span><span class="strip-gold"></span></div>
+    <div class="flag-strip" aria-hidden="true">
+      <span class="strip-black"></span>
+      <span class="strip-red"></span>
+      <span class="strip-gold"></span>
+    </div>
+
     <header class="site-header" data-header>
       <a class="brand" href="/en/" aria-label="ŞAK Almanya Home">
         <img class="brand-mark" src="/assets/logoask.svg" alt="ŞAK Almanya logo" width="50" height="50" />
@@ -65,68 +68,157 @@
       </nav>
       <div class="language-switcher" aria-label="Language selection"><a href="/" hreflang="tr" lang="tr">TR</a><span>|</span><a href="/de/" hreflang="de" lang="de">DE</a><span>|</span><a href="/en/" hreflang="en" lang="en" aria-current="true">EN</a></div>
     </header>
+
     <main id="top">
-      <section class="hero" aria-labelledby="hero-title">
-        <div class="hero-media" aria-hidden="true"></div>
-        <div class="hero-overlay"></div>
-        <div class="hero-content">
-          <p class="eyebrow">Germany education guidance and private German lessons</p>
-          <h1 id="hero-title" class="hero-title-long">Understand Germany. Apply with confidence. Arrive prepared.</h1>
-          <p class="hero-copy">I help students with German, university applications, Ausbildung research and the first steps in Germany. The aim is simple: clear orientation, honest expectations and a plan that fits your actual situation.</p>
-          <div class="hero-actions">
-            <a class="button button-primary" href="mailto:iletisim@andaykahveci.com?subject=Almanya%20Hakkinda%20Bilgi">Book a free consultation</a>
-            <a class="button button-secondary" href="/en/services/">View services</a>
+      <section class="home-hero hero" aria-labelledby="hero-title">
+        <div class="container home-hero__grid">
+          <div class="home-hero__copy">
+            <h1 id="hero-title" class="is-long"><span>Understand Germany.</span> <span>Apply with confidence.</span> <span>Arrive prepared.</span></h1>
+            <p class="home-hero__lede">I learned German from zero, handled my applications and visa myself and studied at TU Dresden. Now I pass that experience on to people planning the same route.</p>
+            <div class="hero-actions">
+              <a class="button button-primary" href="#contact">Book a free pilot session</a>
+              <a class="button button-secondary" href="/rota-testi/">Take the route test</a>
+            </div>
+            <p class="home-hero__note">Non-commercial pilot phase; sessions are free. No empty promises, just language, documents, deadlines and a practical plan.</p>
           </div>
-          <p class="trial-note">No empty promises — just language, documents, deadlines and a practical plan.</p>
+
+          <figure class="doc-stack" data-doc-stack aria-label="Admission letters and language certificates">
+            <div class="doc-stack__deck" data-doc-deck tabindex="0" aria-roledescription="document stack" aria-label="Documents. Use the arrow keys to browse and Enter to open.">
+              <a class="doc-card" href="/assets/belgeler/kabuller/tu-dresden-zulassungsbescheid-redacted.pdf" data-doc-title="TU Dresden" data-doc-kind="Admission letter"><img src="/assets/belgeler/previews/tu-dresden-zulassungsbescheid-redacted.jpg" alt="TU Dresden, Admission letter" width="640" height="905" fetchpriority="high" draggable="false" /></a>
+              <a class="doc-card" href="/assets/belgeler/dil-belgeleri/dsh-2-tu-dresden-redacted.pdf" data-doc-title="TU Dresden" data-doc-kind="DSH-2 certificate"><img src="/assets/belgeler/previews/dsh-2-tu-dresden-redacted.jpg" alt="TU Dresden, DSH-2 certificate" width="640" height="905" loading="lazy" draggable="false" /></a>
+              <a class="doc-card" href="/assets/belgeler/kabuller/ulm-zulassung-redacted.pdf" data-doc-title="Universität Ulm" data-doc-kind="Admission letter"><img src="/assets/belgeler/previews/ulm-zulassung-redacted.jpg" alt="Universität Ulm, Admission letter" width="640" height="905" loading="lazy" draggable="false" /></a>
+              <a class="doc-card" href="/assets/belgeler/dil-belgeleri/telc-b2-redacted.pdf" data-doc-title="telc" data-doc-kind="B2 certificate"><img src="/assets/belgeler/previews/telc-b2-redacted.jpg" alt="telc, B2 certificate" width="640" height="905" loading="lazy" draggable="false" /></a>
+              <a class="doc-card" href="/assets/belgeler/kabuller/kiel-zulassung-redacted.pdf" data-doc-title="Universität Kiel" data-doc-kind="Admission letter"><img src="/assets/belgeler/previews/kiel-zulassung-redacted.jpg" alt="Universität Kiel, Admission letter" width="640" height="905" loading="lazy" draggable="false" /></a>
+              <a class="doc-card" href="/assets/belgeler/kabuller/bayreuth-zulassung-redacted.pdf" data-doc-title="Universität Bayreuth" data-doc-kind="Admission letter"><img src="/assets/belgeler/previews/bayreuth-zulassung-redacted.jpg" alt="Universität Bayreuth, Admission letter" width="640" height="905" loading="lazy" draggable="false" /></a>
+            </div>
+            <figcaption class="doc-stack__bar">
+              <span class="doc-stack__label" aria-live="polite"><strong data-doc-title-out>TU Dresden</strong><span data-doc-meta-out>Admission letter, 1 / 6</span></span>
+              <button class="icon-button" type="button" data-doc-prev aria-label="Previous document"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12.5 4.5 7 10l5.5 5.5" /></svg></button>
+              <button class="icon-button" type="button" data-doc-next aria-label="Next document"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7.5 4.5 13 10l-5.5 5.5" /></svg></button>
+            </figcaption>
+            <p class="doc-stack__hint">Swipe to browse, tap to open. Personal details are redacted.</p>
+          </figure>
         </div>
       </section>
-      <section class="intro-band"><div class="container intro-grid"><p>Let’s find the best option for your situation together.</p><a href="mailto:iletisim@andaykahveci.com?subject=Almanya%20Hakkinda%20Bilgi">Send an email</a></div></section>
-      <section id="about" class="section about-section">
-        <div class="container two-column">
-          <div><p class="section-label">About</p><h2>I am not describing this maze from the outside.</h2></div>
-          <div class="rich-text"><p>I live in Dresden and know many parts of this process first-hand: learning German, preparing applications, finding housing, organising documents and figuring out a new system.</p><p>I reached B2 in roughly seven months and C1 after about 17 months of learning in total. Along the way, I earned one telc B2 certificate and two DSH certificates.</p><p><a class="text-link" href="/en/about/">Read more about my journey and why I built ŞAK Almanya.</a></p></div>
-        </div>
-      </section>
-      <section id="services" class="section services-section">
-        <div class="container"><div class="section-heading compact"><p class="section-label">Planned support areas</p><h2>Areas being developed during the pilot phase.</h2><p class="muted">These areas are currently being developed only for the pilot phase and general orientation.</p></div><div class="services-grid"><article class="service-card"><h3>German lessons</h3><p>We build a realistic learning plan that takes you step by step from the basics towards B1, B2 or C1 preparation.</p></article>
-<article class="service-card"><h3>University applications in Germany</h3><p>We sort through universities, programmes, documents, deadlines and the application route that fits your case.</p></article>
-<article class="service-card"><h3>Ausbildung research</h3><p>We compare fields, read vacancies carefully and prepare the next application step with a clear structure.</p></article>
-<article class="service-card"><h3>Visa &amp; documents</h3><p>Checklists, appointments and paperwork are put in order without making promises no serious adviser can make.</p></article>
-<article class="service-card"><h3>German speaking practice</h3><p>Where practical, we complement lessons with real conversation practice with German native speakers.</p></article>
-<article class="service-card"><h3>Settling in Germany</h3><p>From first appointments to university administration, we make the next steps easier to understand and plan.</p></article></div></div>
-      </section>
-      <section id="success-stories" class="section proof-section">
-        <div class="container"><div class="section-heading"><p class="section-label">Success Stories</p><h2>Why ŞAK Almanya?</h2><p>Because a useful Germany plan needs more than general advice. We look at your language level, documents, real deadlines and the steps you can actually carry out.</p><p>When it fits your learning goal, we can also add conversation practice with German native speakers.</p></div></div>
-      </section>
-      <section id="process" class="section process-section">
-        <div class="container two-column"><div><p class="section-label">Process</p><h2>From goal to file.</h2><p class="muted">We turn a large plan into a sequence you can understand and work through.</p></div><ol class="timeline"><li><strong>Clarify the goal</strong><span>We define whether university, Hochschule, Ausbildung or German is the main target.</span></li><li><strong>Review documents</strong><span>We identify what you have, what is missing and what needs preparation.</span></li><li><strong>Build the plan</strong><span>Deadlines, language and applications are put into a clear order with practical next steps.</span></li></ol></div>
-      </section>
-      <section class="section seo-links-section" aria-labelledby="service-pages-title">
+
+      <section class="journey" aria-labelledby="journey-title">
         <div class="container">
-          <div class="section-heading">
-            <p class="section-label">Service pages</p>
-            <h2 id="service-pages-title">Look at the education guidance topics one by one.</h2>
-            <p>University applications, Hochschulen, Ausbildung, conditional admission, German lessons, the visa process and document preparation — I tie these topics into a more organised route using my own experience as a student in Dresden.</p>
+          <h2 id="journey-title" class="visually-hidden">My route with German and Germany</h2>
+          <ol class="journey__track">
+            <li><span class="journey__when">Start</span><span class="journey__what">Zero</span><span class="journey__detail">I began German in Türkiye with no prior knowledge.</span></li>
+            <li><span class="journey__when">Month 7</span><span class="journey__what">B2</span><span class="journey__detail">With an intensive, disciplined study routine.</span></li>
+            <li><span class="journey__when">Month 17</span><span class="journey__what">C1</span><span class="journey__detail">Along the way: one telc B2 and two DSH certificates.</span></li>
+            <li><span class="journey__when">TU Dresden</span><span class="journey__what">4 semesters</span><span class="journey__detail">Electrical engineering; 8 months working at the university, 5 in hospitality.</span></li>
+            <li><span class="journey__when">Today</span><span class="journey__what">ŞAK Almanya</span><span class="journey__detail">I share this experience with people planning the same route.</span></li>
+          </ol>
+        </div>
+      </section>
+
+      <section class="section home-about" id="about" aria-labelledby="about-title">
+        <div class="container home-about__grid">
+          <div class="home-about__intro">
+            <h2 id="about-title">I am not describing this maze from the outside.</h2>
+            <a class="person" href="https://www.linkedin.com/in/andaykahveci/" target="_blank" rel="noopener noreferrer">
+              <img src="/assets/linkedin-profile.jpg" alt="" width="56" height="56" loading="lazy" />
+              <span><strong>Ş. Anday Kahveci</strong><small>Founder, Dresden. LinkedIn profile ↗</small></span>
+            </a>
           </div>
-          <div class="seo-link-grid">
-            <a href="/en/education-consulting/">Education Guidance for Germany</a>
-            <a href="/en/university-application/">University Applications in Germany</a>
-            <a href="/en/ausbildung-guidance/">Ausbildung Guidance</a>
-            <a href="/en/german-lessons/">Private German Lessons</a>
-            <a href="/en/conditional-admission/">Conditional Admission</a>
-            <a href="/en/studienkolleg/">Studienkolleg in Germany</a>
-            <a href="/en/student-visa/">German Student Visa</a>
-            <a href="/en/universities/">Universities in Germany</a>
+          <div class="rich-text">
+            <p>I live in Dresden and know many parts of this process first-hand: learning German, preparing applications, finding housing, organising documents and figuring out a new system.</p>
+            <p>I reached B2 in roughly seven months and C1 after about 17 months of learning in total. Along the way, I earned one telc B2 certificate and two DSH certificates.</p>
+            <p>I handled most of my visa application, university applications, flat hunting and first appointments with the authorities myself. Four semesters of electrical engineering at TU Dresden showed me the university system from the inside.</p>
+            <p>Where practical, we complement lessons with real conversation practice with German native speakers.</p>
+            <p><a class="text-link" href="/en/about/">Read more about the founder and ŞAK Almanya</a></p>
           </div>
         </div>
       </section>
 
-      <section class="section faq-section" id="faq">
+      <section class="section" id="services" aria-labelledby="services-title">
         <div class="container">
-          <div class="section-heading compact">
-            <p class="section-label">Frequently asked questions</p>
-            <h2>What students and families ask most often.</h2>
-            <p><a class="text-link" href="/en/faq/">All the questions are on the FAQ page.</a></p>
+          <div class="section-heading">
+            <h2 id="services-title">Areas being developed during the pilot phase.</h2>
+            <p>These areas are currently being developed only for the pilot phase and general orientation. Each one has its own page.</p>
+          </div>
+          <ul class="service-index">
+            <li><a href="/en/education-consulting/"><h3>Education guidance for Germany</h3><p>Settle your goal, language level, documents and timeline together, then turn them into a workable plan.</p><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7.5 4.5 13 10l-5.5 5.5" /></svg></a></li>
+            <li><a href="/en/university-application/"><h3>University applications</h3><p>Universities, programmes, documents, deadlines and the application route that fits your case.</p><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7.5 4.5 13 10l-5.5 5.5" /></svg></a></li>
+            <li><a href="/en/masters-requirements/"><h3>Master’s applications</h3><p>Subject fit, admission requirements, CV, statement of purpose and document checks.</p><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7.5 4.5 13 10l-5.5 5.5" /></svg></a></li>
+            <li><a href="/en/ausbildung-guidance/"><h3>Ausbildung</h3><p>Compare fields, read vacancies carefully and prepare the next application step.</p><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7.5 4.5 13 10l-5.5 5.5" /></svg></a></li>
+            <li><a href="/en/conditional-admission/"><h3>Conditional admission</h3><p>When conditional admission makes sense and how it connects to your language plan.</p><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7.5 4.5 13 10l-5.5 5.5" /></svg></a></li>
+            <li><a href="/en/studienkolleg/"><h3>Studienkolleg</h3><p>Who needs a Studienkolleg and which preparation routes exist.</p><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7.5 4.5 13 10l-5.5 5.5" /></svg></a></li>
+            <li><a href="/en/student-visa/"><h3>Student visa and first weeks</h3><p>Checklists, appointments and paperwork; then registration, housing and the first steps on arrival.</p><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7.5 4.5 13 10l-5.5 5.5" /></svg></a></li>
+            <li><a href="/en/german-lessons/"><h3>German lessons</h3><p>A realistic learning plan from the basics towards B1, B2 or C1 exams.</p><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7.5 4.5 13 10l-5.5 5.5" /></svg></a></li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="section documents" id="success-stories" aria-labelledby="documents-title">
+        <div class="container">
+          <div class="section-heading">
+            <h2 id="documents-title">Documents, not promises.</h2>
+            <p>Admission letters and language exam results. Tap a document to open it in full.</p>
+          </div>
+
+          <div class="doc-shelf" data-document-carousel>
+            <div class="doc-shelf__head"><h3>Admissions</h3><span>8 documents</span></div>
+            <div class="doc-shelf__row document-previews" aria-label="Admissions">
+              <a href="/assets/belgeler/kabuller/tu-dresden-zulassungsbescheid-redacted.pdf"><img src="/assets/belgeler/previews/tu-dresden-zulassungsbescheid-redacted.jpg" alt="" width="640" height="905" loading="lazy" /><span>TU Dresden<small>Admission letter</small></span></a>
+              <a href="/assets/belgeler/kabuller/ulm-zulassung-redacted.pdf"><img src="/assets/belgeler/previews/ulm-zulassung-redacted.jpg" alt="" width="640" height="905" loading="lazy" /><span>Universität Ulm<small>Admission letter</small></span></a>
+              <a href="/assets/belgeler/kabuller/kiel-zulassung-redacted.pdf"><img src="/assets/belgeler/previews/kiel-zulassung-redacted.jpg" alt="" width="640" height="905" loading="lazy" /><span>Universität Kiel<small>Admission letter</small></span></a>
+              <a href="/assets/belgeler/kabuller/bayreuth-zulassung-redacted.pdf"><img src="/assets/belgeler/previews/bayreuth-zulassung-redacted.jpg" alt="" width="640" height="905" loading="lazy" /><span>Universität Bayreuth<small>Admission letter</small></span></a>
+              <a href="/assets/belgeler/kabuller/lmu-zeyno-immatrikulation-redacted.pdf"><img src="/assets/belgeler/previews/lmu-zeyno-immatrikulation-redacted.jpg" alt="" width="640" height="905" loading="lazy" /><span>LMU München<small>Enrolment certificate</small></span></a>
+              <a href="/assets/belgeler/kabuller/tu-dresden-aufnahmetest-zulassung-redacted.pdf"><img src="/assets/belgeler/previews/tu-dresden-aufnahmetest-zulassung-redacted.jpg" alt="" width="640" height="905" loading="lazy" /><span>TU Dresden<small>Entrance test admission</small></span></a>
+              <a href="/assets/belgeler/kabuller/bremen-bewerberbestaetigung-redacted.pdf"><img src="/assets/belgeler/previews/bremen-bewerberbestaetigung-redacted.jpg" alt="" width="640" height="905" loading="lazy" /><span>Bremen<small>Application confirmation</small></span></a>
+              <a href="/assets/belgeler/kabuller/potsdam-dsh-kurs-einladung-redacted.pdf"><img src="/assets/belgeler/previews/potsdam-dsh-kurs-einladung-redacted.jpg" alt="" width="640" height="905" loading="lazy" /><span>Universität Potsdam<small>DSH course invitation</small></span></a>
+            </div>
+          </div>
+
+          <div class="doc-shelf" data-document-carousel>
+            <div class="doc-shelf__head"><h3>Language certificates</h3><span>4 documents</span></div>
+            <div class="doc-shelf__row document-previews" aria-label="Language certificates">
+              <a href="/assets/belgeler/dil-belgeleri/dsh-2-tu-dresden-redacted.pdf"><img src="/assets/belgeler/previews/dsh-2-tu-dresden-redacted.jpg" alt="" width="640" height="905" loading="lazy" /><span>TU Dresden<small>DSH-2 certificate</small></span></a>
+              <a href="/assets/belgeler/dil-belgeleri/dsh-2-mittweida-redacted.pdf"><img src="/assets/belgeler/previews/dsh-2-mittweida-redacted.jpg" alt="" width="640" height="905" loading="lazy" /><span>Hochschule Mittweida<small>DSH-2 certificate</small></span></a>
+              <a href="/assets/belgeler/dil-belgeleri/telc-b2-redacted.pdf"><img src="/assets/belgeler/previews/telc-b2-redacted.jpg" alt="" width="640" height="905" loading="lazy" /><span>telc<small>B2 certificate</small></span></a>
+              <a href="/assets/belgeler/dil-belgeleri/testdaf-levent-redacted.pdf"><img src="/assets/belgeler/previews/testdaf-levent-redacted.jpg" alt="" width="640" height="905" loading="lazy" /><span>TestDaF<small>Result certificate</small></span></a>
+            </div>
+          </div>
+          <p class="documents__privacy">Personal details in these documents are redacted. Every application is different; these documents are not a guarantee of admission or results.</p>
+        </div>
+      </section>
+
+      <div class="document-modal" data-document-modal aria-hidden="true">
+        <div class="document-modal__backdrop" data-document-close></div>
+        <div class="document-modal__dialog" role="dialog" aria-modal="true" aria-label="Document preview">
+          <div class="document-modal__controls">
+            <button type="button" data-document-modal-prev aria-label="Previous document">‹</button>
+            <button type="button" data-document-modal-next aria-label="Next document">›</button>
+            <button type="button" data-document-close aria-label="Close">×</button>
+          </div>
+          <iframe class="document-modal__frame" data-document-frame title="Document preview"></iframe>
+        </div>
+      </div>
+
+      <section class="section" id="process" aria-labelledby="process-title">
+        <div class="container">
+          <div class="section-heading">
+            <h2 id="process-title">From goal to file.</h2>
+            <p>We turn a large plan into a sequence you can understand and work through.</p>
+          </div>
+          <ol class="steps">
+            <li><strong>First conversation</strong><span>We talk through your goal, grades, German level and timeline.</span></li>
+            <li><strong>Route</strong><span>University, Hochschule, Ausbildung or master’s: we set the application route that fits.</span></li>
+            <li><strong>Documents</strong><span>Application documents, CV, motivation letter and steps such as translation or certification are listed.</span></li>
+            <li><strong>Applications and deadlines</strong><span>Deadlines are tracked; missing documents and portal steps are checked.</span></li>
+            <li><strong>Visa preparation</strong><span>After admission, the basics of visa preparation become a clear plan.</span></li>
+          </ol>
+        </div>
+      </section>
+
+      <section class="section home-faq" id="faq" aria-labelledby="faq-title">
+        <div class="container home-faq__grid">
+          <div class="section-heading">
+            <h2 id="faq-title">What students and families ask most often.</h2>
+            <p><a class="text-link" href="/en/faq/">All questions on the FAQ page</a></p>
           </div>
           <div class="faq-list">
             <details>
@@ -188,7 +280,19 @@
           </div>
         </div>
       </section>
-      <section id="contact" class="contact-section"><div class="container contact-panel"><div><p class="section-label">Contact</p><h2>Let’s find the best option for your situation together.</h2><p>No empty promises — just language, documents, deadlines and a practical plan.</p></div>
+
+      <section class="section" aria-labelledby="deutschlaender-home-title">
+        <div class="container">
+          <aside class="deutschlaender-callout">
+            <p class="section-label">Free learning and community</p>
+            <h2 id="deutschlaender-home-title">Improve your German and share your route with the community.</h2>
+            <p>Deutschländer is an independent forum with free German lessons, grammar explanations, exam guides and space to discuss university applications. The content is in Turkish.</p>
+            <div class="deutschlaender-callout-actions"><a class="button button-primary" href="https://deutschlaender.com.tr/deutschkurs" data-deutschlaender-link data-deutschlaender-path="/deutschkurs" data-deutschlaender-content="home_course">Browse German lessons ↗</a><a class="button button-secondary" href="https://deutschlaender.com.tr/forum" data-deutschlaender-link data-deutschlaender-path="/forum" data-deutschlaender-content="home_forum">Explore the forum ↗</a></div>
+          </aside>
+        </div>
+      </section>
+
+      <section id="contact" class="contact-section"><div class="container contact-panel"><div><h2>Let’s find the best option for your situation together.</h2><p>No empty promises — just language, documents, deadlines and a practical plan.</p></div>
           <div class="contact-form-panel">
             <h3 id="contact-form-title">Tell us about your plans for Germany.</h3>
             <p class="contact-form-note">Fields marked with an asterisk are required. We will reply by email.</p>
@@ -206,7 +310,7 @@
                   <div class="contact-field contact-field-wide"><label for="contact-message">Your message <span aria-hidden="true">*</span></label><textarea id="contact-message" name="message" rows="5" minlength="10" maxlength="5000" placeholder="Briefly share your goal, current situation and questions." required></textarea></div>
                 </div>
                 <div class="contact-consent"><input id="contact-consent" name="consent" type="checkbox" value="accepted" required /><label for="contact-consent">I have read the <a href="/en/privacy/">Privacy Policy</a> and agree to my information being processed to respond to my enquiry.</label></div>
-                <button class="button button-primary contact-submit" type="submit">Send message<span aria-hidden="true">↗</span></button>
+                <button class="button button-primary contact-submit" type="submit">Send message</button>
               </fieldset>
               <p class="contact-form-status" data-contact-status role="status" aria-live="polite" aria-atomic="true"></p>
               <button class="button contact-form-reset" type="button" data-contact-reset hidden>Write another message</button>
@@ -216,6 +320,7 @@
         </div>
       </section>
     </main>
+
     <footer class="site-footer">
       <div class="container footer-grid">
         <div class="footer-about">

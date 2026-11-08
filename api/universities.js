@@ -505,7 +505,7 @@ function renderUniversityPage(record) {
   <body data-university-name="${escapeHtml(item.name)}">
     <div class="flag-strip" aria-hidden="true"><span class="strip-black"></span><span class="strip-red"></span><span class="strip-gold"></span></div>
     <header class="site-header" data-header>
-      <a class="brand" href="/" aria-label="ŞAK Almanya Ana sayfa"><img class="brand-mark" src="/assets/logoask.svg" alt="ŞAK Almanya logosu" width="50" height="50" /><span><strong>Almanya</strong></span></a>
+      <a class="brand" href="/" aria-label="ŞAK Almanya Ana sayfa"><picture><source srcset="/assets/logoask-dark.svg" media="(prefers-color-scheme: dark)" /><img class="brand-mark" src="/assets/logoask.svg" alt="ŞAK Almanya logosu" width="50" height="50" /></picture><span><strong>Almanya</strong></span></a>
       <nav class="main-nav" aria-label="Türkçe menü" data-nav><a href="/#hakkimda">Hakkımda</a><a href="/#hizmetler">Hizmetler</a><a href="/#basarilar">Başarılar</a><a href="/#surec">Süreç</a><a href="/universite-tanitimlari/" aria-current="page">Üniversiteler</a><a href="/blog/">Blog</a><a href="/sss/">SSS</a></nav>
       <div class="language-switcher" aria-label="Dil seçimi"><a href="${escapeHtml(canonical)}" lang="tr" aria-current="true">TR</a><span>|</span><a href="${escapeHtml(languageSwitchUrl(item.slug, "de"))}" lang="de">DE</a><span>|</span><a href="${escapeHtml(languageSwitchUrl(item.slug, "en"))}" lang="en">EN</a></div>
     </header>

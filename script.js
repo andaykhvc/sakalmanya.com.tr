@@ -8,37 +8,6 @@ const deutschlaenderOrigin = "https://deutschlaender.com.tr";
 const deutschlaenderCampaign = "deutschlaender_ecosystem";
 let isPilotNoticeDismissed = false;
 
-const reducedMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
-const easeOut = "cubic-bezier(0.22, 1, 0.36, 1)";
-
-// Surfaces leave along the path they arrived by, a little faster than they came in.
-const sheetExit = [{ opacity: 1, transform: "none" }, { opacity: 0, transform: "translateY(8px) scale(0.97)" }];
-const fadeExit = [{ opacity: 1 }, { opacity: 0 }];
-
-const playExit = (element, keyframes, duration = 180) => {
-  if (!element || typeof element.animate !== "function") return Promise.resolve();
-  element.style.pointerEvents = "none";
-  const animation = element.animate(reducedMotionQuery.matches ? fadeExit : keyframes, {
-    duration,
-    easing: easeOut,
-    fill: "forwards",
-  });
-  // Never let a stalled frame clock (hidden tab, throttled page) keep a closed surface on screen.
-  const timeout = new Promise((resolve) => window.setTimeout(resolve, duration + 120));
-  return Promise.race([animation.finished.catch(() => {}), timeout])
-    .then(() => () => {
-      animation.cancel();
-      element.style.pointerEvents = "";
-    });
-};
-
-// Hide after the exit, then drop the held final frame so the next open starts clean.
-const hideWithExit = (element, keyframes, duration) =>
-  playExit(element, keyframes, duration).then((reset) => {
-    element.hidden = true;
-    reset?.();
-  });
-
 const safelyReadStorage = (key) => {
   try {
     return JSON.parse(window.localStorage.getItem(key));
@@ -148,7 +117,26 @@ const setupDeutschlaenderLinks = () => {
     link.rel = "noopener noreferrer";
   });
 
-  // The forum lives in the footer, the drawer and the in-page callouts; the header stays short.
+  document.querySelectorAll(".site-header [data-nav]").forEach((navigation) => {
+    if (navigation.querySelector("[data-deutschlaender-header-link]")) return;
+    const link = document.createElement("a");
+    link.href = buildDeutschlaenderUrl("/forum", "header_nav_forum");
+    link.target = "_blank";
+    link.rel = "noopener noreferrer";
+    link.textContent = "Deutschländer Forum";
+    link.setAttribute("data-deutschlaender-link", "");
+    link.setAttribute("data-deutschlaender-header-link", "");
+    link.dataset.deutschlaenderPath = "/forum";
+    link.dataset.deutschlaenderContent = "header_nav_forum";
+
+    const universityLink = Array.from(navigation.querySelectorAll("a")).find((item) => item.href.includes("/universite-tanitimlari/") || item.href.includes("/universitaeten/") || item.href.includes("/universities/"));
+    const navigationAnchor = navigation.querySelector("[data-dresden-header-link]") || universityLink;
+    if (navigationAnchor) {
+      navigationAnchor.after(link);
+    } else {
+      navigation.append(link);
+    }
+  });
 
   const footerLabels = {
     tr: "Almanca öğren & forum",
@@ -483,12 +471,11 @@ const setupPilotNotice = () => {
   const focusableElements = () => [languageButton, confirmButton].filter((element) => !element.disabled);
 
   const close = () => {
-    if (isPilotNoticeDismissed) return;
     isPilotNoticeDismissed = true;
     document.removeEventListener("keydown", handleKeydown);
     document.documentElement.classList.remove("is-pilot-notice-open");
     document.body.classList.remove("is-pilot-notice-open");
-    Promise.all([playExit(dialog, sheetExit), playExit(overlay, fadeExit)]).then(() => modal.remove());
+    modal.remove();
     if (previouslyFocused?.isConnected) previouslyFocused.focus();
     previouslyFocused = null;
     setupRouteTestPrompt();
@@ -611,15 +598,12 @@ const setupRouteTestPrompt = () => {
 
   const focusableElements = () => [...languageButtons, startLink, skipButton].filter((element) => !element.disabled);
 
-  let isClosing = false;
   const close = (eventName = "route_test_prompt_skip") => {
-    if (isClosing) return;
-    isClosing = true;
     markRouteTestPromptSeen();
     document.removeEventListener("keydown", handleKeydown);
     document.documentElement.classList.remove("is-pilot-notice-open");
     document.body.classList.remove("is-pilot-notice-open");
-    Promise.all([playExit(dialog, sheetExit), playExit(overlay, fadeExit)]).then(() => modal.remove());
+    modal.remove();
     if (previouslyFocused?.isConnected) previouslyFocused.focus();
     previouslyFocused = null;
     trackEvent(eventName);
@@ -723,8 +707,7 @@ const setupConsentManager = () => {
       safelyRemoveStorage(analyticsStorageKey);
     }
     window.sakUpdateGoogleConsent?.(consent);
-    // The banner sinks back out of the bottom edge it rose from.
-    if (!banner.hidden) hideWithExit(banner, [{ opacity: 1, transform: "none" }, { opacity: 0, transform: "translateY(24px)" }], 200);
+    banner.hidden = true;
     closeSettings();
     if (analytics) trackEvent("consent_update", { analytics_consent: analytics ? "granted" : "denied", marketing_consent: marketing ? "granted" : "denied" });
   };
@@ -741,12 +724,8 @@ const setupConsentManager = () => {
   };
 
   function closeSettings() {
-    if (settings.hidden) return;
-    hideWithExit(settings, [
-      { opacity: 1, transform: "translate(-50%, -50%)" },
-      { opacity: 0, transform: "translate(-50%, calc(-50% + 8px)) scale(0.97)" },
-    ]);
-    hideWithExit(settingsOverlay, fadeExit);
+    settingsOverlay.hidden = true;
+    settings.hidden = true;
     document.body.classList.remove("is-consent-open");
     previouslyFocused?.focus();
   }
@@ -882,7 +861,7 @@ const mobileNavigationCopy = {
       ["Deutschländer Forum", "https://deutschlaender.com.tr/forum"],
       ["Almanya’da Eğitim", "/almanya-egitim-danismanligi/"],
       ["Rota Testi", "/rota-testi/"],
-      ["Belgeler", "/#basarilar"],
+      ["Başarılarımız", "/#basarilar"],
       ["Hakkımızda", "/hakkimizda/"],
       ["Sık Sorulan Sorular", "/sss/"],
       ["İletişim", "/#iletisim"],
@@ -903,7 +882,7 @@ const mobileNavigationCopy = {
       ["Deutschländer Forum", "https://deutschlaender.com.tr/forum"],
       ["Bildungsberatung", "/de/bildungsberatung/"],
       ["Routen-Test", "/rota-testi/"],
-      ["Dokumente", "/de/#erfolge"],
+      ["Erfolge", "/de/#erfolge"],
       ["Über uns", "/de/ueber-uns/"],
       ["FAQ", "/de/faq/"],
       ["Kontakt", "/de/#kontakt"],
@@ -924,7 +903,7 @@ const mobileNavigationCopy = {
       ["Deutschländer Forum", "https://deutschlaender.com.tr/forum"],
       ["Education Guidance", "/en/education-consulting/"],
       ["Route test", "/rota-testi/"],
-      ["Documents", "/en/#success-stories"],
+      ["Success Stories", "/en/#success-stories"],
       ["About", "/en/about/"],
       ["Frequently Asked Questions", "/en/faq/"],
       ["Contact", "/en/#contact"],
@@ -1099,8 +1078,6 @@ const setupRouteTest = () => {
 
   const getSelectedOption = (question) => question.options.find((option) => option.value === answers[question.id]);
 
-  let renderedIndex = null;
-
   const renderQuestion = () => {
     const question = routeTestQuestions[currentIndex];
     const fieldset = document.createElement("fieldset");
@@ -1128,22 +1105,11 @@ const setupRouteTest = () => {
     });
     fieldset.append(legend, optionList);
     questionElement.replaceChildren(fieldset);
-    // The new question arrives from the side you are moving towards.
-    if (renderedIndex !== null && renderedIndex !== currentIndex && typeof fieldset.animate === "function") {
-      const direction = currentIndex > renderedIndex ? 1 : -1;
-      fieldset.animate(
-        reducedMotionQuery.matches
-          ? [{ opacity: 0 }, { opacity: 1 }]
-          : [{ opacity: 0, transform: `translateX(${direction * 16}px)` }, { opacity: 1, transform: "none" }],
-        { duration: 240, easing: easeOut },
-      );
-    }
-    renderedIndex = currentIndex;
     statusElement.textContent = "";
     progressLabel.textContent = `${currentIndex + 1} / ${routeTestQuestions.length}`;
     const percent = Math.round(((currentIndex + 1) / routeTestQuestions.length) * 100);
     progressPercent.textContent = `%${percent}`;
-    progressBar.style.transform = `scaleX(${percent / 100})`;
+    progressBar.style.width = `${percent}%`;
     backButton.disabled = currentIndex === 0;
     nextButton.textContent = currentIndex === routeTestQuestions.length - 1 ? "Sonucu gör" : "Devam et";
   };
@@ -1181,25 +1147,6 @@ const setupRouteTest = () => {
     form.hidden = true;
     progress.hidden = true;
     result.hidden = false;
-    renderedIndex = null;
-    // A rare moment: let the result settle in, answers following one by one.
-    if (typeof result.animate === "function") {
-      const reduced = reducedMotionQuery.matches;
-      result.animate(
-        reduced ? [{ opacity: 0 }, { opacity: 1 }] : [{ opacity: 0, transform: "translateY(12px) scale(0.98)" }, { opacity: 1, transform: "none" }],
-        { duration: reduced ? 200 : 420, easing: easeOut },
-      );
-      if (!reduced) {
-        resultSummary.querySelectorAll("li").forEach((item, index) => {
-          item.animate([{ opacity: 0, transform: "translateY(6px)" }, { opacity: 1, transform: "none" }], {
-            duration: 260,
-            delay: 180 + index * 40,
-            easing: easeOut,
-            fill: "backwards",
-          });
-        });
-      }
-    }
     trackEvent("route_test_complete", { route_result: resultKey, route_test_answers: Object.keys(answers).length });
   };
 
@@ -1232,7 +1179,7 @@ const setupRouteTest = () => {
     progress.hidden = false;
     result.hidden = true;
     renderQuestion();
-    root.scrollIntoView({ behavior: reducedMotionQuery.matches ? "auto" : "smooth", block: "start" });
+    root.scrollIntoView({ behavior: "smooth", block: "start" });
     trackEvent("route_test_restart");
   });
 
@@ -1384,7 +1331,7 @@ const setupMobileNavigation = () => {
     if (event.key === "Escape" && toggle.getAttribute("aria-expanded") === "true") setOpen(false);
   });
   window.addEventListener("resize", () => {
-    if (window.innerWidth >= 1180 && toggle.getAttribute("aria-expanded") === "true") setOpen(false);
+    if (window.innerWidth > 768 && toggle.getAttribute("aria-expanded") === "true") setOpen(false);
   });
 
   if (activeLanguage) {
@@ -1704,21 +1651,6 @@ let activeDocumentIndex = 0;
 
 const openDocumentModal = (documents, index) => {
   if (!documentModal || !documentFrame) return;
-  documentModalExit += 1;
-  documentModal.style.pointerEvents = "";
-  documentModal.querySelectorAll(".document-modal__dialog, .document-modal__backdrop").forEach((element) => {
-    // Reopened mid-exit: run the exit backwards from where it is instead of jumping.
-    element.getAnimations().forEach((animation) => {
-      if (typeof CSSAnimation !== "undefined" && animation instanceof CSSAnimation) return;
-      if (animation.playState === "running") {
-        animation.reverse();
-        animation.finished.then(() => animation.cancel()).catch(() => {});
-      } else {
-        animation.cancel();
-      }
-    });
-    element.style.pointerEvents = "";
-  });
   activeDocuments = documents;
   activeDocumentIndex = index;
   documentFrame.src = activeDocuments[activeDocumentIndex].href;
@@ -1730,26 +1662,12 @@ const openDocumentModal = (documents, index) => {
   if (modalNext) modalNext.disabled = !hasMultipleDocuments;
 };
 
-let documentModalExit = 0;
-
 const closeDocumentModal = () => {
-  if (!documentModal || !documentFrame || !documentModal.classList.contains("is-open")) return;
-  const exit = ++documentModalExit;
-  // Clicks pass through a closing viewer, so the page answers at once.
-  documentModal.style.pointerEvents = "none";
+  if (!documentModal || !documentFrame) return;
+  documentModal.classList.remove("is-open");
   documentModal.setAttribute("aria-hidden", "true");
   document.body.classList.remove("is-modal-open");
-  Promise.all([
-    playExit(documentModal.querySelector(".document-modal__dialog"), sheetExit, 200),
-    playExit(documentModal.querySelector(".document-modal__backdrop"), fadeExit, 200),
-  ]).then((resets) => {
-    // A reopen during the exit wins; leave that one alone.
-    if (exit === documentModalExit) {
-      documentModal.classList.remove("is-open");
-      documentFrame.src = "";
-    }
-    resets.forEach((reset) => reset?.());
-  });
+  documentFrame.src = "";
 };
 
 const showModalDocument = (offset) => {
@@ -1783,22 +1701,116 @@ if (yearElement) {
   yearElement.textContent = new Date().getFullYear();
 }
 
-
-// Presentation layer: header scroll edge and the home document deck.
-
-const setupHeaderScrollEdge = () => {
+// Shared presentation layer: no copy, routes, or application data are changed.
+const setupDesignMotion = () => {
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+  const desktopMotion = window.matchMedia("(min-width: 1024px) and (hover: hover)");
+  const hero = document.querySelector(".hero");
+  const heroMedia = hero?.querySelector(".hero-media");
   const header = document.querySelector("[data-header]");
-  if (!header) return;
+  const revealSelector = [
+    ".section-heading", ".intro-grid > *", ".about-section .two-column > *",
+    ".proof-grid > article", ".services-grid > article", ".achievement-grid > article",
+    ".process-section .two-column > div", ".timeline > li", ".seo-link-grid > a",
+    ".faq-list > details", ".contact-panel > *", ".blog-list > article",
+    ".university-grid > article", ".university-info-grid > *", ".dresden-figure",
+    ".about-process-grid > article", ".about-principles > article",
+  ].join(", ");
+  let revealObserver;
   let frame = 0;
-  const update = () => {
-    frame = 0;
-    header.classList.toggle("is-scrolled", window.scrollY > 4);
+
+  const reveal = (element) => {
+    element.classList.remove("is-pending");
+    element.classList.add("is-revealed");
+    revealObserver?.unobserve(element);
   };
-  window.addEventListener("scroll", () => {
-    if (!frame) frame = requestAnimationFrame(update);
-  }, { passive: true });
-  update();
+
+  const registerReveals = () => {
+    document.querySelectorAll(revealSelector).forEach((element) => {
+      if (element.hasAttribute("data-design-reveal")) return;
+      // Keep initially visible content and anchor destinations immediately readable.
+      if (reducedMotion.matches || !revealObserver || element.getBoundingClientRect().top < window.innerHeight) return;
+      element.setAttribute("data-design-reveal", "");
+      const index = Array.from(element.parentElement.children).indexOf(element);
+      element.style.setProperty("--reveal-delay", `${Math.min(index % 3, 2) * 80}ms`);
+      element.classList.add("is-pending");
+      revealObserver.observe(element);
+    });
+  };
+
+  if ("IntersectionObserver" in window) {
+    revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) reveal(entry.target);
+      });
+    }, { threshold: 0, rootMargin: "0px 0px -32px 0px" });
+    registerReveals();
+  }
+
+  // The university directory appends cards after its API request and on filtering.
+  const universityGrid = document.querySelector(".university-grid");
+  if (universityGrid && revealObserver) {
+    new MutationObserver((records) => {
+      records.forEach((record) => record.removedNodes.forEach((node) => {
+        if (node instanceof Element) revealObserver.unobserve(node);
+      }));
+      registerReveals();
+    }).observe(universityGrid, { childList: true });
+  }
+
+  document.addEventListener("focusin", (event) => {
+    const pending = event.target.closest?.("[data-design-reveal].is-pending");
+    if (pending) reveal(pending);
+  });
+
+  // Run the hero entrance after the existing notices have been dismissed.
+  const startHero = () => {
+    if (document.body.classList.contains("is-pilot-notice-open")) return false;
+    if (!reducedMotion.matches && hero && hero.getBoundingClientRect().bottom > 0) {
+      hero.classList.add("is-motion-ready");
+    }
+    return true;
+  };
+  if (hero && !startHero()) {
+    const noticeObserver = new MutationObserver(() => {
+      if (startHero()) noticeObserver.disconnect();
+    });
+    noticeObserver.observe(document.body, { attributes: true, attributeFilter: ["class"] });
+  }
+
+  const updateScroll = () => {
+    frame = 0;
+    header?.classList.toggle("is-scrolled", window.scrollY > 16);
+    if (!heroMedia) return;
+    if (reducedMotion.matches || !desktopMotion.matches) {
+      heroMedia.style.removeProperty("--hero-parallax-y");
+      return;
+    }
+    const rect = hero.getBoundingClientRect();
+    const progress = Math.min(1, Math.max(0, -rect.top / rect.height));
+    heroMedia.style.setProperty("--hero-parallax-y", `${progress * 18}px`);
+  };
+  const scheduleScroll = () => {
+    if (!frame) frame = requestAnimationFrame(updateScroll);
+  };
+  window.addEventListener("scroll", scheduleScroll, { passive: true });
+  window.addEventListener("resize", scheduleScroll);
+  reducedMotion.addEventListener("change", () => {
+    if (reducedMotion.matches) {
+      document.querySelectorAll("[data-design-reveal]").forEach(reveal);
+      hero?.classList.remove("is-motion-ready");
+    } else {
+      registerReveals();
+    }
+    scheduleScroll();
+  });
+  updateScroll();
 };
+
+setupDesignMotion();
+
+// Home document deck (kept from the 2026 redesign).
+const reducedMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
 
 // Springs described the way Apple does: damping ratio + response (seconds).
 const springStep = (prop, dt) => {
@@ -2166,5 +2178,4 @@ const setupDocumentDeck = () => {
   stack.addEventListener("keydown", skipIntro, { once: true, capture: true });
 };
 
-setupHeaderScrollEdge();
 setupDocumentDeck();

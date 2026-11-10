@@ -1726,6 +1726,14 @@ textarea {
   line-height: 1.5;
 }
 
+.page-hero h1 + p {
+  max-width: 60ch;
+  margin-top: 18px;
+  color: var(--ink-2);
+  font-size: 1.1875rem;
+  line-height: 1.5;
+}
+
 .page-hero:has(+ .page-content > .article-layout) .container {
   max-width: calc(760px + var(--gutter) * 2);
 }
@@ -2366,7 +2374,8 @@ blockquote {
   display: block;
   height: 100%;
   background: var(--rot);
-  transition: width 260ms var(--ease);
+  transform-origin: left center;
+  transition: width 260ms var(--ease), transform 260ms var(--ease);
 }
 
 .route-test-form fieldset {
